@@ -375,7 +375,6 @@ function DrillView() {
   const [drillType, setDrillType] = useState("");
   const [material,  setMaterial]  = useState("");
   const [diameter,  setDiameter]  = useState("");
-  const [showOsg,   setShowOsg]   = useState(false);
 
   const solidResult = drillType === "solid" && material && diameter ? DRILL_DATA[diameter]?.[material] ?? null : null;
   const idxResult   = drillType === "indexable" && material ? INDEXABLE_DATA[material] : null;
@@ -430,46 +429,6 @@ function DrillView() {
               <button key={d} onClick={() => setDiameter(d)}
                 className={`dia-pill${diameter === d ? " sel-blue" : ""}`}>{Number(d).toFixed(4)}"</button>
             ))}
-          </div>
-
-          <button
-            onClick={() => setShowOsg(true)}
-            style={{
-              marginTop: 10, width: "100%", padding: "13px 16px",
-              borderRadius: 10, border: "1.5px solid #e8eaed",
-              background: "#fff", cursor: "pointer",
-              fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 500, color: "#374151",
-              textAlign: "center",
-            }}
-          >
-            OSG HY-PRO CARB Reference Chart
-          </button>
-        </div>
-      )}
-
-      {showOsg && (
-        <div style={{
-          position: "fixed", inset: 0, background: "#000", zIndex: 100,
-          display: "flex", flexDirection: "column",
-        }}>
-          <div style={{
-            background: "#fff", borderBottom: "1px solid #e8eaed",
-            padding: "12px 16px", display: "flex", alignItems: "center",
-            justifyContent: "space-between", flexShrink: 0,
-          }}>
-            <div>
-              <div style={{ fontSize: 15, fontWeight: 600, color: "#111" }}>OSG HY-PRO CARB</div>
-              <div style={{ fontSize: 11, color: "#9ca3af" }}>HP253 · HP255 · HP258 — Scroll for page 2</div>
-            </div>
-            <button onClick={() => setShowOsg(false)} style={{
-              background: "#f3f4f6", border: "none", borderRadius: 8,
-              padding: "8px 14px", fontSize: 13, fontWeight: 600,
-              color: "#374151", cursor: "pointer",
-            }}>✕ Close</button>
-          </div>
-          <div style={{ overflowY: "auto", flex: 1, WebkitOverflowScrolling: "touch" }}>
-            <img src={OSG_IMG_1} alt="OSG Chart Page 1" style={{ width: "100%", display: "block" }} />
-            <img src={OSG_IMG_2} alt="OSG Chart Page 2" style={{ width: "100%", display: "block" }} />
           </div>
         </div>
       )}
@@ -660,10 +619,12 @@ function TapView() {
 // ─── ROOT APP ─────────────────────────────────────────────────────────────────
 
 const TABS = [
-  { key: "endmill", label: "Milling" },
-  { key: "drill",   label: "Drilling" },
-  { key: "tap",     label: "Tapping" },
-  { key: "calc",    label: "Calculators" },
+  { key: "endmill",  label: "Milling" },
+  { key: "drill",    label: "Drilling" },
+  { key: "tap",      label: "Tapping" },
+  { key: "turning",  label: "Turning" },
+  { key: "calc",     label: "Calculators" },
+  { key: "ref",      label: "Reference" },
 ];
 
 function CalcView() {
@@ -776,6 +737,85 @@ function CalcView() {
   );
 }
 
+function TurningView() {
+  return (
+    <div className="section">
+      <div className="section-label">Operations</div>
+      <div className="tool-list">
+        {["OD Turning", "ID Boring", "Facing", "Grooving", "Threading"].map(op => (
+          <button key={op} className="tool-btn unavailable">
+            <span>{op}</span>
+            <span className="badge">Coming Soon</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function RefView() {
+  const refs = [
+    { label: "OSG HY-PRO CARB Drill Chart", sub: "HP253 · HP255 · HP258", comingSoon: false, isOsg: true },
+    { label: "Tap Drill Chart", sub: "Inch & Metric", comingSoon: true },
+    { label: "CAM Hole Size Chart", sub: "", comingSoon: true },
+  ];
+
+  const [showOsg, setShowOsg] = useState(false);
+
+  return (
+    <>
+      {showOsg && (
+        <div style={{
+          position: "fixed", inset: 0, background: "#000", zIndex: 100,
+          display: "flex", flexDirection: "column",
+        }}>
+          <div style={{
+            background: "#fff", borderBottom: "1px solid #eaecef",
+            padding: "12px 16px", display: "flex", alignItems: "center",
+            justifyContent: "space-between", flexShrink: 0,
+          }}>
+            <div>
+              <div style={{ fontSize: 15, fontWeight: 600, color: "#111" }}>OSG HY-PRO CARB</div>
+              <div style={{ fontSize: 11, color: "#9ca3af" }}>HP253 · HP255 · HP258 — Scroll for page 2</div>
+            </div>
+            <button onClick={() => setShowOsg(false)} style={{
+              background: "#f3f4f6", border: "none", borderRadius: 8,
+              padding: "8px 14px", fontSize: 13, fontWeight: 600,
+              color: "#374151", cursor: "pointer",
+            }}>✕ Close</button>
+          </div>
+          <div style={{ overflowY: "auto", flex: 1, WebkitOverflowScrolling: "touch" }}>
+            <img src={OSG_IMG_1} alt="OSG Chart Page 1" style={{ width: "100%", display: "block" }} />
+            <img src={OSG_IMG_2} alt="OSG Chart Page 2" style={{ width: "100%", display: "block" }} />
+          </div>
+        </div>
+      )}
+
+      <div className="section">
+        <div className="section-label">Charts &amp; References</div>
+        <div className="tool-list">
+          {refs.map(({ label, sub, comingSoon, isOsg }) => (
+            <button
+              key={label}
+              onClick={() => { if (isOsg) setShowOsg(true); }}
+              className={`tool-btn${comingSoon ? " unavailable" : ""}`}
+              style={{ flexDirection: "column", alignItems: "flex-start", gap: 3 }}
+            >
+              <div style={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center" }}>
+                <span>{label}</span>
+                {comingSoon
+                  ? <span className="badge">Coming Soon</span>
+                  : null}
+              </div>
+              <span style={{ fontSize: 12, color: comingSoon ? "#d1d5db" : "#9ca3af", fontWeight: 400 }}>{sub}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
 export default function App() {
   const [tab, setTab] = useState("endmill");
 
@@ -799,7 +839,9 @@ export default function App() {
         {tab === "endmill" && <EndmillView />}
         {tab === "drill"   && <DrillView />}
         {tab === "tap"     && <TapView />}
+        {tab === "turning" && <TurningView />}
         {tab === "calc"    && <CalcView />}
+        {tab === "ref"     && <RefView />}
         <div style={{ height: 32 }} />
       </div>
     </>
