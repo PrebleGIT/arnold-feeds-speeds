@@ -28,66 +28,66 @@ const BALL_EM_INFO = {
 
 const ENDMILL_DATA = {
   "Flat End Mill — Rough": {
-    materials: ["Aluminum", "Cold Roll", "Stainless", "Tool Steel"],
+    materials: ["Aluminum", "CRS", "Stainless", "Tool Steel"],
     info: SQUARE_EM_INFO,
     diameters: {
-      ".125": { "Cold Roll": { rpm: 7500, ipm: 24 }, "Aluminum": { rpm: 7500, ipm: 36 }, "Tool Steel": { rpm: 7500, ipm: 21 }, "Stainless": { rpm: 4200, ipm: 17 } },
-      ".187": { "Cold Roll": { rpm: 7500, ipm: 36 }, "Aluminum": { rpm: 7500, ipm: 48 }, "Tool Steel": { rpm: 7500, ipm: 33 }, "Stainless": { rpm: 4000, ipm: 22 } },
-      ".250": { "Cold Roll": { rpm: 6500, ipm: 42 }, "Aluminum": { rpm: 7500, ipm: 60 }, "Tool Steel": { rpm: 5730, ipm: 34 }, "Stainless": { rpm: 3500, ipm: 25 } },
-      ".312": { "Cold Roll": { rpm: 5200, ipm: 42 }, "Aluminum": { rpm: 7500, ipm: 65 }, "Tool Steel": { rpm: 4584, ipm: 33 }, "Stainless": { rpm: 2800, ipm: 23 } },
-      ".375": { "Cold Roll": { rpm: 4330, ipm: 42 }, "Aluminum": { rpm: 7500, ipm: 70 }, "Tool Steel": { rpm: 3820, ipm: 33 }, "Stainless": { rpm: 2300, ipm: 23 } },
-      ".437": { "Cold Roll": { rpm: 3710, ipm: 42 }, "Aluminum": { rpm: 6550, ipm: 70 }, "Tool Steel": { rpm: 3274, ipm: 33 }, "Stainless": { rpm: 2000, ipm: 22 } },
-      ".500": { "Cold Roll": { rpm: 3250, ipm: 42 }, "Aluminum": { rpm: 5730, ipm: 70 }, "Tool Steel": { rpm: 2865, ipm: 33 }, "Stainless": { rpm: 1750, ipm: 21 } },
-      ".750": { "Cold Roll": { rpm: 2165, ipm: 42 }, "Aluminum": { rpm: 3820, ipm: 70 }, "Tool Steel": { rpm: 1910, ipm: 33 }, "Stainless": { rpm: 1170, ipm: 21 } },
+      ".1250": { "CRS": { rpm: 7500, ipm: 24 }, "Aluminum": { rpm: 7500, ipm: 36 }, "Tool Steel": { rpm: 7500, ipm: 21 }, "Stainless": { rpm: 4200, ipm: 17 } },
+      ".1875": { "CRS": { rpm: 7500, ipm: 36 }, "Aluminum": { rpm: 7500, ipm: 48 }, "Tool Steel": { rpm: 7500, ipm: 33 }, "Stainless": { rpm: 4000, ipm: 22 } },
+      ".2500": { "CRS": { rpm: 6500, ipm: 42 }, "Aluminum": { rpm: 7500, ipm: 60 }, "Tool Steel": { rpm: 5730, ipm: 34 }, "Stainless": { rpm: 3500, ipm: 25 } },
+      ".312": { "CRS": { rpm: 5200, ipm: 42 }, "Aluminum": { rpm: 7500, ipm: 65 }, "Tool Steel": { rpm: 4584, ipm: 33 }, "Stainless": { rpm: 2800, ipm: 23 } },
+      ".3750": { "CRS": { rpm: 4330, ipm: 42 }, "Aluminum": { rpm: 7500, ipm: 70 }, "Tool Steel": { rpm: 3820, ipm: 33 }, "Stainless": { rpm: 2300, ipm: 23 } },
+      ".4375": { "CRS": { rpm: 3710, ipm: 42 }, "Aluminum": { rpm: 6550, ipm: 70 }, "Tool Steel": { rpm: 3274, ipm: 33 }, "Stainless": { rpm: 2000, ipm: 22 } },
+      ".5000": { "CRS": { rpm: 3250, ipm: 42 }, "Aluminum": { rpm: 5730, ipm: 70 }, "Tool Steel": { rpm: 2865, ipm: 33 }, "Stainless": { rpm: 1750, ipm: 21 } },
+      ".7500": { "CRS": { rpm: 2165, ipm: 42 }, "Aluminum": { rpm: 3820, ipm: 70 }, "Tool Steel": { rpm: 1910, ipm: 33 }, "Stainless": { rpm: 1170, ipm: 21 } },
     },
   },
   "Flat End Mill — Finish": {
-    materials: ["Aluminum", "Cold Roll", "Stainless", "Tool Steel"],
+    materials: ["Aluminum", "CRS", "Stainless", "Tool Steel"],
     info: SQUARE_EM_INFO,
     diameters: {
-      ".125": { "Cold Roll": { rpm: 7500, ipm: 27 }, "Aluminum": { rpm: 7500, ipm: 20 }, "Tool Steel": { rpm: 7500, ipm: 24 }, "Stainless": { rpm: 5000, ipm: 20 } },
-      ".187": { "Cold Roll": { rpm: 7500, ipm: 42 }, "Aluminum": { rpm: 7500, ipm: 25 }, "Tool Steel": { rpm: 7500, ipm: 33 }, "Stainless": { rpm: 4800, ipm: 28 } },
-      ".250": { "Cold Roll": { rpm: 7500, ipm: 54 }, "Aluminum": { rpm: 7500, ipm: 35 }, "Tool Steel": { rpm: 6876, ipm: 41 }, "Stainless": { rpm: 4100, ipm: 33 } },
-      ".312": { "Cold Roll": { rpm: 6112, ipm: 56 }, "Aluminum": { rpm: 7500, ipm: 35 }, "Tool Steel": { rpm: 5500, ipm: 42 }, "Stainless": { rpm: 3300, ipm: 30 } },
-      ".375": { "Cold Roll": { rpm: 4960, ipm: 54 }, "Aluminum": { rpm: 7500, ipm: 40 }, "Tool Steel": { rpm: 4584, ipm: 42 }, "Stainless": { rpm: 2750, ipm: 30 } },
-      ".437": { "Cold Roll": { rpm: 4366, ipm: 56 }, "Aluminum": { rpm: 6550, ipm: 45 }, "Tool Steel": { rpm: 3930, ipm: 41 }, "Stainless": { rpm: 2400, ipm: 29 } },
-      ".500": { "Cold Roll": { rpm: 3820, ipm: 50 }, "Aluminum": { rpm: 5730, ipm: 45 }, "Tool Steel": { rpm: 3438, ipm: 41 }, "Stainless": { rpm: 2100, ipm: 28 } },
-      ".750": { "Cold Roll": { rpm: 2547, ipm: 55 }, "Aluminum": { rpm: 3820, ipm: 45 }, "Tool Steel": { rpm: 2292, ipm: 41 }, "Stainless": { rpm: 1400, ipm: 28 } },
+      ".125": { "CRS": { rpm: 7500, ipm: 27 }, "Aluminum": { rpm: 7500, ipm: 20 }, "Tool Steel": { rpm: 7500, ipm: 24 }, "Stainless": { rpm: 5000, ipm: 20 } },
+      ".187": { "CRS": { rpm: 7500, ipm: 42 }, "Aluminum": { rpm: 7500, ipm: 25 }, "Tool Steel": { rpm: 7500, ipm: 33 }, "Stainless": { rpm: 4800, ipm: 28 } },
+      ".250": { "CRS": { rpm: 7500, ipm: 54 }, "Aluminum": { rpm: 7500, ipm: 35 }, "Tool Steel": { rpm: 6876, ipm: 41 }, "Stainless": { rpm: 4100, ipm: 33 } },
+      ".312": { "CRS": { rpm: 6112, ipm: 56 }, "Aluminum": { rpm: 7500, ipm: 35 }, "Tool Steel": { rpm: 5500, ipm: 42 }, "Stainless": { rpm: 3300, ipm: 30 } },
+      ".375": { "CRS": { rpm: 4960, ipm: 54 }, "Aluminum": { rpm: 7500, ipm: 40 }, "Tool Steel": { rpm: 4584, ipm: 42 }, "Stainless": { rpm: 2750, ipm: 30 } },
+      ".437": { "CRS": { rpm: 4366, ipm: 56 }, "Aluminum": { rpm: 6550, ipm: 45 }, "Tool Steel": { rpm: 3930, ipm: 41 }, "Stainless": { rpm: 2400, ipm: 29 } },
+      ".500": { "CRS": { rpm: 3820, ipm: 50 }, "Aluminum": { rpm: 5730, ipm: 45 }, "Tool Steel": { rpm: 3438, ipm: 41 }, "Stainless": { rpm: 2100, ipm: 28 } },
+      ".750": { "CRS": { rpm: 2547, ipm: 55 }, "Aluminum": { rpm: 3820, ipm: 45 }, "Tool Steel": { rpm: 2292, ipm: 41 }, "Stainless": { rpm: 1400, ipm: 28 } },
     },
   },
 };
 
-const DRILL_MATERIALS = ["Aluminum", "Cold Roll", "Stainless", "Tool Steel"];
-const TAP_MATERIALS   = ["Aluminum", "Cold Roll", "Stainless", "Tool Steel"];
+const DRILL_MATERIALS = ["Aluminum", "CRS", "Stainless", "Tool Steel"];
+const TAP_MATERIALS   = ["Aluminum", "CRS", "Stainless", "Tool Steel"];
 
 const DRILL_DATA = {
-  ".125":  { "Cold Roll": { rpm: 7500, ipm: 35 }, "Aluminum": { rpm: 7500, ipm: 75 }, "Tool Steel": { rpm: 5500, ipm: 18 }, "Stainless": { rpm: 5562, ipm: 18 } },
-  ".169":  { "Cold Roll": { rpm: 7500, ipm: 35 }, "Aluminum": { rpm: 7500, ipm: 75 }, "Tool Steel": { rpm: 4100, ipm: 16 }, "Stainless": { rpm: 4100, ipm: 16 } },
-  ".203":  { "Cold Roll": { rpm: 6770, ipm: 45 }, "Aluminum": { rpm: 7500, ipm: 75 }, "Tool Steel": { rpm: 3400, ipm: 16 }, "Stainless": { rpm: 3400, ipm: 16 } },
-  ".228":  { "Cold Roll": { rpm: 6000, ipm: 40 }, "Aluminum": { rpm: 7500, ipm: 75 }, "Tool Steel": { rpm: 3000, ipm: 15 }, "Stainless": { rpm: 3000, ipm: 15 } },
-  ".250":  { "Cold Roll": { rpm: 5500, ipm: 35 }, "Aluminum": { rpm: 7500, ipm: 75 }, "Tool Steel": { rpm: 2750, ipm: 15 }, "Stainless": { rpm: 2750, ipm: 15 } },
-  ".288":  { "Cold Roll": { rpm: 4770, ipm: 35 }, "Aluminum": { rpm: 7500, ipm: 75 }, "Tool Steel": { rpm: 2380, ipm: 15 }, "Stainless": { rpm: 2380, ipm: 15 } },
-  ".3125": { "Cold Roll": { rpm: 4400, ipm: 35 }, "Aluminum": { rpm: 7500, ipm: 75 }, "Tool Steel": { rpm: 2200, ipm: 15 }, "Stainless": { rpm: 2200, ipm: 15 } },
-  ".344":  { "Cold Roll": { rpm: 4000, ipm: 35 }, "Aluminum": { rpm: 7500, ipm: 75 }, "Tool Steel": { rpm: 2000, ipm: 15 }, "Stainless": { rpm: 2000, ipm: 15 } },
-  ".375":  { "Cold Roll": { rpm: 3670, ipm: 35 }, "Aluminum": { rpm: 7500, ipm: 75 }, "Tool Steel": { rpm: 1800, ipm: 15 }, "Stainless": { rpm: 1800, ipm: 15 } },
-  ".406":  { "Cold Roll": { rpm: 3400, ipm: 30 }, "Aluminum": { rpm: 7500, ipm: 75 }, "Tool Steel": { rpm: 1700, ipm: 15 }, "Stainless": { rpm: 1700, ipm: 15 } },
-  ".422":  { "Cold Roll": { rpm: 3250, ipm: 30 }, "Aluminum": { rpm: 7500, ipm: 75 }, "Tool Steel": { rpm: 1630, ipm: 14 }, "Stainless": { rpm: 1630, ipm: 14 } },
-  ".437":  { "Cold Roll": { rpm: 3150, ipm: 30 }, "Aluminum": { rpm: 7400, ipm: 75 }, "Tool Steel": { rpm: 1570, ipm: 14 }, "Stainless": { rpm: 1570, ipm: 14 } },
-  ".464":  { "Cold Roll": { rpm: 3000, ipm: 25 }, "Aluminum": { rpm: 7000, ipm: 75 }, "Tool Steel": { rpm: 1500, ipm: 13 }, "Stainless": { rpm: 1500, ipm: 13 } },
-  ".500":  { "Cold Roll": { rpm: 2750, ipm: 25 }, "Aluminum": { rpm: 6500, ipm: 75 }, "Tool Steel": { rpm: 1375, ipm: 13 }, "Stainless": { rpm: 1375, ipm: 13 } },
-  ".531":  { "Cold Roll": { rpm: 2600, ipm: 25 }, "Aluminum": { rpm: 6100, ipm: 75 }, "Tool Steel": { rpm: 1300, ipm: 13 }, "Stainless": { rpm: 1300, ipm: 13 } },
+  ".1250": { "CRS": { rpm: 7500, ipm: 35 }, "Aluminum": { rpm: 7500, ipm: 75 }, "Tool Steel": { rpm: 5500, ipm: 18 }, "Stainless": { rpm: 5562, ipm: 18 } },
+  ".1690": { "CRS": { rpm: 7500, ipm: 35 }, "Aluminum": { rpm: 7500, ipm: 75 }, "Tool Steel": { rpm: 4100, ipm: 16 }, "Stainless": { rpm: 4100, ipm: 16 } },
+  ".2030": { "CRS": { rpm: 6770, ipm: 45 }, "Aluminum": { rpm: 7500, ipm: 75 }, "Tool Steel": { rpm: 3400, ipm: 16 }, "Stainless": { rpm: 3400, ipm: 16 } },
+  ".2280": { "CRS": { rpm: 6000, ipm: 40 }, "Aluminum": { rpm: 7500, ipm: 75 }, "Tool Steel": { rpm: 3000, ipm: 15 }, "Stainless": { rpm: 3000, ipm: 15 } },
+  ".2500": { "CRS": { rpm: 5500, ipm: 35 }, "Aluminum": { rpm: 7500, ipm: 75 }, "Tool Steel": { rpm: 2750, ipm: 15 }, "Stainless": { rpm: 2750, ipm: 15 } },
+  ".2880": { "CRS": { rpm: 4770, ipm: 35 }, "Aluminum": { rpm: 7500, ipm: 75 }, "Tool Steel": { rpm: 2380, ipm: 15 }, "Stainless": { rpm: 2380, ipm: 15 } },
+  ".3125": { "CRS": { rpm: 4400, ipm: 35 }, "Aluminum": { rpm: 7500, ipm: 75 }, "Tool Steel": { rpm: 2200, ipm: 15 }, "Stainless": { rpm: 2200, ipm: 15 } },
+  ".3440": { "CRS": { rpm: 4000, ipm: 35 }, "Aluminum": { rpm: 7500, ipm: 75 }, "Tool Steel": { rpm: 2000, ipm: 15 }, "Stainless": { rpm: 2000, ipm: 15 } },
+  ".3750": { "CRS": { rpm: 3670, ipm: 35 }, "Aluminum": { rpm: 7500, ipm: 75 }, "Tool Steel": { rpm: 1800, ipm: 15 }, "Stainless": { rpm: 1800, ipm: 15 } },
+  ".4060": { "CRS": { rpm: 3400, ipm: 30 }, "Aluminum": { rpm: 7500, ipm: 75 }, "Tool Steel": { rpm: 1700, ipm: 15 }, "Stainless": { rpm: 1700, ipm: 15 } },
+  ".4220": { "CRS": { rpm: 3250, ipm: 30 }, "Aluminum": { rpm: 7500, ipm: 75 }, "Tool Steel": { rpm: 1630, ipm: 14 }, "Stainless": { rpm: 1630, ipm: 14 } },
+  ".4370": { "CRS": { rpm: 3150, ipm: 30 }, "Aluminum": { rpm: 7400, ipm: 75 }, "Tool Steel": { rpm: 1570, ipm: 14 }, "Stainless": { rpm: 1570, ipm: 14 } },
+  ".4640": { "CRS": { rpm: 3000, ipm: 25 }, "Aluminum": { rpm: 7000, ipm: 75 }, "Tool Steel": { rpm: 1500, ipm: 13 }, "Stainless": { rpm: 1500, ipm: 13 } },
+  ".5000": { "CRS": { rpm: 2750, ipm: 25 }, "Aluminum": { rpm: 6500, ipm: 75 }, "Tool Steel": { rpm: 1375, ipm: 13 }, "Stainless": { rpm: 1375, ipm: 13 } },
+  ".5310": { "CRS": { rpm: 2600, ipm: 25 }, "Aluminum": { rpm: 6100, ipm: 75 }, "Tool Steel": { rpm: 1300, ipm: 13 }, "Stainless": { rpm: 1300, ipm: 13 } },
 };
 
 const INDEXABLE_DATA = {
   "Aluminum":   { sfm: 720, cl: 0.008 },
-  "Cold Roll":  { sfm: 360, cl: 0.004 },
+  "CRS":  { sfm: 360, cl: 0.004 },
   "Stainless":  { sfm: 130, cl: 0.002 },
   "Tool Steel": { sfm: 180, cl: 0.002 },
 };
 
 const SPADE_DATA = {
   "Aluminum":   { sfm: "590 – 790", cl: ".014 – .024" },
-  "Cold Roll":  { sfm: "260 – 400", cl: ".006 – .014" },
+  "CRS":  { sfm: "260 – 400", cl: ".006 – .014" },
   "Stainless":  { sfm: "145 – 240", cl: ".004 – .009" },
   "Tool Steel": { sfm: "130 – 230", cl: ".006 – .010" },
 };
@@ -97,49 +97,49 @@ const SPADE_DATA = {
 // SFM calculated from RPM × dia (inches) × π / 12
 const OSG_DRILL_DATA = {
   ".125": {
-    "Cold Roll":  { rpm: 11690, ipr: "0.002–0.005", sfm: 383 },
+    "CRS":  { rpm: 11690, ipr: "0.002–0.005", sfm: 383 },
     "Aluminum":   { rpm: 10850, ipr: "0.003–0.005", sfm: 356 },
     "Tool Steel": { rpm: 9860,  ipr: "0.002–0.005", sfm: 323 },
     "Stainless":  { rpm: 5580,  ipr: "0.002–0.004", sfm: 183 },
   },
   ".187": {
-    "Cold Roll":  { rpm: 7790,  ipr: "0.004–0.007", sfm: 383 },
+    "CRS":  { rpm: 7790,  ipr: "0.004–0.007", sfm: 383 },
     "Aluminum":   { rpm: 7230,  ipr: "0.005–0.007", sfm: 355 },
     "Tool Steel": { rpm: 6570,  ipr: "0.004–0.007", sfm: 323 },
     "Stainless":  { rpm: 3720,  ipr: "0.004–0.006", sfm: 183 },
   },
   ".250": {
-    "Cold Roll":  { rpm: 5840,  ipr: "0.005–0.010", sfm: 383 },
+    "CRS":  { rpm: 5840,  ipr: "0.005–0.010", sfm: 383 },
     "Aluminum":   { rpm: 5420,  ipr: "0.007–0.009", sfm: 355 },
     "Tool Steel": { rpm: 4930,  ipr: "0.005–0.010", sfm: 323 },
     "Stainless":  { rpm: 2790,  ipr: "0.006–0.008", sfm: 183 },
   },
   ".375": {
-    "Cold Roll":  { rpm: 3900,  ipr: "0.007–0.011", sfm: 383 },
+    "CRS":  { rpm: 3900,  ipr: "0.007–0.011", sfm: 383 },
     "Aluminum":   { rpm: 3620,  ipr: "0.009–0.011", sfm: 355 },
     "Tool Steel": { rpm: 3290,  ipr: "0.007–0.011", sfm: 323 },
     "Stainless":  { rpm: 1860,  ipr: "0.007–0.009", sfm: 183 },
   },
   ".437": {
-    "Cold Roll":  { rpm: 3340,  ipr: "0.008–0.012", sfm: 383 },
+    "CRS":  { rpm: 3340,  ipr: "0.008–0.012", sfm: 383 },
     "Aluminum":   { rpm: 3100,  ipr: "0.012–0.014", sfm: 355 },
     "Tool Steel": { rpm: 2820,  ipr: "0.008–0.012", sfm: 323 },
     "Stainless":  { rpm: 1590,  ipr: "0.008–0.010", sfm: 183 },
   },
   ".500": {
-    "Cold Roll":  { rpm: 2920,  ipr: "0.008–0.013", sfm: 383 },
+    "CRS":  { rpm: 2920,  ipr: "0.008–0.013", sfm: 383 },
     "Aluminum":   { rpm: 2710,  ipr: "0.014–0.016", sfm: 355 },
     "Tool Steel": { rpm: 2460,  ipr: "0.008–0.013", sfm: 323 },
     "Stainless":  { rpm: 1390,  ipr: "0.008–0.010", sfm: 183 },
   },
-  ".625": {
-    "Cold Roll":  { rpm: 2340,  ipr: "0.010–0.014", sfm: 383 },
+  ".6250": {
+    "CRS":  { rpm: 2340,  ipr: "0.010–0.014", sfm: 383 },
     "Aluminum":   { rpm: 2170,  ipr: "0.018–0.020", sfm: 355 },
     "Tool Steel": { rpm: 1970,  ipr: "0.010–0.014", sfm: 323 },
     "Stainless":  { rpm: 1120,  ipr: "0.010–0.012", sfm: 183 },
   },
   ".750": {
-    "Cold Roll":  { rpm: 1950,  ipr: "0.011–0.015", sfm: 383 },
+    "CRS":  { rpm: 1950,  ipr: "0.011–0.015", sfm: 383 },
     "Aluminum":   { rpm: 1810,  ipr: "0.021–0.023", sfm: 355 },
     "Tool Steel": { rpm: 1640,  ipr: "0.011–0.015", sfm: 323 },
     "Stainless":  { rpm: 930,   ipr: "0.011–0.013", sfm: 183 },
@@ -147,30 +147,30 @@ const OSG_DRILL_DATA = {
 };
 
 const FORM_TAP_INCH = [
-  { tap: "4-40",    pitch: "0.0250", drill: '.1024" (2.6mm)', sfm: { "Cold Roll": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "Cold Roll": { rpm: 2040, ipm: 51 }, "Aluminum": { rpm: 3000, ipm: 75 }, "Tool Steel": { rpm: 1040, ipm: 26 }, "Stainless": { rpm: 1360, ipm: 34 } },
-  { tap: "5-40",    pitch: "0.0250", drill: '.1181" (3mm)',   sfm: { "Cold Roll": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "Cold Roll": { rpm: 1840, ipm: 46 }, "Aluminum": { rpm: 2760, ipm: 69 }, "Tool Steel": { rpm:  920, ipm: 23 }, "Stainless": { rpm: 1240, ipm: 31 } },
-  { tap: "6-32",    pitch: "0.0313", drill: '.1250"',         sfm: { "Cold Roll": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "Cold Roll": { rpm: 1664, ipm: 52 }, "Aluminum": { rpm: 2496, ipm: 78 }, "Tool Steel": { rpm:  832, ipm: 26 }, "Stainless": { rpm: 1120, ipm: 35 } },
-  { tap: "8-32",    pitch: "0.0313", drill: '.1496" (3.8mm)', sfm: { "Cold Roll": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "Cold Roll": { rpm: 1408, ipm: 44 }, "Aluminum": { rpm: 2112, ipm: 66 }, "Tool Steel": { rpm:  704, ipm: 22 }, "Stainless": { rpm:  928, ipm: 29 } },
-  { tap: "10-32",   pitch: "0.0313", drill: '.1772" (4.5mm)', sfm: { "Cold Roll": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "Cold Roll": { rpm: 1216, ipm: 38 }, "Aluminum": { rpm: 1824, ipm: 57 }, "Tool Steel": { rpm:  608, ipm: 19 }, "Stainless": { rpm:  800, ipm: 25 } },
-  { tap: "10-24",   pitch: "0.0417", drill: '.1693" (4.3mm)', sfm: { "Cold Roll": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "Cold Roll": { rpm: 1200, ipm: 50 }, "Aluminum": { rpm: 1800, ipm: 75 }, "Tool Steel": { rpm:  600, ipm: 25 }, "Stainless": { rpm:  816, ipm: 34 } },
-  { tap: "1/4-20",  pitch: "0.0500", drill: '.2283" (5.8mm)', sfm: { "Cold Roll": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "Cold Roll": { rpm:  920, ipm: 46 }, "Aluminum": { rpm: 1380, ipm: 69 }, "Tool Steel": { rpm:  460, ipm: 23 }, "Stainless": { rpm:  620, ipm: 31 } },
-  { tap: "5/16-18", pitch: "0.0556", drill: '.2874" (7.3mm)', sfm: { "Cold Roll": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "Cold Roll": { rpm:  738, ipm: 41 }, "Aluminum": { rpm: 1098, ipm: 61 }, "Tool Steel": { rpm:  360, ipm: 20 }, "Stainless": { rpm:  486, ipm: 27 } },
-  { tap: "3/8-16",  pitch: "0.0625", drill: '.3437"',         sfm: { "Cold Roll": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "Cold Roll": { rpm:  608, ipm: 38 }, "Aluminum": { rpm:  912, ipm: 57 }, "Tool Steel": { rpm:  304, ipm: 19 }, "Stainless": { rpm:  400, ipm: 25 } },
-  { tap: "7/16-14", pitch: "0.0714", drill: '.4063"',         sfm: { "Cold Roll": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "Cold Roll": { rpm:  518, ipm: 37 }, "Aluminum": { rpm:  784, ipm: 56 }, "Tool Steel": { rpm:  266, ipm: 19 }, "Stainless": { rpm:  350, ipm: 25 } },
-  { tap: "1/2-13",  pitch: "0.0769", drill: '.4646" (11.8mm)',sfm: { "Cold Roll": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "Cold Roll": { rpm:  455, ipm: 35 }, "Aluminum": { rpm:  689, ipm: 53 }, "Tool Steel": { rpm:  234, ipm: 18 }, "Stainless": { rpm:  312, ipm: 24 } },
-  { tap: "1/2-20",  pitch: "0.0500", drill: '.4843" (12.3mm)',sfm: { "Cold Roll": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "Cold Roll": { rpm:  460, ipm: 23 }, "Aluminum": { rpm:  680, ipm: 34 }, "Tool Steel": { rpm:  220, ipm: 11 }, "Stainless": { rpm:  300, ipm: 15 } },
-  { tap: "5/8-11",  pitch: "0.0909", drill: '.5787" (14.7mm)',sfm: { "Cold Roll": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "Cold Roll": { rpm:  363, ipm: 33 }, "Aluminum": { rpm:  550, ipm: 50 }, "Tool Steel": { rpm:  187, ipm: 17 }, "Stainless": { rpm:  242, ipm: 22 } },
+  { tap: "4-40",    pitch: "0.0250", drill: '.1024" (2.6mm)', sfm: { "CRS": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "CRS": { rpm: 2040, ipm: 51 }, "Aluminum": { rpm: 3000, ipm: 75 }, "Tool Steel": { rpm: 1040, ipm: 26 }, "Stainless": { rpm: 1360, ipm: 34 } },
+  { tap: "5-40",    pitch: "0.0250", drill: '.1181" (3mm)',   sfm: { "CRS": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "CRS": { rpm: 1840, ipm: 46 }, "Aluminum": { rpm: 2760, ipm: 69 }, "Tool Steel": { rpm:  920, ipm: 23 }, "Stainless": { rpm: 1240, ipm: 31 } },
+  { tap: "6-32",    pitch: "0.0313", drill: '.1250"',         sfm: { "CRS": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "CRS": { rpm: 1664, ipm: 52 }, "Aluminum": { rpm: 2496, ipm: 78 }, "Tool Steel": { rpm:  832, ipm: 26 }, "Stainless": { rpm: 1120, ipm: 35 } },
+  { tap: "8-32",    pitch: "0.0313", drill: '.1496" (3.8mm)', sfm: { "CRS": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "CRS": { rpm: 1408, ipm: 44 }, "Aluminum": { rpm: 2112, ipm: 66 }, "Tool Steel": { rpm:  704, ipm: 22 }, "Stainless": { rpm:  928, ipm: 29 } },
+  { tap: "10-32",   pitch: "0.0313", drill: '.1772" (4.5mm)', sfm: { "CRS": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "CRS": { rpm: 1216, ipm: 38 }, "Aluminum": { rpm: 1824, ipm: 57 }, "Tool Steel": { rpm:  608, ipm: 19 }, "Stainless": { rpm:  800, ipm: 25 } },
+  { tap: "10-24",   pitch: "0.0417", drill: '.1693" (4.3mm)', sfm: { "CRS": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "CRS": { rpm: 1200, ipm: 50 }, "Aluminum": { rpm: 1800, ipm: 75 }, "Tool Steel": { rpm:  600, ipm: 25 }, "Stainless": { rpm:  816, ipm: 34 } },
+  { tap: "1/4-20",  pitch: "0.0500", drill: '.2283" (5.8mm)', sfm: { "CRS": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "CRS": { rpm:  920, ipm: 46 }, "Aluminum": { rpm: 1380, ipm: 69 }, "Tool Steel": { rpm:  460, ipm: 23 }, "Stainless": { rpm:  620, ipm: 31 } },
+  { tap: "5/16-18", pitch: "0.0556", drill: '.2874" (7.3mm)', sfm: { "CRS": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "CRS": { rpm:  738, ipm: 41 }, "Aluminum": { rpm: 1098, ipm: 61 }, "Tool Steel": { rpm:  360, ipm: 20 }, "Stainless": { rpm:  486, ipm: 27 } },
+  { tap: "3/8-16",  pitch: "0.0625", drill: '.3437"',         sfm: { "CRS": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "CRS": { rpm:  608, ipm: 38 }, "Aluminum": { rpm:  912, ipm: 57 }, "Tool Steel": { rpm:  304, ipm: 19 }, "Stainless": { rpm:  400, ipm: 25 } },
+  { tap: "7/16-14", pitch: "0.0714", drill: '.4063"',         sfm: { "CRS": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "CRS": { rpm:  518, ipm: 37 }, "Aluminum": { rpm:  784, ipm: 56 }, "Tool Steel": { rpm:  266, ipm: 19 }, "Stainless": { rpm:  350, ipm: 25 } },
+  { tap: "1/2-13",  pitch: "0.0769", drill: '.4646" (11.8mm)',sfm: { "CRS": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "CRS": { rpm:  455, ipm: 35 }, "Aluminum": { rpm:  689, ipm: 53 }, "Tool Steel": { rpm:  234, ipm: 18 }, "Stainless": { rpm:  312, ipm: 24 } },
+  { tap: "1/2-20",  pitch: "0.0500", drill: '.4843" (12.3mm)',sfm: { "CRS": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "CRS": { rpm:  460, ipm: 23 }, "Aluminum": { rpm:  680, ipm: 34 }, "Tool Steel": { rpm:  220, ipm: 11 }, "Stainless": { rpm:  300, ipm: 15 } },
+  { tap: "5/8-11",  pitch: "0.0909", drill: '.5787" (14.7mm)',sfm: { "CRS": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "CRS": { rpm:  363, ipm: 33 }, "Aluminum": { rpm:  550, ipm: 50 }, "Tool Steel": { rpm:  187, ipm: 17 }, "Stainless": { rpm:  242, ipm: 22 } },
 ];
 
 const FORM_TAP_METRIC = [
-  { tap: "M2 x .4",    pitch: "0.0157", drill: '.0729" (1.854mm)', sfm: { "Cold Roll": 55, "Aluminum": 55, "Tool Steel": 28, "Stainless": 37 }, "Cold Roll": { rpm: 2912, ipm: 45.8 }, "Aluminum": { rpm: 3000, ipm: 47.2 }, "Tool Steel": { rpm: 1456, ipm: 22.9 }, "Stainless": { rpm: 1942, ipm: 30.6 } },
-  { tap: "M3 x .5",    pitch: "0.0197", drill: '.1102" (2.8mm)',   sfm: { "Cold Roll": 55, "Aluminum": 82, "Tool Steel": 28, "Stainless": 37 }, "Cold Roll": { rpm: 1941, ipm: 38.2 }, "Aluminum": { rpm: 2911, ipm: 57.3 }, "Tool Steel": { rpm:  970, ipm: 19.1 }, "Stainless": { rpm: 1294, ipm: 25.5 } },
-  { tap: "M4 x .7",    pitch: "0.0276", drill: '.1457" (3.7mm)',   sfm: { "Cold Roll": 55, "Aluminum": 82, "Tool Steel": 28, "Stainless": 37 }, "Cold Roll": { rpm: 1456, ipm: 40.1 }, "Aluminum": { rpm: 2184, ipm: 60.2 }, "Tool Steel": { rpm:  728, ipm: 20.1 }, "Stainless": { rpm:  971, ipm: 26.8 } },
-  { tap: "M5 x .8",    pitch: "0.0315", drill: '.1811" (4.6mm)',   sfm: { "Cold Roll": 55, "Aluminum": 82, "Tool Steel": 28, "Stainless": 37 }, "Cold Roll": { rpm: 1165, ipm: 36.7 }, "Aluminum": { rpm: 1747, ipm: 55.0 }, "Tool Steel": { rpm:  582, ipm: 18.3 }, "Stainless": { rpm:  776, ipm: 24.4 } },
-  { tap: "M6 x 1",     pitch: "0.0394", drill: '.2189" (5.56mm)',  sfm: { "Cold Roll": 55, "Aluminum": 82, "Tool Steel": 28, "Stainless": 37 }, "Cold Roll": { rpm:  970, ipm: 38.2 }, "Aluminum": { rpm: 1456, ipm: 57.3 }, "Tool Steel": { rpm:  485, ipm: 19.1 }, "Stainless": { rpm:  647, ipm: 25.5 } },
-  { tap: "M8 x 1.25",  pitch: "0.0492", drill: '.2913" (7.4mm)',   sfm: { "Cold Roll": 55, "Aluminum": 82, "Tool Steel": 28, "Stainless": 37 }, "Cold Roll": { rpm:  728, ipm: 35.8 }, "Aluminum": { rpm: 1092, ipm: 53.7 }, "Tool Steel": { rpm:  364, ipm: 17.9 }, "Stainless": { rpm:  485, ipm: 23.9 } },
-  { tap: "M10 x 1.5",  pitch: "0.0591", drill: '.3661" (9.3mm)',   sfm: { "Cold Roll": 55, "Aluminum": 82, "Tool Steel": 28, "Stainless": 37 }, "Cold Roll": { rpm:  582, ipm: 34.4 }, "Aluminum": { rpm:  873, ipm: 51.6 }, "Tool Steel": { rpm:  291, ipm: 17.2 }, "Stainless": { rpm:  388, ipm: 22.9 } },
-  { tap: "M12 x 1.75", pitch: "0.0689", drill: '.4375" (11.11mm)', sfm: { "Cold Roll": 55, "Aluminum": 82, "Tool Steel": 28, "Stainless": 37 }, "Cold Roll": { rpm:  485, ipm: 33.4 }, "Aluminum": { rpm:  728, ipm: 50.2 }, "Tool Steel": { rpm:  243, ipm: 16.7 }, "Stainless": { rpm:  323, ipm: 22.3 } },
+  { tap: "M2 x .4",    pitch: "0.0157", drill: '.0729" (1.854mm)', sfm: { "CRS": 55, "Aluminum": 55, "Tool Steel": 28, "Stainless": 37 }, "CRS": { rpm: 2912, ipm: 45.8 }, "Aluminum": { rpm: 3000, ipm: 47.2 }, "Tool Steel": { rpm: 1456, ipm: 22.9 }, "Stainless": { rpm: 1942, ipm: 30.6 } },
+  { tap: "M3 x .5",    pitch: "0.0197", drill: '.1102" (2.8mm)',   sfm: { "CRS": 55, "Aluminum": 82, "Tool Steel": 28, "Stainless": 37 }, "CRS": { rpm: 1941, ipm: 38.2 }, "Aluminum": { rpm: 2911, ipm: 57.3 }, "Tool Steel": { rpm:  970, ipm: 19.1 }, "Stainless": { rpm: 1294, ipm: 25.5 } },
+  { tap: "M4 x .7",    pitch: "0.0276", drill: '.1457" (3.7mm)',   sfm: { "CRS": 55, "Aluminum": 82, "Tool Steel": 28, "Stainless": 37 }, "CRS": { rpm: 1456, ipm: 40.1 }, "Aluminum": { rpm: 2184, ipm: 60.2 }, "Tool Steel": { rpm:  728, ipm: 20.1 }, "Stainless": { rpm:  971, ipm: 26.8 } },
+  { tap: "M5 x .8",    pitch: "0.0315", drill: '.1811" (4.6mm)',   sfm: { "CRS": 55, "Aluminum": 82, "Tool Steel": 28, "Stainless": 37 }, "CRS": { rpm: 1165, ipm: 36.7 }, "Aluminum": { rpm: 1747, ipm: 55.0 }, "Tool Steel": { rpm:  582, ipm: 18.3 }, "Stainless": { rpm:  776, ipm: 24.4 } },
+  { tap: "M6 x 1",     pitch: "0.0394", drill: '.2189" (5.56mm)',  sfm: { "CRS": 55, "Aluminum": 82, "Tool Steel": 28, "Stainless": 37 }, "CRS": { rpm:  970, ipm: 38.2 }, "Aluminum": { rpm: 1456, ipm: 57.3 }, "Tool Steel": { rpm:  485, ipm: 19.1 }, "Stainless": { rpm:  647, ipm: 25.5 } },
+  { tap: "M8 x 1.25",  pitch: "0.0492", drill: '.2913" (7.4mm)',   sfm: { "CRS": 55, "Aluminum": 82, "Tool Steel": 28, "Stainless": 37 }, "CRS": { rpm:  728, ipm: 35.8 }, "Aluminum": { rpm: 1092, ipm: 53.7 }, "Tool Steel": { rpm:  364, ipm: 17.9 }, "Stainless": { rpm:  485, ipm: 23.9 } },
+  { tap: "M10 x 1.5",  pitch: "0.0591", drill: '.3661" (9.3mm)',   sfm: { "CRS": 55, "Aluminum": 82, "Tool Steel": 28, "Stainless": 37 }, "CRS": { rpm:  582, ipm: 34.4 }, "Aluminum": { rpm:  873, ipm: 51.6 }, "Tool Steel": { rpm:  291, ipm: 17.2 }, "Stainless": { rpm:  388, ipm: 22.9 } },
+  { tap: "M12 x 1.75", pitch: "0.0689", drill: '.4375" (11.11mm)', sfm: { "CRS": 55, "Aluminum": 82, "Tool Steel": 28, "Stainless": 37 }, "CRS": { rpm:  485, ipm: 33.4 }, "Aluminum": { rpm:  728, ipm: 50.2 }, "Tool Steel": { rpm:  243, ipm: 16.7 }, "Stainless": { rpm:  323, ipm: 22.3 } },
 ];
 
 // ─── ARNOLD LOGO ──────────────────────────────────────────────────────────────
@@ -198,53 +198,64 @@ const ArnoldLogo = () => (
 // ─── STYLES ───────────────────────────────────────────────────────────────────
 
 const css = `
-  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=DM+Mono:wght@400;500&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  body { background: #f2f3f5; }
-  .app { min-height: 100vh; background: #f2f3f5; font-family: 'DM Sans', sans-serif; max-width: 480px; margin: 0 auto; padding-bottom: 48px; }
-  .header { background: #fff; border-bottom: 1px solid #e8eaed; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
-  .header-title { font-size: 20px; font-weight: 600; color: #111; letter-spacing: -0.3px; }
-  .header-sub { font-size: 12px; color: #9ca3af; font-weight: 500; margin-top: 1px; }
-  .nav-tabs { background: #fff; border-bottom: 1px solid #e8eaed; display: flex; padding: 0 16px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  body { background: #f0f1f3; }
+  .app { min-height: 100vh; background: #f0f1f3; font-family: 'DM Sans', sans-serif; max-width: 480px; margin: 0 auto; padding-bottom: 56px; }
+  .header { background: #fff; border-bottom: 1px solid #eaecef; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; box-shadow: 0 1px 0 #eaecef; }
+  .header-title { font-size: 19px; font-weight: 700; color: #0d0d0d; letter-spacing: -0.4px; }
+  .header-sub { font-size: 11px; color: #b0b7c3; font-weight: 500; margin-top: 2px; letter-spacing: 0.03em; }
+  .nav-tabs { background: #fff; border-bottom: 1px solid #eaecef; display: flex; padding: 0 12px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
   .nav-tabs::-webkit-scrollbar { display: none; }
-  .nav-tab { flex-shrink: 0; padding: 12px 16px 10px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; color: #9ca3af; background: transparent; border: none; border-bottom: 2px solid transparent; cursor: pointer; transition: color 0.15s, border-color 0.15s; white-space: nowrap; }
-  .nav-tab.active { color: #111; border-bottom-color: #111; }
+  .nav-tab { flex-shrink: 0; padding: 12px 14px 11px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; color: #adb5bd; background: transparent; border: none; border-bottom: 2px solid transparent; cursor: pointer; transition: color 0.15s, border-color 0.15s; white-space: nowrap; letter-spacing: 0.01em; }
+  .nav-tab.active { color: #0d0d0d; border-bottom-color: #0d0d0d; }
   .section { padding: 20px 16px 0; }
-  .section.locked { opacity: 0.35; pointer-events: none; }
-  .section-label { font-size: 11px; font-weight: 600; color: #9ca3af; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; }
-  .tool-list { display: flex; flex-direction: column; gap: 6px; }
-  .tool-btn { width: 100%; padding: 14px 16px; background: #fff; border: 1.5px solid #e8eaed; border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; color: #111; text-align: left; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: border-color 0.15s, background 0.15s, box-shadow 0.15s; }
+  .section.locked { opacity: 0.3; pointer-events: none; }
+  .section-label { font-size: 10px; font-weight: 700; color: #adb5bd; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+  .tool-list { display: flex; flex-direction: column; gap: 7px; }
+  .tool-btn { width: 100%; padding: 15px 16px; background: #fff; border: 1.5px solid #eaecef; border-radius: 14px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; color: #1a1a1a; text-align: left; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: all 0.15s; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
   .tool-btn:active { transform: scale(0.99); }
-  .tool-btn.selected { border-color: #111; background: #111; color: #fff; box-shadow: 0 2px 12px rgba(0,0,0,0.15); }
+  .tool-btn.selected { border-color: #0d0d0d; background: #0d0d0d; color: #fff; box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
   .tool-btn.unavailable { color: #c4c9d4; cursor: default; background: #fafafa; }
   .tool-btn .badge { font-size: 10px; font-weight: 600; color: #c4c9d4; letter-spacing: 0.05em; text-transform: uppercase; }
-  .check { font-size: 16px; }
+  .check { font-size: 15px; }
   .pill-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .pill { padding: 13px 8px; background: #fff; border: 1.5px solid #e8eaed; border-radius: 10px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: #374151; text-align: center; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+  .pill { padding: 13px 8px; background: #fff; border: 1.5px solid #eaecef; border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: #374151; text-align: center; cursor: pointer; transition: all 0.15s; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
   .pill:active { transform: scale(0.97); }
-  .pill.sel-green { border-color: #16a34a; background: #f0fdf4; color: #15803d; font-weight: 600; }
-  .dia-grid { display: flex; gap: 8px; flex-wrap: wrap; }
-  .dia-pill { flex: 1 1 calc(25% - 7px); padding: 13px 4px; background: #fff; border: 1.5px solid #e8eaed; border-radius: 10px; font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; color: #374151; text-align: center; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+  .pill.sel-green { border-color: #16a34a; background: #f0fdf4; color: #15803d; font-weight: 600; box-shadow: 0 0 0 3px rgba(22,163,74,0.08); }
+  .dia-grid { display: flex; gap: 7px; flex-wrap: wrap; }
+  .dia-pill { flex: 1 1 calc(25% - 6px); padding: 12px 4px; background: #fff; border: 1.5px solid #eaecef; border-radius: 12px; font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; color: #374151; text-align: center; cursor: pointer; transition: all 0.15s; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
   .dia-pill:active { transform: scale(0.97); }
-  .dia-pill.sel-blue { border-color: #2563eb; background: #eff6ff; color: #1d4ed8; font-weight: 600; }
-  .result-card { margin: 20px 16px 0; background: #111; border-radius: 16px; padding: 20px; box-shadow: 0 4px 24px rgba(0,0,0,0.12); }
-  .result-eyebrow { font-size: 11px; font-weight: 600; color: #6b7280; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 16px; }
-  .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .result-stat { background: #1e1e1e; border-radius: 12px; padding: 14px 16px; text-align: center; }
-  .result-stat-label { font-size: 11px; font-weight: 600; color: #6b7280; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
+  .dia-pill.sel-blue { border-color: #2563eb; background: #eff6ff; color: #1d4ed8; font-weight: 600; box-shadow: 0 0 0 3px rgba(37,99,235,0.08); }
+  .result-card { margin: 20px 16px 0; background: linear-gradient(145deg, #141414, #1c1c1c); border-radius: 20px; padding: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.04); }
+  .result-eyebrow { font-size: 10px; font-weight: 700; color: #5a6072; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 14px; }
+  .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .result-stat { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 14px 16px; text-align: center; }
+  .result-stat-label { font-size: 10px; font-weight: 700; color: #5a6072; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
   .result-stat-value { font-family: 'DM Mono', monospace; font-size: 32px; font-weight: 500; line-height: 1; }
-  .result-stat-unit { font-size: 11px; color: #6b7280; margin-top: 3px; }
-  .result-note { margin-top: 12px; padding: 10px 14px; background: #292929; border-radius: 8px; font-size: 12px; color: #f59e0b; display: flex; align-items: center; gap: 6px; }
-  .result-context { margin-top: 12px; font-size: 12px; color: #4b5563; text-align: center; font-family: 'DM Mono', monospace; }
+  .result-stat-unit { font-size: 10px; color: #5a6072; margin-top: 4px; letter-spacing: 0.04em; }
+  .result-note { margin-top: 10px; padding: 10px 14px; background: rgba(255,255,255,0.04); border-radius: 8px; font-size: 12px; color: #f59e0b; }
+  .result-context { margin-top: 12px; font-size: 11px; color: #4a5060; text-align: center; font-family: 'DM Mono', monospace; letter-spacing: 0.03em; }
   .tap-tabs { display: flex; gap: 8px; }
-  .tap-tab { flex: 1; padding: 10px; border-radius: 10px; border: 1.5px solid #e8eaed; background: #fff; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; color: #9ca3af; cursor: pointer; text-align: center; transition: all 0.15s; }
-  .tap-tab.active { border-color: #111; background: #111; color: #fff; }
-  .tap-size-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-  .tap-size-btn { padding: 13px 6px; background: #fff; border: 1.5px solid #e8eaed; border-radius: 10px; font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; color: #374151; text-align: center; cursor: pointer; transition: border-color 0.15s, background 0.15s; }
+  .tap-tab { flex: 1; padding: 10px; border-radius: 12px; border: 1.5px solid #eaecef; background: #fff; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; color: #9ca3af; cursor: pointer; text-align: center; transition: all 0.15s; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+  .tap-tab.active { border-color: #0d0d0d; background: #0d0d0d; color: #fff; }
+  .tap-size-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; }
+  .tap-size-btn { padding: 13px 6px; background: #fff; border: 1.5px solid #eaecef; border-radius: 12px; font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; color: #374151; text-align: center; cursor: pointer; transition: all 0.15s; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
   .tap-size-btn:active { transform: scale(0.97); }
-  .tap-size-btn.active { border-color: #7c3aed; background: #f5f3ff; color: #6d28d9; font-weight: 600; }
-  .reset-btn { display: block; width: calc(100% - 32px); margin: 14px 16px 0; padding: 14px; background: transparent; border: 1.5px solid #e8eaed; border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; color: #9ca3af; text-align: center; cursor: pointer; transition: border-color 0.15s, color 0.15s; }
-  .reset-btn:hover { border-color: #d1d5db; color: #6b7280; }
+  .tap-size-btn.active { border-color: #7c3aed; background: #f5f3ff; color: #6d28d9; font-weight: 600; box-shadow: 0 0 0 3px rgba(124,58,237,0.08); }
+  .calc-card { background: #fff; border-radius: 16px; padding: 18px; margin: 16px 16px 0; box-shadow: 0 1px 4px rgba(0,0,0,0.06), 0 0 0 1px #eaecef; }
+  .calc-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .calc-card-title { font-size: 13px; font-weight: 700; color: #1a1a1a; letter-spacing: -0.1px; }
+  .calc-reset { font-size: 11px; font-weight: 600; color: #adb5bd; background: #f5f6f8; border: none; border-radius: 7px; padding: 5px 10px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: color 0.15s, background 0.15s; }
+  .calc-reset:active { color: #374151; background: #eaecef; }
+  .calc-input-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .calc-input-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .calc-field label { font-size: 10px; font-weight: 700; color: #adb5bd; letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-bottom: 5px; }
+  .calc-field input { width: 100%; padding: 11px 12px; border-radius: 10px; border: 1.5px solid #eaecef; background: #f8f9fb; font-family: 'DM Mono', monospace; font-size: 15px; color: #111; outline: none; transition: border-color 0.15s; }
+  .calc-field input:focus { border-color: #94a3b8; background: #fff; }
+  .calc-result { margin-top: 12px; background: linear-gradient(135deg, #141414, #1e1e1e); border-radius: 14px; padding: 16px 18px; display: flex; align-items: baseline; gap: 10px; }
+  .calc-result-value { font-family: 'DM Mono', monospace; font-size: 34px; font-weight: 500; line-height: 1; }
+  .calc-result-unit { font-size: 11px; color: #5a6072; letter-spacing: 0.04em; }
 `;
 
 // ─── VIEWS ────────────────────────────────────────────────────────────────────
@@ -276,7 +287,7 @@ function EndmillView() {
                 className={`tool-btn${sel ? " selected" : ""}${!avail ? " unavailable" : ""}`}>
                 <span>{key}</span>
                 {sel && <span className="check">✓</span>}
-                {!avail && <span className="badge">Soon</span>}
+                {!avail && <span className="badge">Coming Soon</span>}
               </button>
             );
           })}
@@ -298,7 +309,7 @@ function EndmillView() {
         <div className="section locked">
           <div className="section-label">Material</div>
           <div className="pill-grid">
-            {["Aluminum","Cold Roll","Stainless","Tool Steel"].map(m => (
+            {["Aluminum","CRS","Stainless","Tool Steel"].map(m => (
               <button key={m} className="pill">{m}</button>
             ))}
           </div>
@@ -308,9 +319,9 @@ function EndmillView() {
       <div className={`section${!material ? " locked" : ""}`}>
         <div className="section-label">Diameter (inches)</div>
         <div className="dia-grid">
-          {(toolData ? diameters : [".125",".187",".250",".312",".375",".437",".500",".750"]).map(d => (
+          {(toolData ? diameters : [".1250",".1875",".2500",".3125",".3750",".4375",".5000",".7500"]).map(d => (
             <button key={d} onClick={() => setDiameter(d)}
-              className={`dia-pill${diameter === d ? " sel-blue" : ""}`}>{d}"</button>
+              className={`dia-pill${diameter === d ? " sel-blue" : ""}`}>{Number(d).toFixed(4)}"</button>
           ))}
         </div>
       </div>
@@ -352,7 +363,7 @@ function EndmillView() {
         </div>
       )}
 
-      {toolType && <button className="reset-btn" onClick={reset}>Start Over</button>}
+
     </>
   );
 }
@@ -376,6 +387,7 @@ function DrillView() {
     { key: "solid",     label: "Solid Carbide" },
     { key: "indexable", label: "Sumitomo Flat Bottom" },
     { key: "spade",     label: "Sumitomo Spade" },
+    { key: "sandvik",   label: "Sandvik DS20", comingSoon: true },
   ];
 
   const sfmMats = Object.keys(drillType === "indexable" ? INDEXABLE_DATA : SPADE_DATA);
@@ -385,11 +397,14 @@ function DrillView() {
       <div className="section">
         <div className="section-label">Drill Type</div>
         <div className="tool-list">
-          {DRILL_TYPES.map(({ key, label }) => (
-            <button key={key} onClick={() => { setDrillType(key); resetSel(); }}
-              className={`tool-btn${drillType === key ? " selected" : ""}`}>
+          {DRILL_TYPES.map(({ key, label, comingSoon }) => (
+            <button key={key}
+              onClick={() => { if (!comingSoon) { setDrillType(key); resetSel(); } }}
+              className={`tool-btn${drillType === key ? " selected" : ""}${comingSoon ? " unavailable" : ""}`}>
               <span>{label}</span>
-              {drillType === key && <span className="check">✓</span>}
+              {comingSoon
+                ? <span className="badge">Coming Soon</span>
+                : drillType === key && <span className="check">✓</span>}
             </button>
           ))}
         </div>
@@ -413,7 +428,7 @@ function DrillView() {
           <div className="dia-grid">
             {Object.keys(DRILL_DATA).map(d => (
               <button key={d} onClick={() => setDiameter(d)}
-                className={`dia-pill${diameter === d ? " sel-blue" : ""}`}>{d}"</button>
+                className={`dia-pill${diameter === d ? " sel-blue" : ""}`}>{Number(d).toFixed(4)}"</button>
             ))}
           </div>
 
@@ -424,11 +439,10 @@ function DrillView() {
               borderRadius: 10, border: "1.5px solid #e8eaed",
               background: "#fff", cursor: "pointer",
               fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 500, color: "#374151",
-              display: "flex", justifyContent: "space-between", alignItems: "center",
+              textAlign: "center",
             }}
           >
-            <span>OSG HY-PRO CARB Reference Chart</span>
-            <span style={{ fontSize: 16, color: "#9ca3af" }}>↗</span>
+            OSG HY-PRO CARB Reference Chart
           </button>
         </div>
       )}
@@ -460,24 +474,41 @@ function DrillView() {
         </div>
       )}
 
-      {solidResult && (
-        <div className="result-card">
-          <div className="result-eyebrow">Proven Parameters</div>
-          <div className="result-grid">
-            <div className="result-stat">
-              <div className="result-stat-label">RPM</div>
-              <div className="result-stat-value" style={{ color: "#60a5fa" }}>{solidResult.rpm.toLocaleString()}</div>
-              <div className="result-stat-unit">rev / min</div>
+      {solidResult && (() => {
+        const dia = parseFloat(diameter);
+        const sfm  = Math.round((solidResult.rpm * dia * Math.PI) / 12);
+        const ipt  = solidResult.ipm && solidResult.rpm ? (solidResult.ipm / solidResult.rpm).toFixed(4) : null;
+        return (
+          <div className="result-card">
+            <div className="result-eyebrow">Proven Parameters</div>
+            <div className="result-grid">
+              <div className="result-stat">
+                <div className="result-stat-label">RPM</div>
+                <div className="result-stat-value" style={{ color: "#60a5fa" }}>{solidResult.rpm.toLocaleString()}</div>
+                <div className="result-stat-unit">rev / min</div>
+              </div>
+              <div className="result-stat">
+                <div className="result-stat-label">Feed</div>
+                <div className="result-stat-value" style={{ color: "#34d399" }}>{Number(solidResult.ipm).toFixed(4)}</div>
+                <div className="result-stat-unit">in / min</div>
+              </div>
             </div>
-            <div className="result-stat">
-              <div className="result-stat-label">Feed</div>
-              <div className="result-stat-value" style={{ color: "#34d399" }}>{solidResult.ipm}</div>
-              <div className="result-stat-unit">in / min</div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 12 }}>
+              <div className="result-stat">
+                <div className="result-stat-label">SFM</div>
+                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sfm}</div>
+                <div className="result-stat-unit">ft / min</div>
+              </div>
+              <div className="result-stat">
+                <div className="result-stat-label">Feed / Rev</div>
+                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{ipt}</div>
+                <div className="result-stat-unit">in / rev</div>
+              </div>
             </div>
+            <div className="result-context">{diameter}" · {material} · Solid Carbide Drill</div>
           </div>
-          <div className="result-context">{diameter}" · {material} · Solid Carbide Drill</div>
-        </div>
-      )}
+        );
+      })()}
 
       {(drillType === "indexable" || drillType === "spade") && (idxResult || spdResult) && (() => {
         const r = idxResult || spdResult;
@@ -506,9 +537,10 @@ function DrillView() {
 }
 
 function TapView() {
+  const [tapType,  setTapType]  = useState("");
   const [system,   setSystem]   = useState("");
   const [tapSize,  setTapSize]  = useState(null);
-  const [material, setMaterial] = useState("Cold Roll");
+  const [material, setMaterial] = useState("");
 
   const rows     = system === "inch" ? FORM_TAP_INCH : system === "metric" ? FORM_TAP_METRIC : [];
   const selected = tapSize ? rows.find(r => r.tap === tapSize) : null;
@@ -516,15 +548,37 @@ function TapView() {
   const isMetric = system === "metric";
 
   function switchSystem(s) { setSystem(s); setTapSize(null); }
+  function switchTapType(t) { setTapType(t); setSystem(""); setTapSize(null); setMaterial(""); }
+
+  const TAP_TYPES = [
+    { key: "form", label: "Form Tap" },
+    { key: "cut",  label: "Cut Tap", comingSoon: true },
+  ];
 
   const displayIpm = (ipm) => {
     if (!ipm && ipm !== 0) return "—";
-    return isMetric ? Number(ipm).toFixed(4) : ipm;
+    return Number(ipm).toFixed(4);
   };
 
   return (
     <>
       <div className="section">
+        <div className="section-label">Tap Type</div>
+        <div className="tool-list">
+          {TAP_TYPES.map(({ key, label, comingSoon }) => (
+            <button key={key}
+              onClick={() => { if (!comingSoon) switchTapType(key); }}
+              className={`tool-btn${tapType === key ? " selected" : ""}${comingSoon ? " unavailable" : ""}`}>
+              <span>{label}</span>
+              {comingSoon
+                ? <span className="badge">Coming Soon</span>
+                : tapType === key && <span className="check">✓</span>}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className={`section${!tapType ? " locked" : ""}`}>
         <div className="section-label">Thread System</div>
         <div className="tool-list">
           <button className={`tool-btn${system === "inch" ? " selected" : ""}`} onClick={() => switchSystem("inch")}>
@@ -606,10 +660,121 @@ function TapView() {
 // ─── ROOT APP ─────────────────────────────────────────────────────────────────
 
 const TABS = [
-  { key: "endmill", label: "End Mill" },
-  { key: "drill",   label: "Drill" },
-  { key: "tap",     label: "Form Tap" },
+  { key: "endmill", label: "Milling" },
+  { key: "drill",   label: "Drilling" },
+  { key: "tap",     label: "Tapping" },
+  { key: "calc",    label: "Calculators" },
 ];
+
+function CalcView() {
+  const [rpmSfm, setRpmSfm] = useState("");
+  const [rpmDia, setRpmDia] = useState("");
+  const rpmResult = rpmSfm && rpmDia ? Math.round((parseFloat(rpmSfm) * 12) / (Math.PI * parseFloat(rpmDia))) : null;
+
+  const [frRpm,    setFrRpm]    = useState("");
+  const [frIpr,    setFrIpr]    = useState("");
+  const feedFromIpr = frRpm && frIpr ? (parseFloat(frRpm) * parseFloat(frIpr)).toFixed(4) : null;
+
+  const [iptRpm,    setIptRpm]    = useState("");
+  const [frIpt,    setFrIpt]    = useState("");
+  const [frFlutes, setFrFlutes] = useState("");
+  const feedFromIpt = iptRpm && frIpt && frFlutes ? (parseFloat(iptRpm) * parseFloat(frIpt) * parseFloat(frFlutes)).toFixed(4) : null;
+
+  const [sfmRpm, setSfmRpm] = useState("");
+  const [sfmDia, setSfmDia] = useState("");
+  const sfmResult = sfmRpm && sfmDia ? Math.round((parseFloat(sfmRpm) * Math.PI * parseFloat(sfmDia)) / 12) : null;
+
+  const CalcResult = ({ label, value, unit, color }) => (
+    <div className="calc-result">
+      <span className="calc-result-value" style={{ color }}>{value}</span>
+      <span className="calc-result-unit">{unit}</span>
+    </div>
+  );
+
+  return (
+    <div style={{ paddingTop: 4 }}>
+      {/* RPM from SFM */}
+      <div className="calc-card">
+        <div className="calc-card-header">
+          <span className="calc-card-title">RPM from SFM</span>
+          <button className="calc-reset" onClick={() => { setRpmSfm(""); setRpmDia(""); }}>Reset</button>
+        </div>
+        <div className="calc-input-grid-2">
+          <div className="calc-field">
+            <label>SFM</label>
+            <input type="number" inputMode="decimal" placeholder="350" value={rpmSfm} onChange={e => setRpmSfm(e.target.value)} />
+          </div>
+          <div className="calc-field">
+            <label>Diameter (in)</label>
+            <input type="number" inputMode="decimal" placeholder="0.500" value={rpmDia} onChange={e => setRpmDia(e.target.value)} />
+          </div>
+        </div>
+        {rpmResult !== null && !isNaN(rpmResult) && <CalcResult label="RPM" value={rpmResult.toLocaleString()} unit="rev / min" color="#60a5fa" />}
+      </div>
+
+      {/* Feed from IPR */}
+      <div className="calc-card">
+        <div className="calc-card-header">
+          <span className="calc-card-title">Feed Rate from IPR</span>
+          <button className="calc-reset" onClick={() => { setFrRpm(""); setFrIpr(""); }}>Reset</button>
+        </div>
+        <div className="calc-input-grid-2">
+          <div className="calc-field">
+            <label>RPM</label>
+            <input type="number" inputMode="decimal" placeholder="3000" value={frRpm} onChange={e => setFrRpm(e.target.value)} />
+          </div>
+          <div className="calc-field">
+            <label>IPR</label>
+            <input type="number" inputMode="decimal" placeholder="0.008" value={frIpr} onChange={e => setFrIpr(e.target.value)} />
+          </div>
+        </div>
+        {feedFromIpr !== null && !isNaN(feedFromIpr) && <CalcResult label="Feed" value={feedFromIpr} unit="in / min" color="#34d399" />}
+      </div>
+
+      {/* Feed from IPT */}
+      <div className="calc-card">
+        <div className="calc-card-header">
+          <span className="calc-card-title">Feed Rate from IPT</span>
+          <button className="calc-reset" onClick={() => { setIptRpm(""); setFrIpt(""); setFrFlutes(""); }}>Reset</button>
+        </div>
+        <div className="calc-input-grid-3">
+          <div className="calc-field">
+            <label>RPM</label>
+            <input type="number" inputMode="decimal" placeholder="3000" value={iptRpm} onChange={e => setIptRpm(e.target.value)} />
+          </div>
+          <div className="calc-field">
+            <label>IPT</label>
+            <input type="number" inputMode="decimal" placeholder="0.004" value={frIpt} onChange={e => setFrIpt(e.target.value)} />
+          </div>
+          <div className="calc-field">
+            <label>Flutes</label>
+            <input type="number" inputMode="decimal" placeholder="4" value={frFlutes} onChange={e => setFrFlutes(e.target.value)} />
+          </div>
+        </div>
+        {feedFromIpt !== null && !isNaN(feedFromIpt) && <CalcResult label="Feed" value={feedFromIpt} unit="in / min" color="#34d399" />}
+      </div>
+
+      {/* SFM from RPM */}
+      <div className="calc-card">
+        <div className="calc-card-header">
+          <span className="calc-card-title">SFM from RPM</span>
+          <button className="calc-reset" onClick={() => { setSfmRpm(""); setSfmDia(""); }}>Reset</button>
+        </div>
+        <div className="calc-input-grid-2">
+          <div className="calc-field">
+            <label>RPM</label>
+            <input type="number" inputMode="decimal" placeholder="5000" value={sfmRpm} onChange={e => setSfmRpm(e.target.value)} />
+          </div>
+          <div className="calc-field">
+            <label>Diameter (in)</label>
+            <input type="number" inputMode="decimal" placeholder="0.250" value={sfmDia} onChange={e => setSfmDia(e.target.value)} />
+          </div>
+        </div>
+        {sfmResult !== null && !isNaN(sfmResult) && <CalcResult label="SFM" value={sfmResult.toLocaleString()} unit="surface ft / min" color="#fb923c" />}
+      </div>
+    </div>
+  );
+}
 
 export default function App() {
   const [tab, setTab] = useState("endmill");
@@ -634,6 +799,7 @@ export default function App() {
         {tab === "endmill" && <EndmillView />}
         {tab === "drill"   && <DrillView />}
         {tab === "tap"     && <TapView />}
+        {tab === "calc"    && <CalcView />}
         <div style={{ height: 32 }} />
       </div>
     </>
