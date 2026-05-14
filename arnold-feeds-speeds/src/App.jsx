@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // ─── DATA ─────────────────────────────────────────────────────────────────────
 
@@ -260,7 +260,6 @@ function EndmillView({ onResult }) {
   function selectTool(key) { setToolType(key); setMaterial(""); setDiameter(""); }
   function reset() { setToolType(""); setMaterial(""); setDiameter(""); }
 
-  const { useEffect } = React;
   useEffect(() => {
     if (!result || !onResult) return;
     const dia = parseFloat(diameter);
@@ -455,7 +454,6 @@ function DrillView({ onResult }) {
   const spdResult   = drillType === "spade"     && material ? SPADE_DATA[material]     : null;
   const sandvikResult = drillType === "sandvik" && material ? SANDVIK_DATA[material] : null;
 
-  const { useEffect } = React;
   useEffect(() => {
     if (!onResult) return;
     if (solidResult) {
@@ -691,7 +689,6 @@ function TapView({ onResult }) {
     return Number(ipm).toFixed(4);
   };
 
-  const { useEffect } = React;
   useEffect(() => {
     if (!onResult) return;
     if (selected && sf) {
