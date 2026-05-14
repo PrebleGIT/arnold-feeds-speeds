@@ -144,10 +144,8 @@ const css = `
   .nav-tabs::-webkit-scrollbar { display: none; }
   .nav-tab { flex-shrink: 0; padding: 12px 14px 11px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; color: #adb5bd; background: transparent; border: none; border-bottom: 2px solid transparent; cursor: pointer; transition: color 0.15s, border-color 0.15s; white-space: nowrap; letter-spacing: 0.01em; }
   .nav-tab.active { color: #0d0d0d; border-bottom-color: #0d0d0d; }
-  .desktop-layout { display: block; }
-  .desktop-sidebar { display: none; }
-  .desktop-content { display: block; }
-  .desktop-result-panel { display: none; }
+  .desktop-body { display: block; }
+  .desktop-result { display: none; }
   .section { padding: 20px 16px 0; }
   .section.locked { opacity: 0.3; pointer-events: none; }
   .section-label { font-size: 10px; font-weight: 700; color: #adb5bd; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
@@ -209,9 +207,9 @@ const css = `
     .nav-tab.active { border-left-color: #0d0d0d; border-bottom-color: transparent; background: #f5f5f5; color: #0d0d0d; }
 
     /* Body splits into left selections + right result */
-    .desktop-body { grid-column: 2; grid-row: 2 / 4; display: grid; grid-template-columns: 360px 1fr; overflow: hidden; }
+    .desktop-body { grid-column: 2; grid-row: 2 / 4; display: grid; grid-template-columns: 360px 1fr; overflow: hidden; height: 100%; }
     .desktop-selections { overflow-y: auto; background: #f0f1f3; padding-bottom: 32px; border-right: 1px solid #eaecef; }
-    .desktop-result { overflow-y: auto; background: #18191c; padding: 28px 24px; }
+    .desktop-result { display: flex; overflow-y: auto; background: #f0f1f3; padding: 28px 24px; flex-direction: column; min-height: 0; }
 
     /* Hide result cards from left selections panel on desktop */
     .desktop-selections .result-card { display: none; }
@@ -220,6 +218,7 @@ const css = `
     /* Result stat sizing on desktop */
     .desktop-result .result-stat-value { font-size: 42px; }
     .desktop-result .result-stat { padding: 18px 20px; }
+    .desktop-result .result-eyebrow { font-size: 11px; }
 
     /* Section spacing */
     .section { padding: 20px 20px 0; }
@@ -1265,8 +1264,19 @@ export default function App() {
           </div>
           <div className="desktop-result">
             {resultNode ?? (
-              <div style={{ color: "#3a3f4a", fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500, opacity: 0.4, textAlign: "center", marginTop: "30vh" }}>
-                Make selections on the left to see results
+              <div style={{
+                display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+                flex: 1, gap: 12, opacity: 0.4,
+              }}>
+                <div style={{ width: 48, height: 48, borderRadius: 12, background: "#d1d5db", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6b7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                </div>
+                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 600, color: "#374151" }}>No result yet</div>
+                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "#6b7280", textAlign: "center", maxWidth: 200, lineHeight: 1.6 }}>
+                  Make your selections on the left to see feeds &amp; speeds here
+                </div>
               </div>
             )}
           </div>
