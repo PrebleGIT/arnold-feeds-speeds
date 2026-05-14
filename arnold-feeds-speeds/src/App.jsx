@@ -198,29 +198,28 @@ const css = `
 
   /* ── DESKTOP (768px+) ── */
   @media (min-width: 768px) {
-    body { overflow: hidden; height: 100vh; }
-    .app { max-width: 100%; height: 100vh; display: grid; grid-template-rows: 56px 1fr; grid-template-columns: 200px 1fr; padding-bottom: 0; overflow: hidden; }
-    .header { grid-column: 1 / -1; grid-row: 1; border-right: none; position: static; z-index: 10; padding: 0 24px; }
+    body { height: 100vh; overflow: hidden; }
+    .app { max-width: 100%; height: 100vh; display: grid; grid-template-rows: 56px auto 1fr; grid-template-columns: 200px 1fr; overflow: hidden; }
+    .header { grid-column: 1 / -1; grid-row: 1; position: static; padding: 0 24px; }
     .header-title { font-size: 20px; }
 
     /* Sidebar nav */
-    .nav-tabs { grid-column: 1; grid-row: 2; flex-direction: column; padding: 16px 12px; border-bottom: none; border-right: 1px solid #eaecef; overflow-y: auto; overflow-x: hidden; background: #fff; align-items: stretch; gap: 2px; }
+    .nav-tabs { grid-column: 1; grid-row: 2 / 4; flex-direction: column; padding: 16px 12px; border-bottom: none; border-right: 1px solid #eaecef; overflow-y: auto; overflow-x: hidden; background: #fff; align-items: stretch; gap: 2px; }
     .nav-tab { padding: 11px 14px; border-bottom: none; border-left: 3px solid transparent; border-radius: 10px; font-size: 13px; text-align: left; white-space: normal; }
     .nav-tab.active { border-left-color: #0d0d0d; border-bottom-color: transparent; background: #f5f5f5; color: #0d0d0d; }
 
-    /* Main content area splits into selections + result */
-    .desktop-body { grid-column: 2; grid-row: 2; display: grid; grid-template-columns: 380px 1fr; overflow: hidden; }
-    .desktop-selections { overflow-y: auto; border-right: 1px solid #eaecef; background: #f0f1f3; padding-bottom: 32px; }
-    .desktop-result { overflow-y: auto; background: #18191c; padding: 28px 24px; display: flex; flex-direction: column; gap: 16px; }
+    /* Body splits into left selections + right result */
+    .desktop-body { grid-column: 2; grid-row: 2 / 4; display: grid; grid-template-columns: 360px 1fr; overflow: hidden; }
+    .desktop-selections { overflow-y: auto; background: #f0f1f3; padding-bottom: 32px; border-right: 1px solid #eaecef; }
+    .desktop-result { overflow-y: auto; background: #18191c; padding: 28px 24px; }
 
-    /* Result card fills right panel on desktop */
-    .result-card { margin: 0; border-radius: 16px; }
-    .result-stat-value { font-size: 38px; }
-    .result-stat { padding: 18px 20px; }
+    /* Hide result cards from left selections panel on desktop */
+    .desktop-selections .result-card { display: none; }
+    .desktop-result .result-card { display: block; margin: 0 0 16px 0; border-radius: 16px; }
 
-    /* Calc cards side by side */
-    .desktop-calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; padding: 20px; }
-    .calc-card { margin: 0; }
+    /* Result stat sizing on desktop */
+    .desktop-result .result-stat-value { font-size: 42px; }
+    .desktop-result .result-stat { padding: 18px 20px; }
 
     /* Section spacing */
     .section { padding: 20px 20px 0; }
@@ -232,7 +231,7 @@ const css = `
 
 // ─── VIEWS ────────────────────────────────────────────────────────────────────
 
-function EndmillView() {
+function EndmillView({ onResult }) {
   const [toolType, setToolType] = useState("");
   const [material, setMaterial] = useState("");
   const [diameter, setDiameter] = useState("");
@@ -260,6 +259,35 @@ function EndmillView() {
 
   function selectTool(key) { setToolType(key); setMaterial(""); setDiameter(""); }
   function reset() { setToolType(""); setMaterial(""); setDiameter(""); }
+
+  const { useEffect } = React;
+  useEffect(() => {
+    if (!result || !onResult) return;
+    const dia = parseFloat(diameter);
+    const sfm = Math.round((result.rpm * dia * Math.PI) / 12);
+    const ipr = result.rpm ? (result.ipm / result.rpm).toFixed(4) : null;
+    onResult(
+      <div className="result-card">
+        <div className="result-eyebrow">Proven Parameters</div>
+        <div className="result-grid">
+          <div className="result-stat"><div className="result-stat-label">RPM</div><div className="result-stat-value" style={{ color: "#60a5fa" }}>{result.rpm.toLocaleString()}</div><div className="result-stat-unit">rev / min</div></div>
+          <div className="result-stat"><div className="result-stat-label">Feed</div><div className="result-stat-value" style={{ color: "#34d399" }}>{result.ipm}</div><div className="result-stat-unit">in / min</div></div>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 10 }}>
+          <div className="result-stat"><div className="result-stat-label">SFM</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 28, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sfm}</div><div className="result-stat-unit">ft / min</div></div>
+          <div className="result-stat"><div className="result-stat-label">IPR</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 28, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{ipr}</div><div className="result-stat-unit">in / rev</div></div>
+        </div>
+        {toolData.info?.[diameter] && toolData.info[diameter].map(({ loc, partNo }) => (
+          <div key={partNo} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 10 }}>
+            <div className="result-stat"><div className="result-stat-label">Length of Cut</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, color: "#fbbf24", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{loc}</div></div>
+            <div className="result-stat"><div className="result-stat-label">Part #</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, color: "#e879f9", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{partNo}</div></div>
+          </div>
+        ))}
+        <div className="result-context">{diameter}" · {material} · {toolType}</div>
+      </div>
+    );
+    if (!result && onResult) onResult(null);
+  }, [result, diameter, material, toolType]);
 
   const TOOLS = ["Flat End Mill — Rough", "Flat End Mill — Finish", "Shell Mill"];
 
@@ -417,7 +445,7 @@ const SANDVIK_DATA = {
 };
 const SANDVIK_MATERIALS = ["Plastic", "Aluminum", "CRS", "Stainless", "Tool Steel"];
 
-function DrillView() {
+function DrillView({ onResult }) {
   const [drillType, setDrillType] = useState("");
   const [material,  setMaterial]  = useState("");
   const [diameter,  setDiameter]  = useState("");
@@ -425,6 +453,70 @@ function DrillView() {
   const solidResult = drillType === "solid" && material && diameter ? DRILL_DATA[diameter]?.[material] ?? null : null;
   const idxResult   = drillType === "indexable" && material ? INDEXABLE_DATA[material] : null;
   const spdResult   = drillType === "spade"     && material ? SPADE_DATA[material]     : null;
+  const sandvikResult = drillType === "sandvik" && material ? SANDVIK_DATA[material] : null;
+
+  const { useEffect } = React;
+  useEffect(() => {
+    if (!onResult) return;
+    if (solidResult) {
+      const dia = parseFloat(diameter);
+      const sfm = Math.round((solidResult.rpm * dia * Math.PI) / 12);
+      const ipt = solidResult.rpm ? (solidResult.ipm / solidResult.rpm).toFixed(4) : null;
+      onResult(
+        <div className="result-card">
+          <div className="result-eyebrow">Proven Parameters</div>
+          <div className="result-grid">
+            <div className="result-stat"><div className="result-stat-label">RPM</div><div className="result-stat-value" style={{ color: "#60a5fa" }}>{solidResult.rpm.toLocaleString()}</div><div className="result-stat-unit">rev / min</div></div>
+            <div className="result-stat"><div className="result-stat-label">Feed</div><div className="result-stat-value" style={{ color: "#34d399" }}>{Number(solidResult.ipm).toFixed(4)}</div><div className="result-stat-unit">in / min</div></div>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 10 }}>
+            <div className="result-stat"><div className="result-stat-label">SFM</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 28, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sfm}</div><div className="result-stat-unit">ft / min</div></div>
+            <div className="result-stat"><div className="result-stat-label">Feed / Rev</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 28, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{ipt}</div><div className="result-stat-unit">in / rev</div></div>
+          </div>
+          <div className="result-context">{diameter}" · {material} · Solid Carbide Drill</div>
+        </div>
+      );
+    } else if (idxResult) {
+      onResult(
+        <div className="result-card">
+          <div className="result-eyebrow">Sumitomo Flat Bottom Drill</div>
+          <div className="result-grid">
+            <div className="result-stat"><div className="result-stat-label">SFM</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 32, color: "#60a5fa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{idxResult.sfm}</div><div className="result-stat-unit">surface ft / min</div></div>
+            <div className="result-stat"><div className="result-stat-label">Feed / Rev</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 32, color: "#34d399", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{idxResult.cl}</div><div className="result-stat-unit">in / rev</div></div>
+          </div>
+          <div className="result-context">{material} · Sumitomo Flat Bottom</div>
+        </div>
+      );
+    } else if (spdResult) {
+      onResult(
+        <div className="result-card">
+          <div className="result-eyebrow">Sumitomo Spade Drill</div>
+          <div className="result-grid">
+            <div className="result-stat"><div className="result-stat-label">SFM Range</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 16, color: "#60a5fa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{spdResult.sfm}</div><div className="result-stat-unit">surface ft / min</div></div>
+            <div className="result-stat"><div className="result-stat-label">IPR Range</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 16, color: "#34d399", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{spdResult.cl}</div><div className="result-stat-unit">in / rev</div></div>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 10 }}>
+            <div className="result-stat"><div className="result-stat-label">Recommended SFM</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 26, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{spdResult.sfmMid}</div><div className="result-stat-unit">ft / min</div></div>
+            <div className="result-stat"><div className="result-stat-label">Recommended IPR</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 26, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{spdResult.clMid}</div><div className="result-stat-unit">in / rev</div></div>
+          </div>
+          <div className="result-context">{material} · Sumitomo Spade</div>
+        </div>
+      );
+    } else if (sandvikResult) {
+      onResult(
+        <div className="result-card">
+          <div className="result-eyebrow">Sandvik DS20 · Starting Parameters</div>
+          <div className="result-grid">
+            <div className="result-stat"><div className="result-stat-label">SFM</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 32, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sandvikResult.sfm}</div><div className="result-stat-unit">surface ft / min</div></div>
+            <div className="result-stat"><div className="result-stat-label">Feed / Rev</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 32, color: "#34d399", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sandvikResult.ipr}</div><div className="result-stat-unit">in / rev</div></div>
+          </div>
+          <div className="result-context">{material} · Sandvik DS20</div>
+        </div>
+      );
+    } else {
+      onResult(null);
+    }
+  }, [solidResult, idxResult, spdResult, sandvikResult, material, diameter, drillType]);
 
   function resetSel() { setMaterial(""); setDiameter(""); }
 
@@ -436,8 +528,6 @@ function DrillView() {
   ];
 
   const sfmMats = drillType === "indexable" ? Object.keys(INDEXABLE_DATA) : drillType === "spade" ? Object.keys(SPADE_DATA) : SANDVIK_MATERIALS;
-
-  const sandvikResult = drillType === "sandvik" && material ? SANDVIK_DATA[material] : null;
 
   return (
     <>
@@ -576,7 +666,7 @@ function DrillView() {
   );
 }
 
-function TapView() {
+function TapView({ onResult }) {
   const [tapType,  setTapType]  = useState("");
   const [system,   setSystem]   = useState("");
   const [tapSize,  setTapSize]  = useState(null);
@@ -600,6 +690,29 @@ function TapView() {
     if (!ipm && ipm !== 0) return "—";
     return Number(ipm).toFixed(4);
   };
+
+  const { useEffect } = React;
+  useEffect(() => {
+    if (!onResult) return;
+    if (selected && sf) {
+      onResult(
+        <div className="result-card">
+          <div className="result-eyebrow">Form Tap · {selected.tap} · {material}</div>
+          <div className="result-grid">
+            <div className="result-stat"><div className="result-stat-label">RPM</div><div className="result-stat-value" style={{ color: "#60a5fa" }}>{sf.rpm.toLocaleString()}</div><div className="result-stat-unit">rev / min</div></div>
+            <div className="result-stat"><div className="result-stat-label">Feed</div><div className="result-stat-value" style={{ color: "#34d399", fontSize: isMetric ? 24 : 32 }}>{displayIpm(sf.ipm)}</div><div className="result-stat-unit">in / min</div></div>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginTop: 10 }}>
+            <div className="result-stat"><div className="result-stat-label">SFM</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{selected.sfm[material]}</div><div className="result-stat-unit">ft / min</div></div>
+            <div className="result-stat"><div className="result-stat-label">Form Drill</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: "#f9fafb", fontWeight: 500, lineHeight: 1.3, marginTop: 4 }}>{selected.drill}</div></div>
+            <div className="result-stat"><div className="result-stat-label">Pitch</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 18, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{selected.pitch}"</div><div className="result-stat-unit">in / rev</div></div>
+          </div>
+        </div>
+      );
+    } else {
+      onResult(null);
+    }
+  }, [selected, sf, material, isMetric]);
 
   return (
     <>
@@ -1126,6 +1239,7 @@ function RefView() {
 
 export default function App() {
   const [tab, setTab] = useState("endmill");
+  const [resultNode, setResultNode] = useState(null);
 
   return (
     <>
@@ -1140,25 +1254,26 @@ export default function App() {
         <div className="nav-tabs">
           {TABS.map(t => (
             <button key={t.key} className={`nav-tab${tab === t.key ? " active" : ""}`}
-              onClick={() => setTab(t.key)}>{t.label}</button>
+              onClick={() => { setTab(t.key); setResultNode(null); }}>{t.label}</button>
           ))}
         </div>
         <div className="desktop-body">
           <div className="desktop-selections">
-            {tab === "endmill" && <EndmillView />}
-            {tab === "drill"   && <DrillView />}
-            {tab === "tap"     && <TapView />}
+            {tab === "endmill" && <EndmillView onResult={setResultNode} />}
+            {tab === "drill"   && <DrillView   onResult={setResultNode} />}
+            {tab === "tap"     && <TapView     onResult={setResultNode} />}
             {tab === "turning" && <TurningView />}
             {tab === "calc"    && <CalcView />}
             {tab === "ref"     && <RefView />}
           </div>
           <div className="desktop-result">
-            <div style={{ color: "#3a3f4a", fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500, opacity: 0.5, textAlign: "center", marginTop: "30vh" }}>
-              Make selections on the left to see results
-            </div>
+            {resultNode ?? (
+              <div style={{ color: "#3a3f4a", fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 500, opacity: 0.4, textAlign: "center", marginTop: "30vh" }}>
+                Make selections on the left to see results
+              </div>
+            )}
           </div>
         </div>
-        <div style={{ height: 32 }} />
       </div>
     </>
   );
