@@ -23,17 +23,6 @@ const SQUARE_EM_INFO = {
 “.7500”: [{ loc: ‘1.6250”’, partNo: “61466” }],
 };
 
-const BALL_EM_INFO = {
-“.0625”: [{ loc: ‘0.1250”’, partNo: “61100” }],
-“.0938”: [{ loc: ‘0.1875”’, partNo: “61124” }],
-“.125”:  [{ loc: ‘0.2500”’, partNo: “61142” }],
-“.187”:  [{ loc: ‘0.3125”’, partNo: “28490” }],
-“.250”:  [{ loc: ‘0.7500”’, partNo: “28580” }],
-“.312”:  [{ loc: ‘0.8125”’, partNo: “28620” }],
-“.375”:  [{ loc: ‘0.8750”’, partNo: “28680” }],
-“.500”:  [{ loc: ‘1.2500”’, partNo: “28761” }],
-};
-
 const ENDMILL_DATA = {
 “Flat End Mill — Rough”: {
 materials: [“Aluminum”, “CRS”, “Tool Steel”],
@@ -106,60 +95,6 @@ const SPADE_DATA = {
 “CRS”:        { sfm: “260 – 400”, cl: “.006 – .014”, sfmMid: 330,  clMid: “.010” },
 “Stainless”:  { sfm: “145 – 240”, cl: “.004 – .009”, sfmMid: 193,  clMid: “.007” },
 “Tool Steel”: { sfm: “130 – 230”, cl: “.006 – .010”, sfmMid: 180,  clMid: “.008” },
-};
-
-// OSG HY-PRO CARB data — RPM midpoints and IPR ranges from chart
-// Materials mapped: Cold Roll=Carbon/Mild, Tool Steel=Alloy 4140, Stainless=300/400SS, Aluminum=Aluminum Alloy
-// SFM calculated from RPM × dia (inches) × π / 12
-const OSG_DRILL_DATA = {
-“.125”: {
-“CRS”:  { rpm: 11690, ipr: “0.002–0.005”, sfm: 383 },
-“Aluminum”:   { rpm: 10850, ipr: “0.003–0.005”, sfm: 356 },
-“Tool Steel”: { rpm: 9860,  ipr: “0.002–0.005”, sfm: 323 },
-“Stainless”:  { rpm: 5580,  ipr: “0.002–0.004”, sfm: 183 },
-},
-“.187”: {
-“CRS”:  { rpm: 7790,  ipr: “0.004–0.007”, sfm: 383 },
-“Aluminum”:   { rpm: 7230,  ipr: “0.005–0.007”, sfm: 355 },
-“Tool Steel”: { rpm: 6570,  ipr: “0.004–0.007”, sfm: 323 },
-“Stainless”:  { rpm: 3720,  ipr: “0.004–0.006”, sfm: 183 },
-},
-“.250”: {
-“CRS”:  { rpm: 5840,  ipr: “0.005–0.010”, sfm: 383 },
-“Aluminum”:   { rpm: 5420,  ipr: “0.007–0.009”, sfm: 355 },
-“Tool Steel”: { rpm: 4930,  ipr: “0.005–0.010”, sfm: 323 },
-“Stainless”:  { rpm: 2790,  ipr: “0.006–0.008”, sfm: 183 },
-},
-“.375”: {
-“CRS”:  { rpm: 3900,  ipr: “0.007–0.011”, sfm: 383 },
-“Aluminum”:   { rpm: 3620,  ipr: “0.009–0.011”, sfm: 355 },
-“Tool Steel”: { rpm: 3290,  ipr: “0.007–0.011”, sfm: 323 },
-“Stainless”:  { rpm: 1860,  ipr: “0.007–0.009”, sfm: 183 },
-},
-“.437”: {
-“CRS”:  { rpm: 3340,  ipr: “0.008–0.012”, sfm: 383 },
-“Aluminum”:   { rpm: 3100,  ipr: “0.012–0.014”, sfm: 355 },
-“Tool Steel”: { rpm: 2820,  ipr: “0.008–0.012”, sfm: 323 },
-“Stainless”:  { rpm: 1590,  ipr: “0.008–0.010”, sfm: 183 },
-},
-“.500”: {
-“CRS”:  { rpm: 2920,  ipr: “0.008–0.013”, sfm: 383 },
-“Aluminum”:   { rpm: 2710,  ipr: “0.014–0.016”, sfm: 355 },
-“Tool Steel”: { rpm: 2460,  ipr: “0.008–0.013”, sfm: 323 },
-“Stainless”:  { rpm: 1390,  ipr: “0.008–0.010”, sfm: 183 },
-},
-“.6250”: {
-“CRS”:  { rpm: 2340,  ipr: “0.010–0.014”, sfm: 383 },
-“Aluminum”:   { rpm: 2170,  ipr: “0.018–0.020”, sfm: 355 },
-“Tool Steel”: { rpm: 1970,  ipr: “0.010–0.014”, sfm: 323 },
-“Stainless”:  { rpm: 1120,  ipr: “0.010–0.012”, sfm: 183 },
-},
-“.750”: {
-“CRS”:  { rpm: 1950,  ipr: “0.011–0.015”, sfm: 383 },
-“Aluminum”:   { rpm: 1810,  ipr: “0.021–0.023”, sfm: 355 },
-“Tool Steel”: { rpm: 1640,  ipr: “0.011–0.015”, sfm: 323 },
-“Stainless”:  { rpm: 930,   ipr: “0.011–0.013”, sfm: 183 },
-},
 };
 
 const FORM_TAP_INCH = [
