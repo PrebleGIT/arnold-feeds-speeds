@@ -816,6 +816,7 @@ const TABS = [
   { key: "turning",  label: "Turning" },
   { key: "calc",     label: "Calculators" },
   { key: "ref",      label: "Charts" },
+  { key: "links",    label: "Links" },
 ];
 
 function CalcView() {
@@ -938,6 +939,31 @@ function TurningView() {
             <span>{op}</span>
             <span className="badge">Coming Soon</span>
           </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function LinksView() {
+  const links = [
+    { label: "GARR Technical Advisor", sub: "Speeds, feeds & tool selection calculator", url: "https://www.garrtool.com/calc/index.html" },
+  ];
+
+  return (
+    <div className="section">
+      <div className="section-label">External Tools &amp; Resources</div>
+      <div className="tool-list">
+        {links.map(({ label, sub, url }) => (
+          <a key={label} href={url} target="_blank" rel="noopener noreferrer"
+            className="tool-btn"
+            style={{ textDecoration: "none" }}>
+            <div>
+              <div>{label}</div>
+              <div style={{ fontSize: 11, color: "#9ca3af", fontWeight: 400, marginTop: 3 }}>{sub}</div>
+            </div>
+            <span style={{ fontSize: 16, color: "#9ca3af", flexShrink: 0 }}></span>
+          </a>
         ))}
       </div>
     </div>
@@ -1261,6 +1287,7 @@ export default function App() {
             {tab === "turning" && <TurningView />}
             {tab === "calc"    && <CalcView />}
             {tab === "ref"     && <RefView />}
+            {tab === "links"   && <LinksView />}
           </div>
           <div className="desktop-result">
             {resultNode ?? (
