@@ -1229,7 +1229,6 @@ fontFamily: “‘DM Sans’, sans-serif”, fontSize: 14, fontWeight: 600, curs
 
 export default function App() {
 const [tab, setTab] = useState(“endmill”);
-const isDesktop = typeof window !== ‘undefined’ && window.innerWidth >= 768;
 
 return (
 <>
