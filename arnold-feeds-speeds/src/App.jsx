@@ -892,12 +892,30 @@ const KEYWAY_DATA = {
   "3","3-1/16","3-1/8","3-3/16","3-1/4","3-5/16","3-3/8","3-7/16","3-1/2","3-9/16","3-5/8","3-11/16","3-3/4","3-13/16","3-7/8","3-15/16","4"
 ];
 
-function KeywayView() {
+function KeywayView({ onResult }) {
   const [shaft,  setShaft]  = useState("");
   const [keyway, setKeyway] = useState("");
 
   const availableKeyways = shaft ? Object.keys(KEYWAY_DATA[shaft]) : [];
   const result = shaft && keyway ? KEYWAY_DATA[shaft]?.[keyway] ?? null : null;
+
+  useEffect(() => {
+    if (!onResult) return;
+    if (result) {
+      onResult(
+        <div className="result-card">
+          <div className="result-eyebrow">Keyway Depth</div>
+          <div style={{ textAlign: "center", padding: "16px 0" }}>
+            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 52, fontWeight: 500, color: "#60a5fa", lineHeight: 1 }}>{parseFloat(result).toFixed(4).replace(/^0/, "")}"</div>
+          </div>
+          <div className="result-context">{shaft}" shaft · {keyway}" keyway</div>
+
+        </div>
+      );
+    } else {
+      onResult(null);
+    }
+  }, [result, shaft, keyway]);
 
   return (
     <>
@@ -933,13 +951,10 @@ function KeywayView() {
         <div className="result-card">
           <div className="result-eyebrow">Keyway Depth</div>
           <div style={{ textAlign: "center", padding: "16px 0" }}>
-            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 52, fontWeight: 500, color: "#60a5fa", lineHeight: 1 }}>{result}"</div>
-            <div style={{ fontSize: 11, color: "#5a6072", marginTop: 8, letterSpacing: "0.04em" }}>inches from shaft OD</div>
+            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 52, fontWeight: 500, color: "#60a5fa", lineHeight: 1 }}>{parseFloat(result).toFixed(4).replace(/^0/, "")}"</div>
           </div>
           <div className="result-context">{shaft}" shaft · {keyway}" keyway</div>
-          <div style={{ marginTop: 12, padding: "10px 14px", background: "rgba(251,191,36,0.1)", border: "1px solid rgba(251,191,36,0.3)", borderRadius: 10, fontSize: 11, color: "#fbbf24", textAlign: "center", lineHeight: 1.5 }}>
-            ⚠ Always verify against a hard copy before use
-          </div>
+
         </div>
       )}
     </>
@@ -1073,7 +1088,7 @@ function TurningView() {
   );
 }
 
-function CountersinkView() {
+function CountersinkView({ onResult }) {
   const [machine,  setMachine]  = useState("");
   const [system,   setSystem]   = useState("");
 
@@ -1083,6 +1098,27 @@ function CountersinkView() {
     angle: system === "metric" ? "90°" : "82°",
     label: system === "metric" ? "Metric (90°)" : "Inch (82°)",
   } : null;
+
+  useEffect(() => {
+    if (!onResult) return;
+    if (info) {
+      onResult(
+        <div className="result-card">
+          <div className="result-eyebrow">{machine} · {info.label}</div>
+          <div style={{ textAlign: "center", padding: "20px 0" }}>
+            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 64, fontWeight: 500, color: "#60a5fa", lineHeight: 1 }}>{info.angle}</div>
+            <div style={{ fontSize: 12, color: "#5a6072", marginTop: 8, letterSpacing: "0.04em" }}>countersink angle</div>
+          </div>
+          <div className="result-context">{machine} · {system === "metric" ? "Metric threads" : "Inch threads"}</div>
+          <div style={{ marginTop: 12, padding: "10px 14px", background: "rgba(251,191,36,0.1)", border: "1px solid rgba(251,191,36,0.3)", borderRadius: 10, fontSize: 11, color: "#fbbf24", textAlign: "center", lineHeight: 1.5 }}>
+            Sizes &amp; depths coming soon
+          </div>
+        </div>
+      );
+    } else {
+      onResult(null);
+    }
+  }, [info, machine, system]);
 
   return (
     <>
@@ -1477,8 +1513,8 @@ export default function App() {
             {tab === "turning" && <TurningView />}
             {tab === "calc"        && <CalcView />}
             {tab === "ref"         && <RefView />}
-            {tab === "keyway"      && <KeywayView />}
-            {tab === "countersink" && <CountersinkView />}
+            {tab === "keyway"      && <KeywayView onResult={setResultNode} />}
+            {tab === "countersink" && <CountersinkView onResult={setResultNode} />}
             {tab === "links"       && <LinksView />}
           </div>
           <div className="desktop-result">
