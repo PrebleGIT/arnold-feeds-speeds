@@ -814,7 +814,7 @@ function TapView({ onResult }) {
       )}
 
       {/* ── THREAD DIMENSIONS ── */}
-      {mode === "thread" && <ThreadDimView />}
+      {mode === "thread" && <ThreadDimView onResult={onResult} />}
     </>
   );
 }
@@ -1212,7 +1212,7 @@ function calcMetricThread(d, pitch, cls, internal) {
   }
 }
 
-function ThreadDimView() {
+function ThreadDimView({ onResult }) {
   const [system,   setSystem]   = useState("inch");
   const [dir,      setDir]      = useState("external");
   const [cls,      setCls]      = useState(2);
@@ -1239,6 +1239,60 @@ function ThreadDimView() {
       if (d > 0 && p > 0) result = calcMetricThread(d, p, cls, internal);
     }
   }
+
+  const unit = system === "inch" ? "in" : "mm";
+  const threadLabel = mode === "preset" ? preset?.label
+    : system === "inch" ? `${custD}" – ${custTPI} TPI` : `M${custD}×${custP}`;
+
+  useEffect(() => {
+    if (!onResult) return;
+    if (!result) { onResult(null); return; }
+    onResult(
+      <div className="result-card">
+        <div className="result-eyebrow">{threadLabel} · {result.tdLabel}</div>
+        <div style={{ marginTop:12 }}>
+          <div style={{ fontSize:10, fontWeight:700, color:"#5a6072", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:8 }}>Nominal</div>
+          {[
+            ["Major Diameter", `${result.major} ${unit}`],
+            ["Pitch", result.pitch],
+            ["Pitch (Distance)", `${result.pitchDist} ${unit}`],
+            ["Pitch Diameter", `${result.d2basic} ${unit}`],
+            ["Minor Diameter", `${result.d3basic} ${unit}`],
+            ["Thread Depth", `${result.hs} ${unit}`],
+            ["Addendum", `${result.has} ${unit}`],
+            ["Crest Width", `${result.Fcs} ${unit}`],
+          ].map(([label, value]) => (
+            <div key={label} style={{ display:"flex", justifyContent:"space-between", padding:"8px 12px", background:"rgba(255,255,255,0.04)", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", marginBottom:5 }}>
+              <span style={{ fontSize:11, color:"#9ca3af" }}>{label}</span>
+              <span style={{ fontFamily:"'DM Mono',monospace", fontSize:12, color:"#f9fafb" }}>{value}</span>
+            </div>
+          ))}
+        </div>
+        <div style={{ marginTop:12 }}>
+          <div style={{ fontSize:10, fontWeight:700, color:"#5a6072", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:8 }}>Tolerance Range</div>
+          {result.allowance > 0 && (
+            <div style={{ display:"flex", justifyContent:"space-between", padding:"8px 12px", background:"rgba(255,255,255,0.04)", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", marginBottom:5 }}>
+              <span style={{ fontSize:11, color:"#9ca3af" }}>Allowance</span>
+              <span style={{ fontFamily:"'DM Mono',monospace", fontSize:12, color:"#f9fafb" }}>{result.allowance} {unit}</span>
+            </div>
+          )}
+          {[
+            ["Major Diameter", result.majorMin, result.majorMax, "#60a5fa"],
+            ["Pitch Diameter", result.pdMin,    result.pdMax,    "#34d399"],
+            ["Minor Diameter", result.minorMin, result.minorMax, "#a78bfa"],
+          ].map(([label, min, max, color]) => (
+            <div key={label} style={{ display:"flex", justifyContent:"space-between", alignItems:"center", padding:"8px 12px", background:"rgba(255,255,255,0.04)", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", marginBottom:5 }}>
+              <span style={{ fontSize:11, color:"#9ca3af" }}>{label}</span>
+              <div style={{ textAlign:"right" }}>
+                {min !== null && <div style={{ fontFamily:"'DM Mono',monospace", fontSize:11, color }}>Min: {min}</div>}
+                {max !== null && <div style={{ fontFamily:"'DM Mono',monospace", fontSize:11, color }}>Max: {max}</div>}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }, [result, system, dir, cls, mode, preset, custD, custTPI, custP]);
 
   const StatRow = ({ label, value, sub }) => (
     <div style={{ display:"flex", justifyContent:"space-between", alignItems:"baseline",
