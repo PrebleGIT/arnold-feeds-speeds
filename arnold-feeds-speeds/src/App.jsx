@@ -664,6 +664,7 @@ function DrillView({ onResult }) {
 }
 
 function TapView({ onResult }) {
+  const [mode,     setMode]     = useState("tap");  // "tap" | "thread"
   const [tapType,  setTapType]  = useState("");
   const [system,   setSystem]   = useState("");
   const [tapSize,  setTapSize]  = useState(null);
@@ -690,7 +691,7 @@ function TapView({ onResult }) {
 
   useEffect(() => {
     if (!onResult) return;
-    if (selected && sf) {
+    if (mode === "tap" && selected && sf) {
       onResult(
         <div className="result-card">
           <div className="result-eyebrow">Form Tap · {selected.tap} · {material}</div>
@@ -708,111 +709,120 @@ function TapView({ onResult }) {
     } else {
       onResult(null);
     }
-  }, [selected, sf, material, isMetric]);
+  }, [selected, sf, material, isMetric, mode]);
 
   return (
     <>
+      {/* Type selector */}
       <div className="section">
-        <div className="section-label">Tap Type</div>
-        <div className="tool-list">
-          {TAP_TYPES.map(({ key, label, comingSoon }) => (
-            <button key={key}
-              onClick={() => { if (!comingSoon) switchTapType(key); }}
-              className={`tool-btn${tapType === key ? " selected" : ""}${comingSoon ? " unavailable" : ""}`}>
-              <span>{label}</span>
-              {comingSoon
-                ? <span className="badge">Coming Soon</span>
-                : tapType === key && <span className="check">✓</span>}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className={`section${!tapType ? " locked" : ""}`}>
-        <div className="section-label">Thread System</div>
-        <div className="tool-list">
-          <button className={`tool-btn${system === "inch" ? " selected" : ""}`} onClick={() => switchSystem("inch")}>
-            <span>Inch</span>
-            {system === "inch" && <span className="check">✓</span>}
-          </button>
-          <button className={`tool-btn${system === "metric" ? " selected" : ""}`} onClick={() => switchSystem("metric")}>
-            <span>Metric</span>
-            {system === "metric" && <span className="check">✓</span>}
-          </button>
-        </div>
-      </div>
-
-      <div className={`section${!system ? " locked" : ""}`}>
-        <div className="section-label">Tap Size</div>
-        <div className="tap-size-grid">
-          {(system ? rows : FORM_TAP_INCH).map(row => (
-            <button key={row.tap} onClick={() => setTapSize(row.tap)}
-              className={`tap-size-btn${tapSize === row.tap ? " active" : ""}`}>
-              {row.tap}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className={`section${!tapSize ? " locked" : ""}`}>
-        <div className="section-label">Material</div>
+        <div className="section-label">Type</div>
         <div className="pill-grid">
-          {TAP_MATERIALS.map(m => (
-            <button key={m} onClick={() => setMaterial(m)}
-              className={`pill${material === m ? " sel-green" : ""}`}>{m}</button>
-          ))}
+          <button className={`pill${mode === "tap" ? " sel-green" : ""}`}
+            onClick={() => setMode("tap")}>Tap Speeds</button>
+          <button className={`pill${mode === "thread" ? " sel-green" : ""}`}
+            onClick={() => { setMode("thread"); onResult && onResult(null); }}>Thread Dimensions</button>
         </div>
       </div>
 
-      {selected && sf && (
-        <div className="result-card">
-          <div className="result-eyebrow">Form Tap · {selected.tap} · {material}</div>
-          <div className="result-grid">
-            <div className="result-stat">
-              <div className="result-stat-label">RPM</div>
-              <div className="result-stat-value" style={{ color: "#60a5fa" }}>{sf.rpm.toLocaleString()}</div>
-              <div className="result-stat-unit">rev / min</div>
-            </div>
-            <div className="result-stat">
-              <div className="result-stat-label">Feed</div>
-              <div className="result-stat-value" style={{ color: "#34d399", fontSize: isMetric ? 24 : 32 }}>{displayIpm(sf.ipm)}</div>
-              <div className="result-stat-unit">in / min</div>
-            </div>
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginTop: 12 }}>
-            <div className="result-stat">
-              <div className="result-stat-label">SFM</div>
-              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>
-                {selected.sfm[material]}
-              </div>
-              <div className="result-stat-unit">ft / min</div>
-            </div>
-            <div className="result-stat">
-              <div className="result-stat-label">Form Drill</div>
-              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: "#f9fafb", fontWeight: 500, lineHeight: 1.3, marginTop: 4 }}>
-                {selected.drill}
-              </div>
-            </div>
-            <div className="result-stat">
-              <div className="result-stat-label">Pitch</div>
-              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 18, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>
-                {selected.pitch}"
-              </div>
-              <div className="result-stat-unit">in / rev</div>
+      {/* ── TAP SPEEDS ── */}
+      {mode === "tap" && (
+        <>
+          <div className="section">
+            <div className="section-label">Tap Type</div>
+            <div className="tool-list">
+              {TAP_TYPES.map(({ key, label, comingSoon }) => (
+                <button key={key}
+                  onClick={() => { if (!comingSoon) switchTapType(key); }}
+                  className={`tool-btn${tapType === key ? " selected" : ""}${comingSoon ? " unavailable" : ""}`}>
+                  <span>{label}</span>
+                  {comingSoon
+                    ? <span className="badge">Coming Soon</span>
+                    : tapType === key && <span className="check">✓</span>}
+                </button>
+              ))}
             </div>
           </div>
-        </div>
+
+          <div className={`section${!tapType ? " locked" : ""}`}>
+            <div className="section-label">Thread System</div>
+            <div className="tool-list">
+              <button className={`tool-btn${system === "inch" ? " selected" : ""}`} onClick={() => switchSystem("inch")}>
+                <span>Inch</span>{system === "inch" && <span className="check">✓</span>}
+              </button>
+              <button className={`tool-btn${system === "metric" ? " selected" : ""}`} onClick={() => switchSystem("metric")}>
+                <span>Metric</span>{system === "metric" && <span className="check">✓</span>}
+              </button>
+            </div>
+          </div>
+
+          <div className={`section${!system ? " locked" : ""}`}>
+            <div className="section-label">Tap Size</div>
+            <div className="tap-size-grid">
+              {(system ? rows : FORM_TAP_INCH).map(row => (
+                <button key={row.tap} onClick={() => setTapSize(row.tap)}
+                  className={`tap-size-btn${tapSize === row.tap ? " active" : ""}`}>
+                  {row.tap}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className={`section${!tapSize ? " locked" : ""}`}>
+            <div className="section-label">Material</div>
+            <div className="pill-grid">
+              {TAP_MATERIALS.map(m => (
+                <button key={m} onClick={() => setMaterial(m)}
+                  className={`pill${material === m ? " sel-green" : ""}`}>{m}</button>
+              ))}
+            </div>
+          </div>
+
+          {selected && sf && (
+            <div className="result-card">
+              <div className="result-eyebrow">Form Tap · {selected.tap} · {material}</div>
+              <div className="result-grid">
+                <div className="result-stat">
+                  <div className="result-stat-label">RPM</div>
+                  <div className="result-stat-value" style={{ color: "#60a5fa" }}>{sf.rpm.toLocaleString()}</div>
+                  <div className="result-stat-unit">rev / min</div>
+                </div>
+                <div className="result-stat">
+                  <div className="result-stat-label">Feed</div>
+                  <div className="result-stat-value" style={{ color: "#34d399", fontSize: isMetric ? 24 : 32 }}>{displayIpm(sf.ipm)}</div>
+                  <div className="result-stat-unit">in / min</div>
+                </div>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginTop: 12 }}>
+                <div className="result-stat">
+                  <div className="result-stat-label">SFM</div>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{selected.sfm[material]}</div>
+                  <div className="result-stat-unit">ft / min</div>
+                </div>
+                <div className="result-stat">
+                  <div className="result-stat-label">Form Drill</div>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: "#f9fafb", fontWeight: 500, lineHeight: 1.3, marginTop: 4 }}>{selected.drill}</div>
+                </div>
+                <div className="result-stat">
+                  <div className="result-stat-label">Pitch</div>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 18, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{selected.pitch}"</div>
+                  <div className="result-stat-unit">in / rev</div>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
       )}
+
+      {/* ── THREAD DIMENSIONS ── */}
+      {mode === "thread" && <ThreadDimView />}
     </>
   );
 }
 
-// ─── ROOT APP ─────────────────────────────────────────────────────────────────
-
 const TABS = [
   { key: "endmill",     label: "Milling" },
   { key: "drill",       label: "Drilling" },
-  { key: "tap",         label: "Tapping" },
+  { key: "tap",         label: "Threading" },
   { key: "turning",     label: "Turning" },
   { key: "keyway",      label: "Keyways" },
   { key: "countersink", label: "Countersinks" },
@@ -824,6 +834,9 @@ const TABS = [
 // Keyway data: shaft size → keyway width → depth value
 // Values represent depth to add to keyway from shaft OD
 const KEYWAY_SIZES = ["1/8","3/16","1/4","5/16","3/8","7/16","1/2","9/16","5/8","11/16","3/4","13/16","7/8","15/16","1"];
+
+// Sort helper to display available keyways in size order
+const KEYWAY_ORDER = {"1/8":1,"3/16":2,"1/4":3,"5/16":4,"3/8":5,"7/16":6,"1/2":7,"9/16":8,"5/8":9,"11/16":10,"3/4":11,"13/16":12,"7/8":13,"15/16":14,"1":15};
 
 const KEYWAY_DATA = {
   "3/8":     { "1/8":".0108","3/16":".0231","1/4":".0478" },
@@ -885,7 +898,9 @@ const KEYWAY_DATA = {
   "3-7/8":   { "1/4":".0041","5/16":".0063","3/8":".0096","7/16":".0124","1/2":".0161","9/16":".0202","5/8":".025","11/16":".0302","3/4":".0361","13/16":".0424","7/8":".0492","15/16":".0566","1":".0645" },
   "3-15/16": { "1/4":".0041","5/16":".0062","3/8":".0095","7/16":".0123","1/2":".0161","9/16":".0199","5/8":".0246","11/16":".0297","3/4":".0355","13/16":".0417","7/8":".0485","15/16":".0557","1":".0636" },
   "4":       { "1/4":".004","5/16":".0061","3/8":".0094","7/16":".0121","1/2":".016","9/16":".0199","5/8":".0246","11/16":".0297","3/4":".0355","13/16":".0417","7/8":".0485","15/16":".0557","1":".0636" },
-};const SHAFT_SIZES = [
+};
+
+const SHAFT_SIZES = [
   "3/8","7/16","1/2","9/16","5/8","11/16","3/4","13/16","7/8","15/16",
   "1","1-1/16","1-1/8","1-3/16","1-1/4","1-5/16","1-3/8","1-7/16","1-1/2","1-9/16","1-5/8","1-11/16","1-3/4","1-13/16","1-7/8","1-15/16",
   "2","2-1/16","2-1/8","2-3/16","2-1/4","2-5/16","2-3/8","2-7/16","2-1/2","2-9/16","2-5/8","2-11/16","2-3/4","2-13/16","2-7/8","2-15/16",
@@ -896,7 +911,9 @@ function KeywayView({ onResult }) {
   const [shaft,  setShaft]  = useState("");
   const [keyway, setKeyway] = useState("");
 
-  const availableKeyways = shaft ? Object.keys(KEYWAY_DATA[shaft]) : [];
+  const availableKeyways = shaft
+    ? Object.keys(KEYWAY_DATA[shaft]).sort((a, b) => KEYWAY_ORDER[a] - KEYWAY_ORDER[b])
+    : [];
   const result = shaft && keyway ? KEYWAY_DATA[shaft]?.[keyway] ?? null : null;
 
   useEffect(() => {
@@ -1069,6 +1086,297 @@ function CalcView() {
         {sfmResult !== null && !isNaN(sfmResult) && <CalcResult label="SFM" value={sfmResult.toLocaleString()} unit="surface ft / min" color="#fb923c" />}
       </div>
     </div>
+  );
+}
+
+// ─── THREAD DIMENSION CALCULATOR ─────────────────────────────────────────────
+
+const INCH_PRESETS = [
+  { label:"#0-80 UNF",   d:0.0600, tpi:80  }, { label:"#1-64 UNC",   d:0.0730, tpi:64  },
+  { label:"#1-72 UNF",   d:0.0730, tpi:72  }, { label:"#2-56 UNC",   d:0.0860, tpi:56  },
+  { label:"#2-64 UNF",   d:0.0860, tpi:64  }, { label:"#3-48 UNC",   d:0.0990, tpi:48  },
+  { label:"#4-40 UNC",   d:0.1120, tpi:40  }, { label:"#4-48 UNF",   d:0.1120, tpi:48  },
+  { label:"#5-40 UNC",   d:0.1250, tpi:40  }, { label:"#6-32 UNC",   d:0.1380, tpi:32  },
+  { label:"#6-40 UNF",   d:0.1380, tpi:40  }, { label:"#8-32 UNC",   d:0.1640, tpi:32  },
+  { label:"#8-36 UNF",   d:0.1640, tpi:36  }, { label:"#10-24 UNC",  d:0.1900, tpi:24  },
+  { label:"#10-32 UNF",  d:0.1900, tpi:32  }, { label:"1/4-20 UNC",  d:0.2500, tpi:20  },
+  { label:"1/4-28 UNF",  d:0.2500, tpi:28  }, { label:"5/16-18 UNC", d:0.3125, tpi:18  },
+  { label:"5/16-24 UNF", d:0.3125, tpi:24  }, { label:"3/8-16 UNC",  d:0.3750, tpi:16  },
+  { label:"3/8-24 UNF",  d:0.3750, tpi:24  }, { label:"7/16-14 UNC", d:0.4375, tpi:14  },
+  { label:"7/16-20 UNF", d:0.4375, tpi:20  }, { label:"1/2-13 UNC",  d:0.5000, tpi:13  },
+  { label:"1/2-20 UNF",  d:0.5000, tpi:20  }, { label:"9/16-12 UNC", d:0.5625, tpi:12  },
+  { label:"5/8-11 UNC",  d:0.6250, tpi:11  }, { label:"3/4-10 UNC",  d:0.7500, tpi:10  },
+  { label:"7/8-9 UNC",   d:0.8750, tpi:9   }, { label:"1-8 UNC",     d:1.0000, tpi:8   },
+];
+
+const METRIC_PRESETS = [
+  { label:"M1.6x0.35",  d:1.6,  p:0.35 }, { label:"M2x0.4",    d:2.0,  p:0.4  },
+  { label:"M2.5x0.45",  d:2.5,  p:0.45 }, { label:"M3x0.5",    d:3.0,  p:0.5  },
+  { label:"M3.5x0.6",   d:3.5,  p:0.6  }, { label:"M4x0.7",    d:4.0,  p:0.7  },
+  { label:"M5x0.8",     d:5.0,  p:0.8  }, { label:"M6x1",      d:6.0,  p:1.0  },
+  { label:"M7x1",       d:7.0,  p:1.0  }, { label:"M8x1.25",   d:8.0,  p:1.25 },
+  { label:"M8x1",       d:8.0,  p:1.0  }, { label:"M10x1.5",   d:10.0, p:1.5  },
+  { label:"M10x1.25",   d:10.0, p:1.25 }, { label:"M12x1.75",  d:12.0, p:1.75 },
+  { label:"M12x1.25",   d:12.0, p:1.25 }, { label:"M14x2",     d:14.0, p:2.0  },
+  { label:"M16x2",      d:16.0, p:2.0  }, { label:"M20x2.5",   d:20.0, p:2.5  },
+  { label:"M24x3",      d:24.0, p:3.0  }, { label:"M30x3.5",   d:30.0, p:3.5  },
+];
+
+function calcInchThread(d, tpi, cls, internal) {
+  const P = 1.0 / tpi;
+  const Le = 2 * d; // engagement = 2x nominal dia (standard assumption)
+  const d2 = d - 0.6495190 * P;
+  const d3ext = d - 1.19079 * P;  // UNR external minor
+  const D1int = d - 1.0825318 * P; // internal minor
+  const hs  = 0.6134882 * P;
+  const has = 0.3247595 * P;
+  const Fcs = 0.125 * P;
+
+  // Pitch dia tolerance base (2A)
+  const td2base = 0.0015 * Math.pow(d, 1/3) + 0.0015 * Math.sqrt(Le) + 0.015 * Math.pow(P, 2/3);
+  const mult = cls === 1 ? 1.5 : cls === 2 ? 1.0 : 0.75;
+  const td2 = td2base * mult;
+  const es  = internal ? 0 : (cls === 3 ? 0 : 0.3 * td2base * (cls === 1 ? 1.5 : 1.0));
+
+  const r = (v, n=4) => Math.round(v * Math.pow(10, n)) / Math.pow(10, n);
+
+  if (!internal) {
+    return {
+      major:    r(d), pitch: `${tpi} TPI`, pitchDist: r(P),
+      d2basic:  r(d2), d3basic: r(d3ext), hs: r(hs), has: r(has), Fcs: r(Fcs),
+      allowance: r(es),
+      majorMax: r(d - es), majorMin: r(d - es - 0.06 * P),
+      pdMax:    r(d2 - es), pdMin: r(d2 - es - td2),
+      minorMax: r(d3ext - es), minorMin: null,
+      tdLabel: `Class ${cls}A External`,
+    };
+  } else {
+    const td2i = td2base * mult * 1.3; // internal slightly more tolerance
+    return {
+      major:    r(d), pitch: `${tpi} TPI`, pitchDist: r(P),
+      d2basic:  r(d2), d3basic: r(D1int), hs: r(hs), has: r(has), Fcs: r(Fcs),
+      allowance: 0,
+      majorMax: r(d + 0.125 * P), majorMin: r(d),
+      pdMax:    r(d2 + td2i), pdMin: r(d2),
+      minorMin: r(D1int), minorMax: r(D1int + 0.05 * P + 0.03 * Math.pow(P, 2/3)),
+      tdLabel: `Class ${cls}B Internal`,
+    };
+  }
+}
+
+function calcMetricThread(d, pitch, cls, internal) {
+  const P = pitch;
+  const d2 = d - 0.6495190 * P;
+  const d3ext = d - 1.2269440 * P;
+  const D1int = d - 1.0825318 * P;
+  const hs  = 0.6134882 * P;
+  const has = 0.3247595 * P;
+  const Fcs = 0.125 * P;
+
+  const r = (v, n=3) => Math.round(v * Math.pow(10, n)) / Math.pow(10, n);
+
+  if (!internal) {
+    // ISO 965 external - class e=fine, f=medium-fine, g=medium, h=close
+    // We map 1→f, 2→g(standard), 3→h
+    const T_d2 = 90 * Math.pow(P, 0.4) * Math.pow(d, 0.1) / 1000;
+    const mult = cls === 1 ? 1.32 : cls === 2 ? 1.0 : 0.71;
+    const td2  = T_d2 * mult;
+    // fundamental deviation: g=-0.0814mm for typical, h=0
+    const es_map = { 1: -(17 + 63*Math.pow(P,0.5))/1000, 2: -(11 + 63*Math.pow(P,0.5))/1000, 3: 0 };
+    const es = es_map[cls];
+    return {
+      major:    r(d,3), pitch: `${P} mm`, pitchDist: r(P,3),
+      d2basic:  r(d2,3), d3basic: r(d3ext,3), hs: r(hs,3), has: r(has,3), Fcs: r(Fcs,3),
+      allowance: r(Math.abs(es),3),
+      majorMax: r(d + es,3), majorMin: r(d - 0.06*P,3),
+      pdMax:    r(d2 + es,3), pdMin: r(d2 + es - td2,3),
+      minorMax: r(d3ext + es,3), minorMin: null,
+      tdLabel: cls === 1 ? '6f External' : cls === 2 ? '6g External' : '6h External',
+    };
+  } else {
+    // ISO 965 internal - H deviation (EI=0), class 4H/5H/6H/7H
+    const T_D2 = 90 * Math.pow(P, 0.4) * Math.pow(d, 0.1) / 1000;
+    const mult = cls === 1 ? 0.85 : cls === 2 ? 1.0 : 1.25;
+    const td2  = T_D2 * mult;
+    const T_D1 = (433*P - 190*Math.pow(P,2)) / 1000;
+    const td1  = T_D1 * mult;
+    return {
+      major:    r(d,3), pitch: `${P} mm`, pitchDist: r(P,3),
+      d2basic:  r(d2,3), d3basic: r(D1int,3), hs: r(hs,3), has: r(has,3), Fcs: r(Fcs,3),
+      allowance: 0,
+      majorMax: null, majorMin: r(d,3),
+      pdMax:    r(d2 + td2,3), pdMin: r(d2,3),
+      minorMin: r(D1int,3), minorMax: r(D1int + td1,3),
+      tdLabel: cls === 1 ? '5H Internal' : cls === 2 ? '6H Internal' : '7H Internal',
+    };
+  }
+}
+
+function ThreadDimView() {
+  const [system,   setSystem]   = useState("inch");
+  const [dir,      setDir]      = useState("external");
+  const [cls,      setCls]      = useState(2);
+  const [preset,   setPreset]   = useState(null);
+  const [custD,    setCustD]    = useState("");
+  const [custTPI,  setCustTPI]  = useState("");
+  const [custP,    setCustP]    = useState("");
+  const [mode,     setMode]     = useState("preset"); // "preset" | "custom"
+
+  const internal = dir === "internal";
+  const presets  = system === "inch" ? INCH_PRESETS : METRIC_PRESETS;
+
+  let result = null;
+  if (mode === "preset" && preset) {
+    if (system === "inch") result = calcInchThread(preset.d, preset.tpi, cls, internal);
+    else result = calcMetricThread(preset.d, preset.p, cls, internal);
+  } else if (mode === "custom") {
+    const d = parseFloat(custD);
+    if (system === "inch") {
+      const tpi = parseFloat(custTPI);
+      if (d > 0 && tpi > 0) result = calcInchThread(d, tpi, cls, internal);
+    } else {
+      const p = parseFloat(custP);
+      if (d > 0 && p > 0) result = calcMetricThread(d, p, cls, internal);
+    }
+  }
+
+  const StatRow = ({ label, value, sub }) => (
+    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"baseline",
+      padding:"10px 14px", background:"rgba(255,255,255,0.04)", borderRadius:10,
+      border:"1px solid rgba(255,255,255,0.06)", marginBottom:6 }}>
+      <div>
+        <span style={{ fontSize:12, color:"#9ca3af", fontWeight:600 }}>{label}</span>
+        {sub && <span style={{ fontSize:10, color:"#5a6072", marginLeft:6 }}>{sub}</span>}
+      </div>
+      <span style={{ fontFamily:"'DM Mono',monospace", fontSize:15, color:"#f9fafb", fontWeight:500 }}>{value}</span>
+    </div>
+  );
+
+  const RangeRow = ({ label, min, max, color="#60a5fa" }) => (
+    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"baseline",
+      padding:"10px 14px", background:"rgba(255,255,255,0.04)", borderRadius:10,
+      border:"1px solid rgba(255,255,255,0.06)", marginBottom:6 }}>
+      <span style={{ fontSize:12, color:"#9ca3af", fontWeight:600 }}>{label}</span>
+      <div style={{ textAlign:"right" }}>
+        {min !== null && <div style={{ fontFamily:"'DM Mono',monospace", fontSize:13, color }}>Min: {min}</div>}
+        {max !== null && <div style={{ fontFamily:"'DM Mono',monospace", fontSize:13, color }}>Max: {max}</div>}
+      </div>
+    </div>
+  );
+
+  return (
+    <>
+      {/* System */}
+      <div className="section" style={{ marginTop:8 }}>
+        <div className="section-label">Thread System</div>
+        <div className="pill-grid">
+          <button className={`pill${system==="inch" ? " sel-green":""}`} onClick={() => { setSystem("inch"); setPreset(null); }}>Inch</button>
+          <button className={`pill${system==="metric" ? " sel-green":""}`} onClick={() => { setSystem("metric"); setPreset(null); }}>Metric</button>
+        </div>
+      </div>
+
+      {/* External / Internal */}
+      <div className="section">
+        <div className="section-label">Thread Type</div>
+        <div className="pill-grid">
+          <button className={`pill${dir==="external" ? " sel-green":""}`} onClick={() => setDir("external")}>External</button>
+          <button className={`pill${dir==="internal" ? " sel-green":""}`} onClick={() => setDir("internal")}>Internal</button>
+        </div>
+      </div>
+
+      {/* Class */}
+      <div className="section">
+        <div className="section-label">Thread Class</div>
+        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:8 }}>
+          {[1,2,3].map(c => (
+            <button key={c} className={`pill${cls===c ? " sel-green":""}`} onClick={() => setCls(c)}>
+              Class {c}{dir==="external" ? "A":"B"}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Preset / Custom toggle */}
+      <div className="section">
+        <div className="section-label">Size Selection</div>
+        <div className="pill-grid">
+          <button className={`pill${mode==="preset" ? " sel-green":""}`} onClick={() => setMode("preset")}>Preset Sizes</button>
+          <button className={`pill${mode==="custom" ? " sel-green":""}`} onClick={() => setMode("custom")}>Custom</button>
+        </div>
+      </div>
+
+      {/* Preset picker */}
+      {mode === "preset" && (
+        <div className="section">
+          <div className="section-label">{system === "inch" ? "Inch Sizes" : "Metric Sizes"}</div>
+          <div className="tap-size-grid">
+            {presets.map(p => (
+              <button key={p.label}
+                className={`tap-size-btn${preset?.label===p.label ? " active":""}`}
+                onClick={() => setPreset(p)}
+                style={{ fontSize:10, padding:"10px 4px" }}>
+                {p.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Custom inputs */}
+      {mode === "custom" && (
+        <div className="section">
+          <div className="section-label">Enter Dimensions</div>
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10 }}>
+            <div className="calc-field">
+              <label>Major Dia ({system === "inch" ? "in" : "mm"})</label>
+              <input type="number" value={custD} onChange={e => setCustD(e.target.value)} placeholder={system==="inch" ? "0.2500" : "8.000"} step="0.001" />
+            </div>
+            <div className="calc-field">
+              <label>{system === "inch" ? "TPI" : "Pitch (mm)"}</label>
+              <input type="number" value={system==="inch" ? custTPI : custP}
+                onChange={e => system==="inch" ? setCustTPI(e.target.value) : setCustP(e.target.value)}
+                placeholder={system==="inch" ? "20" : "1.25"} step={system==="inch" ? "1" : "0.25"} />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Result card */}
+      {result && (
+        <div className="result-card" style={{ marginTop:20 }}>
+          <div className="result-eyebrow">
+            {mode==="preset" ? preset.label : (system==="inch" ? `${custD}" - ${custTPI} TPI` : `M${custD}x${custP}`)}
+            {" · "}{result.tdLabel}
+          </div>
+
+          <div style={{ marginTop:12 }}>
+            <div style={{ fontSize:10, fontWeight:700, color:"#5a6072", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:8 }}>Nominal Dimensions</div>
+            <StatRow label="Major Diameter" value={`${result.major} ${system==="inch"?"in":"mm"}`} />
+            <StatRow label="Pitch" value={result.pitch} />
+            <StatRow label="Pitch (Distance)" value={`${result.pitchDist} ${system==="inch"?"in":"mm"}`} />
+            <StatRow label="Pitch Diameter" value={`${result.d2basic} ${system==="inch"?"in":"mm"}`} />
+            <StatRow label="Minor Diameter" value={`${result.d3basic} ${system==="inch"?"in":"mm"}`} sub={!internal?"UNR":""} />
+            <StatRow label="Thread Depth" value={`${result.hs} ${system==="inch"?"in":"mm"}`} />
+            <StatRow label="Addendum" value={`${result.has} ${system==="inch"?"in":"mm"}`} />
+            <StatRow label="Crest Width" value={`${result.Fcs} ${system==="inch"?"in":"mm"}`} />
+          </div>
+
+          <div style={{ marginTop:14 }}>
+            <div style={{ fontSize:10, fontWeight:700, color:"#5a6072", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:8 }}>Tolerance Range</div>
+            {result.allowance > 0 && <StatRow label="Allowance" value={`${result.allowance} ${system==="inch"?"in":"mm"}`} />}
+            <RangeRow label="Major Diameter" min={result.majorMin} max={result.majorMax} color="#60a5fa" />
+            <RangeRow label="Pitch Diameter" min={result.pdMin}    max={result.pdMax}    color="#34d399" />
+            <RangeRow label="Minor Diameter" min={result.minorMin} max={result.minorMax} color="#a78bfa" />
+          </div>
+
+          <div style={{ marginTop:12, padding:"10px 14px", background:"rgba(251,191,36,0.08)",
+            border:"1px solid rgba(251,191,36,0.25)", borderRadius:10, fontSize:11,
+            color:"#fbbf24", textAlign:"center", lineHeight:1.5 }}>
+            Calculated per ASME B1.1 (Inch) / ISO 965 (Metric) · Verify against standards
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
