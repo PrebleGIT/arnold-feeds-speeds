@@ -205,6 +205,7 @@ const css = `
     .desktop-selections { overflow-y: auto; background: #f0f1f3; padding-bottom: 32px; border-right: 1px solid #eaecef; }
     .desktop-result { display: flex; overflow-y: auto; background: #f0f1f3; padding: 28px 24px; flex-direction: column; min-height: 0; }
     .desktop-selections .result-card { display: none; }
+    .desktop-selections .calc-result { display: none; }
     .desktop-result .result-card { display: block; margin: 0 0 16px 0; border-radius: 16px; }
     .desktop-result .result-stat-value { font-size: 42px; }
     .desktop-result .result-stat { padding: 18px 20px; }
@@ -966,7 +967,7 @@ function KeywayView({ onResult }) {
 }
 
 
-function CalcView() {
+function CalcView({ onResult }) {
   const [rpmSfm, setRpmSfm] = useState("");
   const [rpmDia, setRpmDia] = useState("");
   const rpmResult = rpmSfm && rpmDia ? Math.round((parseFloat(rpmSfm) * 12) / (Math.PI * parseFloat(rpmDia))) : null;
@@ -997,6 +998,35 @@ function CalcView() {
   const ciAdjIpm = ciClpt !== null
     ? ciClpt * parseFloat(ciRpm) * parseFloat(ciFlutes)
     : null;
+
+  const hasAnyResult = rpmResult !== null || feedFromIpr !== null || feedFromIpt !== null || sfmResult !== null || ciClpt !== null;
+
+  const ResultRow = ({ label, value, unit, color }) => (
+    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"baseline", padding:"12px 14px", background:"rgba(255,255,255,0.04)", borderRadius:10, border:"1px solid rgba(255,255,255,0.06)", marginBottom:6 }}>
+      <span style={{ fontSize:11, color:"#5a6072", fontWeight:600, textTransform:"uppercase", letterSpacing:"0.06em" }}>{label}</span>
+      <div style={{ textAlign:"right" }}>
+        <span style={{ fontFamily:"'DM Mono',monospace", fontSize:22, fontWeight:500, color }}>{value}</span>
+        <span style={{ fontSize:10, color:"#5a6072", marginLeft:6 }}>{unit}</span>
+      </div>
+    </div>
+  );
+
+  useEffect(() => {
+    if (!onResult) return;
+    if (!hasAnyResult) { onResult(null); return; }
+    onResult(
+      <div className="result-card">
+        <div className="result-eyebrow">Calculator Results</div>
+        <div style={{ marginTop: 4 }}>
+          {ciClpt !== null && !isNaN(ciClpt) && <><div style={{ fontSize:10, fontWeight:700, color:"#5a6072", letterSpacing:"0.08em", textTransform:"uppercase", margin:"8px 0 6px" }}>Circular Interpolation</div><ResultRow label="Adj. CLPT" value={ciClpt.toFixed(4)} unit="in/tooth" color="#a78bfa" /><ResultRow label="Adj. IPM" value={ciAdjIpm.toFixed(4)} unit="in/min" color="#34d399" /></>}
+          {rpmResult !== null && !isNaN(rpmResult) && <><div style={{ fontSize:10, fontWeight:700, color:"#5a6072", letterSpacing:"0.08em", textTransform:"uppercase", margin:"8px 0 6px" }}>RPM from SFM</div><ResultRow label="RPM" value={rpmResult.toLocaleString()} unit="rev/min" color="#60a5fa" /></>}
+          {feedFromIpr !== null && !isNaN(feedFromIpr) && <><div style={{ fontSize:10, fontWeight:700, color:"#5a6072", letterSpacing:"0.08em", textTransform:"uppercase", margin:"8px 0 6px" }}>Feed from IPR</div><ResultRow label="Feed" value={feedFromIpr} unit="in/min" color="#34d399" /></>}
+          {feedFromIpt !== null && !isNaN(feedFromIpt) && <><div style={{ fontSize:10, fontWeight:700, color:"#5a6072", letterSpacing:"0.08em", textTransform:"uppercase", margin:"8px 0 6px" }}>Feed from IPT</div><ResultRow label="Feed" value={feedFromIpt} unit="in/min" color="#34d399" /></>}
+          {sfmResult !== null && !isNaN(sfmResult) && <><div style={{ fontSize:10, fontWeight:700, color:"#5a6072", letterSpacing:"0.08em", textTransform:"uppercase", margin:"8px 0 6px" }}>SFM from RPM</div><ResultRow label="SFM" value={sfmResult.toLocaleString()} unit="ft/min" color="#fb923c" /></>}
+        </div>
+      </div>
+    );
+  }, [rpmResult, feedFromIpr, feedFromIpt, sfmResult, ciClpt, ciAdjIpm, hasAnyResult]);
 
   const CalcResult = ({ label, value, unit, color }) => (
     <div className="calc-result">
@@ -1996,7 +2026,7 @@ export default function App() {
             {tab === "drill"   && <DrillView   onResult={setResultNode} />}
             {tab === "tap"     && <TapView     onResult={setResultNode} />}
             {tab === "turning" && <TurningView />}
-            {tab === "calc"        && <CalcView />}
+            {tab === "calc"        && <CalcView onResult={setResultNode} />}
             {tab === "ref"         && <RefView />}
             {tab === "keyway"      && <KeywayView onResult={setResultNode} />}
             {tab === "countersink" && <CountersinkView onResult={setResultNode} />}
