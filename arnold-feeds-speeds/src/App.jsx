@@ -134,8 +134,6 @@ const css = `
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=DM+Mono:wght@400;500&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   body { background: #f0f1f3; }
-
-  /* ── MOBILE (default) ── */
   .app { min-height: 100vh; background: #f0f1f3; font-family: 'DM Sans', sans-serif; max-width: 480px; margin: 0 auto; padding-bottom: 56px; }
   .header { background: #fff; border-bottom: 1px solid #eaecef; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; box-shadow: 0 1px 0 #eaecef; }
   .header-title { font-size: 19px; font-weight: 700; color: #0d0d0d; letter-spacing: -0.4px; }
@@ -143,12 +141,12 @@ const css = `
   .nav-tabs { background: #fff; border-bottom: 1px solid #eaecef; display: flex; padding: 0 12px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
   .nav-tabs::-webkit-scrollbar { display: none; }
   .nav-tab { flex-shrink: 0; padding: 12px 14px 11px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; color: #adb5bd; background: transparent; border: none; border-bottom: 2px solid transparent; cursor: pointer; transition: color 0.15s, border-color 0.15s; white-space: nowrap; letter-spacing: 0.01em; }
-  .nav-tab.active { color: #0d0d0d; border-bottom-color: #0d0d0d; }
+  .nav-tab.active { color: #1a6ef5; border-bottom-color: #1a6ef5; }
   .desktop-body { display: block; }
   .desktop-result { display: none; }
   .section { padding: 20px 16px 0; }
   .section.locked { opacity: 0.3; pointer-events: none; }
-  .section-label { font-size: 10px; font-weight: 700; color: #adb5bd; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+  .section-label { font-size: 10px; font-weight: 700; color: #8a94a6; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
   .tool-list { display: flex; flex-direction: column; gap: 7px; }
   .tool-btn { width: 100%; padding: 15px 16px; background: #fff; border: 1.5px solid #eaecef; border-radius: 14px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; color: #1a1a1a; text-align: left; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: all 0.15s; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
   .tool-btn:active { transform: scale(0.99); }
@@ -163,7 +161,7 @@ const css = `
   .dia-grid { display: flex; gap: 7px; flex-wrap: wrap; }
   .dia-pill { flex: 1 1 calc(25% - 6px); padding: 12px 4px; background: #fff; border: 1.5px solid #eaecef; border-radius: 12px; font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; color: #374151; text-align: center; cursor: pointer; transition: all 0.15s; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
   .dia-pill:active { transform: scale(0.97); }
-  .dia-pill.sel-blue { border-color: #2563eb; background: #eff6ff; color: #1d4ed8; font-weight: 600; box-shadow: 0 0 0 3px rgba(37,99,235,0.08); }
+  .dia-pill.sel-blue { border-color: #1a6ef5; background: #eff4ff; color: #1a5fd4; font-weight: 600; box-shadow: 0 0 0 3px rgba(26,110,245,0.08); }
   .result-card { margin: 20px 16px 0; background: linear-gradient(145deg, #141414, #1c1c1c); border-radius: 20px; padding: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.04); }
   .result-eyebrow { font-size: 10px; font-weight: 700; color: #5a6072; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 14px; }
   .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -179,7 +177,7 @@ const css = `
   .tap-size-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; }
   .tap-size-btn { padding: 13px 6px; background: #fff; border: 1.5px solid #eaecef; border-radius: 12px; font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; color: #374151; text-align: center; cursor: pointer; transition: all 0.15s; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
   .tap-size-btn:active { transform: scale(0.97); }
-  .tap-size-btn.active { border-color: #7c3aed; background: #f5f3ff; color: #6d28d9; font-weight: 600; box-shadow: 0 0 0 3px rgba(124,58,237,0.08); }
+  .tap-size-btn.active { border-color: #1a6ef5; background: #eff4ff; color: #1a5fd4; font-weight: 600; box-shadow: 0 0 0 3px rgba(26,110,245,0.08); }
   .calc-card { background: #fff; border-radius: 16px; padding: 18px; margin: 16px 16px 0; box-shadow: 0 1px 4px rgba(0,0,0,0.06), 0 0 0 1px #eaecef; }
   .calc-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
   .calc-card-title { font-size: 13px; font-weight: 700; color: #1a1a1a; letter-spacing: -0.1px; }
@@ -189,7 +187,7 @@ const css = `
   .calc-input-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
   .calc-field label { font-size: 10px; font-weight: 700; color: #adb5bd; letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-bottom: 5px; }
   .calc-field input { width: 100%; padding: 11px 12px; border-radius: 10px; border: 1.5px solid #eaecef; background: #f8f9fb; font-family: 'DM Mono', monospace; font-size: 15px; color: #111; outline: none; transition: border-color 0.15s; }
-  .calc-field input:focus { border-color: #94a3b8; background: #fff; }
+  .calc-field input:focus { border-color: #1a6ef5; background: #fff; }
   .calc-result { margin-top: 12px; background: linear-gradient(135deg, #141414, #1e1e1e); border-radius: 14px; padding: 16px 18px; display: flex; align-items: baseline; gap: 10px; }
   .calc-result-value { font-family: 'DM Mono', monospace; font-size: 34px; font-weight: 500; line-height: 1; }
   .calc-result-unit { font-size: 11px; color: #5a6072; letter-spacing: 0.04em; }
@@ -197,38 +195,27 @@ const css = `
   /* ── DESKTOP (768px+) ── */
   @media (min-width: 768px) {
     body { height: 100vh; overflow: hidden; }
-    .app { max-width: 100%; height: 100vh; display: grid; grid-template-rows: 56px auto 1fr; grid-template-columns: 200px 1fr; overflow: hidden; }
+    .app { max-width: 100%; height: 100vh; display: grid; grid-template-rows: 56px auto 1fr; grid-template-columns: 200px 1fr; overflow: hidden; padding-bottom: 0; }
     .header { grid-column: 1 / -1; grid-row: 1; position: static; padding: 0 24px; }
     .header-title { font-size: 20px; }
-
-    /* Sidebar nav */
     .nav-tabs { grid-column: 1; grid-row: 2 / 4; flex-direction: column; padding: 16px 12px; border-bottom: none; border-right: 1px solid #eaecef; overflow-y: auto; overflow-x: hidden; background: #fff; align-items: stretch; gap: 2px; }
     .nav-tab { padding: 11px 14px; border-bottom: none; border-left: 3px solid transparent; border-radius: 10px; font-size: 13px; text-align: left; white-space: normal; }
-    .nav-tab.active { border-left-color: #0d0d0d; border-bottom-color: transparent; background: #f5f5f5; color: #0d0d0d; }
-
-    /* Body splits into left selections + right result */
+    .nav-tab.active { border-left-color: #1a6ef5; border-bottom-color: transparent; background: #eff4ff; color: #1a5fd4; }
     .desktop-body { grid-column: 2; grid-row: 2 / 4; display: grid; grid-template-columns: 360px 1fr; overflow: hidden; height: 100%; }
     .desktop-selections { overflow-y: auto; background: #f0f1f3; padding-bottom: 32px; border-right: 1px solid #eaecef; }
     .desktop-result { display: flex; overflow-y: auto; background: #f0f1f3; padding: 28px 24px; flex-direction: column; min-height: 0; }
-
-    /* Hide result cards from left selections panel on desktop */
     .desktop-selections .result-card { display: none; }
     .desktop-result .result-card { display: block; margin: 0 0 16px 0; border-radius: 16px; }
-
-    /* Result stat sizing on desktop */
     .desktop-result .result-stat-value { font-size: 42px; }
     .desktop-result .result-stat { padding: 18px 20px; }
     .desktop-result .result-eyebrow { font-size: 11px; }
-
-    /* Section spacing */
     .section { padding: 20px 20px 0; }
     .pill { font-size: 15px; padding: 14px 10px; }
     .tool-btn { font-size: 16px; padding: 16px 18px; }
     .dia-pill { font-size: 13px; padding: 13px 6px; }
+    .result-card { margin: 0; }
   }
-`;
-
-// ─── VIEWS ────────────────────────────────────────────────────────────────────
+`;// ─── VIEWS ────────────────────────────────────────────────────────────────────
 
 function EndmillView({ onResult }) {
   const [toolType, setToolType] = useState("");
@@ -272,13 +259,13 @@ function EndmillView({ onResult }) {
           <div className="result-stat"><div className="result-stat-label">Feed</div><div className="result-stat-value" style={{ color: "#34d399" }}>{result.ipm}</div><div className="result-stat-unit">in / min</div></div>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 10 }}>
-          <div className="result-stat"><div className="result-stat-label">SFM</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 28, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sfm}</div><div className="result-stat-unit">ft / min</div></div>
-          <div className="result-stat"><div className="result-stat-label">IPR</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 28, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{ipr}</div><div className="result-stat-unit">in / rev</div></div>
+          <div className="result-stat"><div className="result-stat-label">SFM</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 28, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sfm}</div><div className="result-stat-unit">ft / min</div></div>
+          <div className="result-stat"><div className="result-stat-label">IPR</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 28, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{ipr}</div><div className="result-stat-unit">in / rev</div></div>
         </div>
         {toolData.info?.[diameter] && toolData.info[diameter].map(({ loc, partNo }) => (
           <div key={partNo} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 10 }}>
-            <div className="result-stat"><div className="result-stat-label">Length of Cut</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, color: "#fbbf24", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{loc}</div></div>
-            <div className="result-stat"><div className="result-stat-label">Part #</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, color: "#e879f9", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{partNo}</div></div>
+            <div className="result-stat"><div className="result-stat-label">Length of Cut</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 22, color: "#fbbf24", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{loc}</div></div>
+            <div className="result-stat"><div className="result-stat-label">Part #</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 22, color: "#e879f9", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{partNo}</div></div>
           </div>
         ))}
         <div className="result-context">{diameter}" · {material} · {toolType}</div>
@@ -378,12 +365,12 @@ function EndmillView({ onResult }) {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 10 }}>
               <div className="result-stat">
                 <div className="result-stat-label">SFM</div>
-                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sfm}</div>
+                <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 22, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sfm}</div>
                 <div className="result-stat-unit">ft / min</div>
               </div>
               <div className="result-stat">
                 <div className="result-stat-label">IPR</div>
-                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{ipr}</div>
+                <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 22, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{ipr}</div>
                 <div className="result-stat-unit">in / rev</div>
               </div>
             </div>
@@ -394,11 +381,11 @@ function EndmillView({ onResult }) {
                   <div key={partNo} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
                     <div className="result-stat">
                       <div className="result-stat-label">Length of Cut</div>
-                      <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, color: "#fbbf24", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{loc}</div>
+                      <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 22, color: "#fbbf24", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{loc}</div>
                     </div>
                     <div className="result-stat">
                       <div className="result-stat-label">Part #</div>
-                      <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, color: "#e879f9", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{partNo}</div>
+                      <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 22, color: "#e879f9", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{partNo}</div>
                     </div>
                   </div>
                 ))}
@@ -467,8 +454,8 @@ function DrillView({ onResult }) {
             <div className="result-stat"><div className="result-stat-label">Feed</div><div className="result-stat-value" style={{ color: "#34d399" }}>{Number(solidResult.ipm).toFixed(4)}</div><div className="result-stat-unit">in / min</div></div>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 10 }}>
-            <div className="result-stat"><div className="result-stat-label">SFM</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 28, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sfm}</div><div className="result-stat-unit">ft / min</div></div>
-            <div className="result-stat"><div className="result-stat-label">Feed / Rev</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 28, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{ipt}</div><div className="result-stat-unit">in / rev</div></div>
+            <div className="result-stat"><div className="result-stat-label">SFM</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 28, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sfm}</div><div className="result-stat-unit">ft / min</div></div>
+            <div className="result-stat"><div className="result-stat-label">Feed / Rev</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 28, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{ipt}</div><div className="result-stat-unit">in / rev</div></div>
           </div>
           <div className="result-context">{diameter}" · {material} · Solid Carbide Drill</div>
         </div>
@@ -478,8 +465,8 @@ function DrillView({ onResult }) {
         <div className="result-card">
           <div className="result-eyebrow">Sumitomo Flat Bottom Drill</div>
           <div className="result-grid">
-            <div className="result-stat"><div className="result-stat-label">SFM</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 32, color: "#60a5fa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{idxResult.sfm}</div><div className="result-stat-unit">surface ft / min</div></div>
-            <div className="result-stat"><div className="result-stat-label">Feed / Rev</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 32, color: "#34d399", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{idxResult.cl}</div><div className="result-stat-unit">in / rev</div></div>
+            <div className="result-stat"><div className="result-stat-label">SFM</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 32, color: "#60a5fa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{idxResult.sfm}</div><div className="result-stat-unit">surface ft / min</div></div>
+            <div className="result-stat"><div className="result-stat-label">Feed / Rev</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 32, color: "#34d399", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{idxResult.cl}</div><div className="result-stat-unit">in / rev</div></div>
           </div>
           <div className="result-context">{material} · Sumitomo Flat Bottom</div>
         </div>
@@ -489,12 +476,12 @@ function DrillView({ onResult }) {
         <div className="result-card">
           <div className="result-eyebrow">Sumitomo Spade Drill</div>
           <div className="result-grid">
-            <div className="result-stat"><div className="result-stat-label">SFM Range</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 16, color: "#60a5fa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{spdResult.sfm}</div><div className="result-stat-unit">surface ft / min</div></div>
-            <div className="result-stat"><div className="result-stat-label">IPR Range</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 16, color: "#34d399", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{spdResult.cl}</div><div className="result-stat-unit">in / rev</div></div>
+            <div className="result-stat"><div className="result-stat-label">SFM Range</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 16, color: "#60a5fa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{spdResult.sfm}</div><div className="result-stat-unit">surface ft / min</div></div>
+            <div className="result-stat"><div className="result-stat-label">IPR Range</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 16, color: "#34d399", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{spdResult.cl}</div><div className="result-stat-unit">in / rev</div></div>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 10 }}>
-            <div className="result-stat"><div className="result-stat-label">Recommended SFM</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 26, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{spdResult.sfmMid}</div><div className="result-stat-unit">ft / min</div></div>
-            <div className="result-stat"><div className="result-stat-label">Recommended IPR</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 26, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{spdResult.clMid}</div><div className="result-stat-unit">in / rev</div></div>
+            <div className="result-stat"><div className="result-stat-label">Recommended SFM</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 26, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{spdResult.sfmMid}</div><div className="result-stat-unit">ft / min</div></div>
+            <div className="result-stat"><div className="result-stat-label">Recommended IPR</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 26, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{spdResult.clMid}</div><div className="result-stat-unit">in / rev</div></div>
           </div>
           <div className="result-context">{material} · Sumitomo Spade</div>
         </div>
@@ -504,8 +491,8 @@ function DrillView({ onResult }) {
         <div className="result-card">
           <div className="result-eyebrow">Sandvik DS20 · Starting Parameters</div>
           <div className="result-grid">
-            <div className="result-stat"><div className="result-stat-label">SFM</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 32, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sandvikResult.sfm}</div><div className="result-stat-unit">surface ft / min</div></div>
-            <div className="result-stat"><div className="result-stat-label">Feed / Rev</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 32, color: "#34d399", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sandvikResult.ipr}</div><div className="result-stat-unit">in / rev</div></div>
+            <div className="result-stat"><div className="result-stat-label">SFM</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 32, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sandvikResult.sfm}</div><div className="result-stat-unit">surface ft / min</div></div>
+            <div className="result-stat"><div className="result-stat-label">Feed / Rev</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 32, color: "#34d399", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sandvikResult.ipr}</div><div className="result-stat-unit">in / rev</div></div>
           </div>
           <div className="result-context">{material} · Sandvik DS20</div>
         </div>
@@ -590,12 +577,12 @@ function DrillView({ onResult }) {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 12 }}>
               <div className="result-stat">
                 <div className="result-stat-label">SFM</div>
-                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sfm}</div>
+                <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 22, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sfm}</div>
                 <div className="result-stat-unit">ft / min</div>
               </div>
               <div className="result-stat">
                 <div className="result-stat-label">Feed / Rev</div>
-                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{ipt}</div>
+                <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 22, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{ipt}</div>
                 <div className="result-stat-unit">in / rev</div>
               </div>
             </div>
@@ -613,12 +600,12 @@ function DrillView({ onResult }) {
             <div className="result-grid">
               <div className="result-stat">
                 <div className="result-stat-label">SFM Range</div>
-                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: isSpade ? 16 : 32, color: "#60a5fa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{r.sfm}</div>
+                <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: isSpade ? 16 : 32, color: "#60a5fa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{r.sfm}</div>
                 <div className="result-stat-unit">surface ft / min</div>
               </div>
               <div className="result-stat">
                 <div className="result-stat-label">IPR Range</div>
-                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: isSpade ? 16 : 26, color: "#34d399", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{r.cl}</div>
+                <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: isSpade ? 16 : 26, color: "#34d399", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{r.cl}</div>
                 <div className="result-stat-unit">in / rev</div>
               </div>
             </div>
@@ -626,12 +613,12 @@ function DrillView({ onResult }) {
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 10 }}>
                 <div className="result-stat">
                   <div className="result-stat-label">Recommended SFM</div>
-                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 26, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{r.sfmMid}</div>
+                  <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 26, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{r.sfmMid}</div>
                   <div className="result-stat-unit">ft / min</div>
                 </div>
                 <div className="result-stat">
                   <div className="result-stat-label">Recommended IPR</div>
-                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 26, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{r.clMid}</div>
+                  <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 26, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{r.clMid}</div>
                   <div className="result-stat-unit">in / rev</div>
                 </div>
               </div>
@@ -647,12 +634,12 @@ function DrillView({ onResult }) {
           <div className="result-grid">
             <div className="result-stat">
               <div className="result-stat-label">SFM</div>
-              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 32, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sandvikResult.sfm}</div>
+              <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 32, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sandvikResult.sfm}</div>
               <div className="result-stat-unit">surface ft / min</div>
             </div>
             <div className="result-stat">
               <div className="result-stat-label">Feed / Rev</div>
-              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 32, color: "#34d399", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sandvikResult.ipr}</div>
+              <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 32, color: "#34d399", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sandvikResult.ipr}</div>
               <div className="result-stat-unit">in / rev</div>
             </div>
           </div>
@@ -700,9 +687,9 @@ function TapView({ onResult }) {
             <div className="result-stat"><div className="result-stat-label">Feed</div><div className="result-stat-value" style={{ color: "#34d399", fontSize: isMetric ? 24 : 32 }}>{displayIpm(sf.ipm)}</div><div className="result-stat-unit">in / min</div></div>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginTop: 10 }}>
-            <div className="result-stat"><div className="result-stat-label">SFM</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{selected.sfm[material]}</div><div className="result-stat-unit">ft / min</div></div>
-            <div className="result-stat"><div className="result-stat-label">Form Drill</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: "#f9fafb", fontWeight: 500, lineHeight: 1.3, marginTop: 4 }}>{selected.drill}</div></div>
-            <div className="result-stat"><div className="result-stat-label">Pitch</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 18, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{selected.pitch}"</div><div className="result-stat-unit">in / rev</div></div>
+            <div className="result-stat"><div className="result-stat-label">SFM</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 22, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{selected.sfm[material]}</div><div className="result-stat-unit">ft / min</div></div>
+            <div className="result-stat"><div className="result-stat-label">Form Drill</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 11, color: "#f9fafb", fontWeight: 500, lineHeight: 1.3, marginTop: 4 }}>{selected.drill}</div></div>
+            <div className="result-stat"><div className="result-stat-label">Pitch</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 18, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{selected.pitch}"</div><div className="result-stat-unit">in / rev</div></div>
           </div>
         </div>
       );
@@ -795,16 +782,16 @@ function TapView({ onResult }) {
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginTop: 12 }}>
                 <div className="result-stat">
                   <div className="result-stat-label">SFM</div>
-                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{selected.sfm[material]}</div>
+                  <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 22, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{selected.sfm[material]}</div>
                   <div className="result-stat-unit">ft / min</div>
                 </div>
                 <div className="result-stat">
                   <div className="result-stat-label">Form Drill</div>
-                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: "#f9fafb", fontWeight: 500, lineHeight: 1.3, marginTop: 4 }}>{selected.drill}</div>
+                  <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 11, color: "#f9fafb", fontWeight: 500, lineHeight: 1.3, marginTop: 4 }}>{selected.drill}</div>
                 </div>
                 <div className="result-stat">
                   <div className="result-stat-label">Pitch</div>
-                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 18, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{selected.pitch}"</div>
+                  <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 18, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{selected.pitch}"</div>
                   <div className="result-stat-unit">in / rev</div>
                 </div>
               </div>
@@ -923,7 +910,7 @@ function KeywayView({ onResult }) {
         <div className="result-card">
           <div className="result-eyebrow">Keyway Depth</div>
           <div style={{ textAlign: "center", padding: "16px 0" }}>
-            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 52, fontWeight: 500, color: "#60a5fa", lineHeight: 1 }}>{parseFloat(result).toFixed(4).replace(/^0/, "")}"</div>
+            <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 52, fontWeight: 500, color: "#60a5fa", lineHeight: 1 }}>{parseFloat(result).toFixed(4).replace(/^0/, "")}"</div>
           </div>
           <div className="result-context">{shaft}" shaft · {keyway}" keyway</div>
 
@@ -968,7 +955,7 @@ function KeywayView({ onResult }) {
         <div className="result-card">
           <div className="result-eyebrow">Keyway Depth</div>
           <div style={{ textAlign: "center", padding: "16px 0" }}>
-            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 52, fontWeight: 500, color: "#60a5fa", lineHeight: 1 }}>{parseFloat(result).toFixed(4).replace(/^0/, "")}"</div>
+            <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 52, fontWeight: 500, color: "#60a5fa", lineHeight: 1 }}>{parseFloat(result).toFixed(4).replace(/^0/, "")}"</div>
           </div>
           <div className="result-context">{shaft}" shaft · {keyway}" keyway</div>
 
@@ -997,6 +984,20 @@ function CalcView() {
   const [sfmDia, setSfmDia] = useState("");
   const sfmResult = sfmRpm && sfmDia ? Math.round((parseFloat(sfmRpm) * Math.PI * parseFloat(sfmDia)) / 12) : null;
 
+  const [ciToolDia,  setCiToolDia]  = useState("");
+  const [ciCircDia,  setCiCircDia]  = useState("");
+  const [ciIpm,      setCiIpm]      = useState("");
+  const [ciRpm,      setCiRpm]      = useState("");
+  const [ciFlutes,   setCiFlutes]   = useState("");
+
+  const ciValid = ciToolDia && ciCircDia && ciIpm && ciRpm && ciFlutes;
+  const ciClpt = ciValid
+    ? (parseFloat(ciIpm) / parseFloat(ciRpm) / parseFloat(ciFlutes)) * ((parseFloat(ciCircDia) - parseFloat(ciToolDia)) / parseFloat(ciCircDia))
+    : null;
+  const ciAdjIpm = ciClpt !== null
+    ? ciClpt * parseFloat(ciRpm) * parseFloat(ciFlutes)
+    : null;
+
   const CalcResult = ({ label, value, unit, color }) => (
     <div className="calc-result">
       <span className="calc-result-value" style={{ color }}>{value}</span>
@@ -1006,6 +1007,50 @@ function CalcView() {
 
   return (
     <div style={{ paddingTop: 4 }}>
+      {/* Circular Interpolation */}
+      <div className="calc-card">
+        <div className="calc-card-header">
+          <span className="calc-card-title">Circular Interpolation</span>
+          <button className="calc-reset" onClick={() => { setCiToolDia(""); setCiCircDia(""); setCiIpm(""); setCiRpm(""); setCiFlutes(""); }}>Reset</button>
+        </div>
+        <div className="calc-input-grid-2" style={{ marginBottom: 10 }}>
+          <div className="calc-field">
+            <label>Circle Dia (in)</label>
+            <input type="number" inputMode="decimal" placeholder="1.000" value={ciCircDia} onChange={e => setCiCircDia(e.target.value)} />
+          </div>
+          <div className="calc-field">
+            <label>Tool Dia (in)</label>
+            <input type="number" inputMode="decimal" placeholder="0.500" value={ciToolDia} onChange={e => setCiToolDia(e.target.value)} />
+          </div>
+        </div>
+        <div className="calc-input-grid-3">
+          <div className="calc-field">
+            <label>RPM</label>
+            <input type="number" inputMode="decimal" placeholder="3000" value={ciRpm} onChange={e => setCiRpm(e.target.value)} />
+          </div>
+          <div className="calc-field">
+            <label>IPM</label>
+            <input type="number" inputMode="decimal" placeholder="50" value={ciIpm} onChange={e => setCiIpm(e.target.value)} />
+          </div>
+          <div className="calc-field">
+            <label>Flutes</label>
+            <input type="number" inputMode="decimal" placeholder="4" value={ciFlutes} onChange={e => setCiFlutes(e.target.value)} />
+          </div>
+        </div>
+        {ciClpt !== null && !isNaN(ciClpt) && (
+          <>
+            <div className="calc-result" style={{ marginBottom: 6 }}>
+              <span className="calc-result-value" style={{ color: "#a78bfa", fontSize: 26 }}>{ciClpt.toFixed(4)}</span>
+              <span className="calc-result-unit">adjusted CLPT</span>
+            </div>
+            <div className="calc-result">
+              <span className="calc-result-value" style={{ color: "#34d399" }}>{ciAdjIpm.toFixed(4)}</span>
+              <span className="calc-result-unit">adjusted IPM</span>
+            </div>
+          </>
+        )}
+      </div>
+
       {/* RPM from SFM */}
       <div className="calc-card">
         <div className="calc-card-header">
@@ -1468,7 +1513,7 @@ function CountersinkView({ onResult }) {
         <div className="result-card">
           <div className="result-eyebrow">{machine} · {info.label}</div>
           <div style={{ textAlign: "center", padding: "20px 0" }}>
-            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 64, fontWeight: 500, color: "#60a5fa", lineHeight: 1 }}>{info.angle}</div>
+            <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 64, fontWeight: 500, color: "#60a5fa", lineHeight: 1 }}>{info.angle}</div>
             <div style={{ fontSize: 12, color: "#5a6072", marginTop: 8, letterSpacing: "0.04em" }}>countersink angle</div>
           </div>
           <div className="result-context">{machine} · {system === "metric" ? "Metric threads" : "Inch threads"}</div>
@@ -1520,7 +1565,7 @@ function CountersinkView({ onResult }) {
         <div className="result-card">
           <div className="result-eyebrow">{machine} · {info.label}</div>
           <div style={{ textAlign: "center", padding: "20px 0" }}>
-            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 64, fontWeight: 500, color: "#60a5fa", lineHeight: 1 }}>{info.angle}</div>
+            <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 64, fontWeight: 500, color: "#60a5fa", lineHeight: 1 }}>{info.angle}</div>
             <div style={{ fontSize: 12, color: "#5a6072", marginTop: 8, letterSpacing: "0.04em" }}>countersink angle</div>
           </div>
           <div className="result-context">{machine} · {system === "metric" ? "Metric threads" : "Inch threads"}</div>
@@ -1548,12 +1593,86 @@ function LinksView() {
             style={{ textDecoration: "none" }}>
             <div>
               <div>{label}</div>
-              <div style={{ fontSize: 11, color: "#9ca3af", fontWeight: 400, marginTop: 3 }}>{sub}</div>
+              <div style={{ fontSize: 11, color: "var(--text3)", fontWeight: 400, marginTop: 3 }}>{sub}</div>
             </div>
-            <span style={{ fontSize: 16, color: "#9ca3af", flexShrink: 0 }}></span>
+            <span style={{ fontSize: 16, color: "var(--text3)", flexShrink: 0 }}></span>
           </a>
         ))}
       </div>
+    </div>
+  );
+}
+
+const GDT_SYMBOLS = [
+  { category: "Form", symbols: [
+    { sym: "⏤", name: "Straightness",         def: "Constrains a surface or axis to lie within two parallel lines. No datum required." },
+    { sym: "⏥", name: "Flatness",             def: "Constrains a surface to lie within two parallel planes. No datum required." },
+    { sym: "○", name: "Circularity",          def: "Each cross-section of a cylindrical feature must lie within two concentric circles. No datum." },
+    { sym: "⌭", name: "Cylindricity",         def: "All points on a cylindrical surface must lie within two coaxial cylinders. No datum." },
+  ]},
+  { category: "Profile", symbols: [
+    { sym: "⌒", name: "Profile of a Line",    def: "Constrains a cross-sectional profile to a theoretically exact shape. May or may not reference a datum." },
+    { sym: "⌓", name: "Profile of a Surface", def: "Constrains an entire surface to a theoretically exact shape and location. May reference datums." },
+  ]},
+  { category: "Orientation", symbols: [
+    { sym: "∠", name: "Angularity",           def: "Controls a surface or axis at a specified angle relative to a datum. Requires a datum." },
+    { sym: "⊥", name: "Perpendicularity",     def: "Controls a surface or axis at exactly 90° to a datum. Requires a datum." },
+    { sym: "∥", name: "Parallelism",          def: "Controls a surface or axis parallel to a datum within a tolerance zone. Requires a datum." },
+  ]},
+  { category: "Location", symbols: [
+    { sym: "⊕", name: "True Position",        def: "Controls the location and/or orientation of a feature relative to datums. Most common GD&T callout." },
+    { sym: "◎", name: "Concentricity",        def: "All median points of a diametrically opposed surface must lie within a cylindrical zone coaxial to a datum. Requires a datum." },
+    { sym: "⌖", name: "Symmetry",             def: "All median points of a feature must lie within two parallel planes equally disposed about a datum plane. Requires a datum." },
+  ]},
+  { category: "Runout", symbols: [
+    { sym: "↗", name: "Circular Runout",      def: "Controls the variation in a single cross-section as a part is rotated about a datum axis. Requires a datum." },
+    { sym: "⌰", name: "Total Runout",         def: "Controls the variation of an entire surface as a part is rotated about a datum axis. Requires a datum." },
+  ]},
+  { category: "Modifiers", symbols: [
+    { sym: "Ⓜ", name: "Maximum Material Condition (MMC)", def: "The condition where a feature contains the most material — smallest hole, largest pin." },
+    { sym: "Ⓛ", name: "Least Material Condition (LMC)",  def: "The condition where a feature contains the least material — largest hole, smallest pin." },
+    { sym: "Ⓢ", name: "Regardless of Feature Size (RFS)", def: "The tolerance applies at any produced size of the feature. Default when no modifier shown." },
+    { sym: "Ⓟ", name: "Projected Tolerance Zone",        def: "The tolerance zone extends beyond the surface of the part, used for fastener clearance." },
+    { sym: "Ⓕ", name: "Free State",                      def: "Measurement taken with the part unconstrained — used for flexible or non-rigid parts." },
+    { sym: "⌀", name: "Diameter Symbol",                  def: "Indicates the tolerance zone is cylindrical (3D) rather than between two parallel planes." },
+    { sym: "R",  name: "Radius",                          def: "Indicates a radius dimension. The center may be anywhere within the tolerance zone." },
+    { sym: "CR", name: "Controlled Radius",               def: "A smooth, fair curve with no flats or reversals. More restrictive than standard radius." },
+    { sym: "□",  name: "Square",                          def: "Indicates the tolerance or dimension applies to a square feature." },
+    { sym: "ST", name: "Statistical Tolerance",           def: "The tolerance is based on statistical process control — parts may be accepted on a statistical basis." },
+  ]},
+];
+
+function GdtModal({ onClose }) {
+  return (
+    <div style={{ position: "fixed", inset: 0, zIndex: 100, display: "flex", flexDirection: "column", background: "#f0f1f3" }}>
+      <div style={{ background: "#fff", borderBottom: "1px solid #eaecef", padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
+        <div>
+          <div style={{ fontSize: 15, fontWeight: 700, color: "#111" }}>GD&T Reference</div>
+          <div style={{ fontSize: 11, color: "#9ca3af" }}>Geometric Dimensioning &amp; Tolerancing</div>
+        </div>
+        <button onClick={onClose} style={{ background: "#f3f4f6", border: "none", borderRadius: 8, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: "#374151", cursor: "pointer" }}>✕</button>
+      </div>
+      <div style={{ overflowY: "auto", flex: 1, WebkitOverflowScrolling: "touch", padding: "16px 16px 8px" }}>
+        {GDT_SYMBOLS.map(({ category, symbols }) => (
+          <div key={category} style={{ marginBottom: 20 }}>
+            <div style={{ fontSize: 10, fontWeight: 700, color: "#adb5bd", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 8 }}>{category}</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              {symbols.map(({ sym, name, def }) => (
+                <div key={name} style={{ background: "#fff", borderRadius: 12, padding: "14px 16px", border: "1.5px solid #eaecef", display: "flex", gap: 14, alignItems: "flex-start" }}>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, fontWeight: 600, color: "#1a6ef5", minWidth: 36, textAlign: "center", flexShrink: 0, lineHeight: 1.2 }}>{sym}</div>
+                  <div>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: "#111", marginBottom: 4 }}>{name}</div>
+                    <div style={{ fontSize: 12, color: "#6b7280", lineHeight: 1.6 }}>{def}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+      <button onClick={onClose} style={{ flexShrink: 0, width: "100%", padding: "18px 16px", background: "#fff", border: "none", borderTop: "1px solid #eaecef", fontFamily: "'DM Sans', sans-serif", fontSize: 16, fontWeight: 700, color: "#6b7280", cursor: "pointer" }}>
+        ✕ Close
+      </button>
     </div>
   );
 }
@@ -1605,6 +1724,7 @@ function RefView() {
     { label: "Sumitomo Flat Bottom Drills", sub: "WDX Series — Inserts 4D Technical Data", comingSoon: false, isWdx: true },
     { label: "Sumitomo Spade Drills", sub: "SMD Series — Cutting Conditions", comingSoon: false, isSmd: true },
     { label: "Tap Drill Chart", sub: "Inch & Metric", comingSoon: false, isTapDrill: true },
+    { label: "GD&T Reference", sub: "Symbols & Definitions", comingSoon: false, isGdt: true },
   ];
 
   const [showOsg,          setShowOsg]          = useState(false);
@@ -1620,17 +1740,18 @@ function RefView() {
   const [showGuhringCut,   setShowGuhringCut]    = useState(false);
   const [showGarr,         setShowGarr]          = useState(false);
   const [showHss,          setShowHss]           = useState(false);
+  const [showGdt,          setShowGdt]           = useState(false);
   const [camSystem,    setCamSystem]    = useState("inch");
 
   const Modal = ({ title, sub, img, onClose }) => (
     <div style={{ position: "fixed", inset: 0, zIndex: 100, display: "flex", flexDirection: "column" }}>
       {/* Header */}
-      <div style={{ background: "#fff", borderBottom: "1px solid #eaecef", padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
+      <div style={{ background: "var(--surface)", borderBottom: "1px solid #eaecef", padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
         <div>
           <div style={{ fontSize: 15, fontWeight: 600, color: "#111" }}>{title}</div>
-          {sub && <div style={{ fontSize: 11, color: "#9ca3af" }}>{sub}</div>}
+          {sub && <div style={{ fontSize: 11, color: "var(--text3)" }}>{sub}</div>}
         </div>
-        <button onClick={onClose} style={{ background: "#f3f4f6", border: "none", borderRadius: 8, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: "#374151", cursor: "pointer" }}>✕</button>
+        <button onClick={onClose} style={{ background: "#f3f4f6", border: "none", borderRadius: 8, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: "var(--text2)", cursor: "pointer" }}>✕</button>
       </div>
       {/* Scrollable content */}
       <div style={{ overflowY: "auto", flex: 1, WebkitOverflowScrolling: "touch", background: "#000" }}>
@@ -1641,9 +1762,9 @@ function RefView() {
       {/* Large close bar at bottom — easy to tap */}
       <button onClick={onClose} style={{
         flexShrink: 0, width: "100%", padding: "18px 16px",
-        background: "#fff", border: "none", borderTop: "1px solid #eaecef",
-        fontFamily: "'DM Sans', sans-serif", fontSize: 16, fontWeight: 700,
-        color: "#374151", cursor: "pointer", letterSpacing: 0.2,
+        background: "var(--surface)", border: "none", borderTop: "1px solid #eaecef",
+        fontFamily: "var(--font,'Inter',sans-serif)", fontSize: 16, fontWeight: 700,
+        color: "var(--text2)", cursor: "pointer", letterSpacing: 0.2,
       }}>
         ✕ Close
       </button>
@@ -1659,14 +1780,14 @@ function RefView() {
       { key: "nominal", label: "Nominal Ø",              yellow: false },
     ];
     return (
-      <div style={{ position: "fixed", inset: 0, background: "#f0f1f3", zIndex: 100, display: "flex", flexDirection: "column" }}>
+      <div style={{ position: "fixed", inset: 0, background: "var(--bg)", zIndex: 100, display: "flex", flexDirection: "column" }}>
         {/* Header */}
-        <div style={{ background: "#fff", borderBottom: "1px solid #eaecef", padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
+        <div style={{ background: "var(--surface)", borderBottom: "1px solid #eaecef", padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
           <div>
             <div style={{ fontSize: 15, fontWeight: 700, color: "#111" }}>CAM Hole Size Chart</div>
-            <div style={{ fontSize: 11, color: "#9ca3af", marginTop: 1 }}>All values in inches</div>
+            <div style={{ fontSize: 11, color: "var(--text3)", marginTop: 1 }}>All values in inches</div>
           </div>
-          <button onClick={() => setShowCam(false)} style={{ background: "#f3f4f6", border: "none", borderRadius: 8, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: "#374151", cursor: "pointer" }}>✕ Close</button>
+          <button onClick={() => setShowCam(false)} style={{ background: "#f3f4f6", border: "none", borderRadius: 8, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: "var(--text2)", cursor: "pointer" }}>✕ Close</button>
         </div>
 
         {/* System toggle */}
@@ -1677,7 +1798,7 @@ function RefView() {
               borderColor: camSystem === s ? "#0d0d0d" : "#eaecef",
               background: camSystem === s ? "#0d0d0d" : "#fff",
               color: camSystem === s ? "#fff" : "#374151",
-              fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 600, cursor: "pointer",
+              fontFamily: "var(--font,'Inter',sans-serif)", fontSize: 13, fontWeight: 600, cursor: "pointer",
             }}>{s === "inch" ? "Inch" : "Metric"}</button>
           ))}
         </div>
@@ -1685,12 +1806,12 @@ function RefView() {
         {/* Legend */}
         <div style={{ padding: "10px 16px 0", display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
           <div style={{ width: 14, height: 14, background: "#fef08a", border: "1px solid #ca8a04", borderRadius: 3 }} />
-          <span style={{ fontSize: 11, color: "#9ca3af", fontFamily: "'DM Sans', sans-serif" }}>Internal Minor Diameter (CAM entry)</span>
+          <span style={{ fontSize: 11, color: "var(--text3)", fontFamily: "var(--font,'Inter',sans-serif)" }}>Internal Minor Diameter (CAM entry)</span>
         </div>
 
         {/* Table */}
         <div style={{ overflowY: "auto", flex: 1, WebkitOverflowScrolling: "touch", padding: "10px 16px 24px" }}>
-          <div style={{ background: "#fff", borderRadius: 14, overflow: "hidden", border: "1px solid #eaecef", boxShadow: "0 1px 4px rgba(0,0,0,0.06)" }}>
+          <div style={{ background: "var(--surface)", borderRadius: 14, overflow: "hidden", border: "1px solid #eaecef", boxShadow: "0 1px 4px rgba(0,0,0,0.06)" }}>
             {/* Column headers */}
             <div style={{ display: "grid", gridTemplateColumns: "1.1fr 1fr 1.2fr 1fr", background: "#f8f9fb", borderBottom: "2px solid #eaecef" }}>
               {cols.map(c => (
@@ -1700,7 +1821,7 @@ function RefView() {
                   fontSize: 10, fontWeight: 700, color: c.yellow ? "#854d0e" : "#6b7280",
                   letterSpacing: "0.05em", textTransform: "uppercase",
                   textAlign: "center", lineHeight: 1.3,
-                  fontFamily: "'DM Sans', sans-serif",
+                  fontFamily: "var(--font,'Inter',sans-serif)",
                   borderRight: "1px solid #eaecef",
                 }}>{c.label}</div>
               ))}
@@ -1712,10 +1833,10 @@ function RefView() {
                 borderBottom: i < rows.length - 1 ? "1px solid #f3f4f6" : "none",
                 background: i % 2 === 0 ? "#fff" : "#fafafa",
               }}>
-                <div style={{ padding: "12px 10px", fontFamily: "'DM Mono', monospace", fontSize: 13, fontWeight: 600, color: "#1a1a1a", textAlign: "center", borderRight: "1px solid #f3f4f6" }}>{row.thread}</div>
-                <div style={{ padding: "12px 10px", fontFamily: "'DM Mono', monospace", fontSize: 13, color: "#2563eb", textAlign: "center", borderRight: "1px solid #f3f4f6" }}>{row.tap}</div>
-                <div style={{ padding: "12px 10px", fontFamily: "'DM Mono', monospace", fontSize: 13, fontWeight: 600, color: "#854d0e", textAlign: "center", background: "#fef9c3", borderRight: "1px solid #f3f4f6" }}>{row.minor}</div>
-                <div style={{ padding: "12px 10px", fontFamily: "'DM Mono', monospace", fontSize: 13, color: "#374151", textAlign: "center" }}>{row.nominal}</div>
+                <div style={{ padding: "12px 10px", fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 13, fontWeight: 600, color: "var(--text1)", textAlign: "center", borderRight: "1px solid #f3f4f6" }}>{row.thread}</div>
+                <div style={{ padding: "12px 10px", fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 13, color: "#2563eb", textAlign: "center", borderRight: "1px solid #f3f4f6" }}>{row.tap}</div>
+                <div style={{ padding: "12px 10px", fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 13, fontWeight: 600, color: "#854d0e", textAlign: "center", background: "#fef9c3", borderRight: "1px solid #f3f4f6" }}>{row.minor}</div>
+                <div style={{ padding: "12px 10px", fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 13, color: "var(--text2)", textAlign: "center" }}>{row.nominal}</div>
               </div>
             ))}
           </div>
@@ -1732,25 +1853,25 @@ function RefView() {
       {showHss         && <Modal title="HSS Drill Chart" sub="YG-1 Straight Shank — A242 · A243 (scroll right for page 2)" img={[HSS_DRILL_P1, HSS_DRILL_P2]} onClose={() => setShowHss(false)} />}
       {showWex && (
         <div style={{ position: "fixed", inset: 0, background: "#000", zIndex: 100, display: "flex", flexDirection: "column" }}>
-          <div style={{ background: "#fff", borderBottom: "1px solid #eaecef", padding: "10px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
+          <div style={{ background: "var(--surface)", borderBottom: "1px solid #eaecef", padding: "10px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
             <div>
               <div style={{ fontSize: 15, fontWeight: 700, color: "#111" }}>Sumitomo WEX Series</div>
-              <div style={{ fontSize: 11, color: "#9ca3af" }}>Page {wexPage + 1} of {WEX_PAGES.length} · Face Mills</div>
+              <div style={{ fontSize: 11, color: "var(--text3)" }}>Page {wexPage + 1} of {WEX_PAGES.length} · Face Mills</div>
             </div>
-            <button onClick={() => setShowWex(false)} style={{ background: "#f3f4f6", border: "none", borderRadius: 8, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: "#374151", cursor: "pointer" }}>✕ Close</button>
+            <button onClick={() => setShowWex(false)} style={{ background: "#f3f4f6", border: "none", borderRadius: 8, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: "var(--text2)", cursor: "pointer" }}>✕ Close</button>
           </div>
           <div style={{ flex: 1, overflowY: "auto", WebkitOverflowScrolling: "touch", background: "#1a1a1a" }}>
             <img src={WEX_PAGES[wexPage]} alt={`WEX page ${wexPage + 1}`} style={{ width: "100%", display: "block" }} />
           </div>
           {WEX_PAGES.length > 1 && (
-            <div style={{ background: "#fff", borderTop: "1px solid #eaecef", padding: "10px 16px", display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
-              <button onClick={() => setWexPage(p => Math.max(0, p - 1))} disabled={wexPage === 0} style={{ flex: 1, padding: "12px", borderRadius: 10, border: "1.5px solid #eaecef", background: wexPage === 0 ? "#f8f9fb" : "#fff", color: wexPage === 0 ? "#c4c9d4" : "#374151", fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 600, cursor: wexPage === 0 ? "default" : "pointer" }}>← Prev</button>
+            <div style={{ background: "var(--surface)", borderTop: "1px solid #eaecef", padding: "10px 16px", display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
+              <button onClick={() => setWexPage(p => Math.max(0, p - 1))} disabled={wexPage === 0} style={{ flex: 1, padding: "12px", borderRadius: 10, border: "1.5px solid #eaecef", background: wexPage === 0 ? "#f8f9fb" : "#fff", color: wexPage === 0 ? "#c4c9d4" : "#374151", fontFamily: "var(--font,'Inter',sans-serif)", fontSize: 14, fontWeight: 600, cursor: wexPage === 0 ? "default" : "pointer" }}>← Prev</button>
               <div style={{ display: "flex", gap: 4, alignItems: "center", overflowX: "auto", flexShrink: 0 }}>
                 {WEX_PAGES.map((_, i) => (
                   <button key={i} onClick={() => setWexPage(i)} style={{ width: i === wexPage ? 20 : 7, height: 7, borderRadius: 4, border: "none", padding: 0, cursor: "pointer", background: i === wexPage ? "#0d0d0d" : "#d1d5db", transition: "all 0.2s", flexShrink: 0 }} />
                 ))}
               </div>
-              <button onClick={() => setWexPage(p => Math.min(WEX_PAGES.length - 1, p + 1))} disabled={wexPage === WEX_PAGES.length - 1} style={{ flex: 1, padding: "12px", borderRadius: 10, border: "1.5px solid #eaecef", background: wexPage === WEX_PAGES.length - 1 ? "#f8f9fb" : "#fff", color: wexPage === WEX_PAGES.length - 1 ? "#c4c9d4" : "#374151", fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 600, cursor: wexPage === WEX_PAGES.length - 1 ? "default" : "pointer" }}>Next →</button>
+              <button onClick={() => setWexPage(p => Math.min(WEX_PAGES.length - 1, p + 1))} disabled={wexPage === WEX_PAGES.length - 1} style={{ flex: 1, padding: "12px", borderRadius: 10, border: "1.5px solid #eaecef", background: wexPage === WEX_PAGES.length - 1 ? "#f8f9fb" : "#fff", color: wexPage === WEX_PAGES.length - 1 ? "#c4c9d4" : "#374151", fontFamily: "var(--font,'Inter',sans-serif)", fontSize: 14, fontWeight: 600, cursor: wexPage === WEX_PAGES.length - 1 ? "default" : "pointer" }}>Next →</button>
             </div>
           )}
         </div>
@@ -1758,24 +1879,24 @@ function RefView() {
       {showOsg      && <Modal title="OSG HY-PRO CARB" sub="HP253 · HP255 · HP258 — Scroll for page 2" img={[OSG_IMG_1, OSG_IMG_2]} onClose={() => setShowOsg(false)} />}
       {showSmd && (
         <div style={{ position: "fixed", inset: 0, background: "#000", zIndex: 100, display: "flex", flexDirection: "column" }}>
-          <div style={{ background: "#fff", borderBottom: "1px solid #eaecef", padding: "10px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
+          <div style={{ background: "var(--surface)", borderBottom: "1px solid #eaecef", padding: "10px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
             <div>
               <div style={{ fontSize: 15, fontWeight: 700, color: "#111" }}>Sumitomo SMD Series</div>
-              <div style={{ fontSize: 11, color: "#9ca3af" }}>Page {smdPage + 1} of {SMD_PAGES.length} · Replaceable Tip Drills</div>
+              <div style={{ fontSize: 11, color: "var(--text3)" }}>Page {smdPage + 1} of {SMD_PAGES.length} · Replaceable Tip Drills</div>
             </div>
-            <button onClick={() => setShowSmd(false)} style={{ background: "#f3f4f6", border: "none", borderRadius: 8, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: "#374151", cursor: "pointer" }}>✕ Close</button>
+            <button onClick={() => setShowSmd(false)} style={{ background: "#f3f4f6", border: "none", borderRadius: 8, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: "var(--text2)", cursor: "pointer" }}>✕ Close</button>
           </div>
           <div style={{ flex: 1, overflowY: "auto", WebkitOverflowScrolling: "touch", background: "#1a1a1a" }}>
             <img src={SMD_PAGES[smdPage]} alt={`SMD page ${smdPage + 1}`} style={{ width: "100%", display: "block" }} />
           </div>
-          <div style={{ background: "#fff", borderTop: "1px solid #eaecef", padding: "10px 16px", display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
-            <button onClick={() => setSmdPage(p => Math.max(0, p - 1))} disabled={smdPage === 0} style={{ flex: 1, padding: "12px", borderRadius: 10, border: "1.5px solid #eaecef", background: smdPage === 0 ? "#f8f9fb" : "#fff", color: smdPage === 0 ? "#c4c9d4" : "#374151", fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 600, cursor: smdPage === 0 ? "default" : "pointer" }}>← Prev</button>
+          <div style={{ background: "var(--surface)", borderTop: "1px solid #eaecef", padding: "10px 16px", display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
+            <button onClick={() => setSmdPage(p => Math.max(0, p - 1))} disabled={smdPage === 0} style={{ flex: 1, padding: "12px", borderRadius: 10, border: "1.5px solid #eaecef", background: smdPage === 0 ? "#f8f9fb" : "#fff", color: smdPage === 0 ? "#c4c9d4" : "#374151", fontFamily: "var(--font,'Inter',sans-serif)", fontSize: 14, fontWeight: 600, cursor: smdPage === 0 ? "default" : "pointer" }}>← Prev</button>
             <div style={{ display: "flex", gap: 4, alignItems: "center", overflowX: "auto", flexShrink: 0 }}>
               {SMD_PAGES.map((_, i) => (
                 <button key={i} onClick={() => setSmdPage(i)} style={{ width: i === smdPage ? 20 : 7, height: 7, borderRadius: 4, border: "none", padding: 0, cursor: "pointer", background: i === smdPage ? "#0d0d0d" : "#d1d5db", transition: "all 0.2s", flexShrink: 0 }} />
               ))}
             </div>
-            <button onClick={() => setSmdPage(p => Math.min(SMD_PAGES.length - 1, p + 1))} disabled={smdPage === SMD_PAGES.length - 1} style={{ flex: 1, padding: "12px", borderRadius: 10, border: "1.5px solid #eaecef", background: smdPage === SMD_PAGES.length - 1 ? "#f8f9fb" : "#fff", color: smdPage === SMD_PAGES.length - 1 ? "#c4c9d4" : "#374151", fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 600, cursor: smdPage === SMD_PAGES.length - 1 ? "default" : "pointer" }}>Next →</button>
+            <button onClick={() => setSmdPage(p => Math.min(SMD_PAGES.length - 1, p + 1))} disabled={smdPage === SMD_PAGES.length - 1} style={{ flex: 1, padding: "12px", borderRadius: 10, border: "1.5px solid #eaecef", background: smdPage === SMD_PAGES.length - 1 ? "#f8f9fb" : "#fff", color: smdPage === SMD_PAGES.length - 1 ? "#c4c9d4" : "#374151", fontFamily: "var(--font,'Inter',sans-serif)", fontSize: 14, fontWeight: 600, cursor: smdPage === SMD_PAGES.length - 1 ? "default" : "pointer" }}>Next →</button>
           </div>
         </div>
       )}
@@ -1784,24 +1905,24 @@ function RefView() {
       {showWdx && (
         <div style={{ position: "fixed", inset: 0, background: "#000", zIndex: 100, display: "flex", flexDirection: "column" }}>
           {/* Header */}
-          <div style={{ background: "#fff", borderBottom: "1px solid #eaecef", padding: "10px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
+          <div style={{ background: "var(--surface)", borderBottom: "1px solid #eaecef", padding: "10px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
             <div>
               <div style={{ fontSize: 15, fontWeight: 700, color: "#111" }}>Sumitomo WDX Series</div>
-              <div style={{ fontSize: 11, color: "#9ca3af" }}>Page {wdxPage + 1} of {WDX_PAGES.length}</div>
+              <div style={{ fontSize: 11, color: "var(--text3)" }}>Page {wdxPage + 1} of {WDX_PAGES.length}</div>
             </div>
-            <button onClick={() => setShowWdx(false)} style={{ background: "#f3f4f6", border: "none", borderRadius: 8, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: "#374151", cursor: "pointer" }}>✕ Close</button>
+            <button onClick={() => setShowWdx(false)} style={{ background: "#f3f4f6", border: "none", borderRadius: 8, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: "var(--text2)", cursor: "pointer" }}>✕ Close</button>
           </div>
           {/* Page image */}
           <div style={{ flex: 1, overflowY: "auto", WebkitOverflowScrolling: "touch", background: "#1a1a1a" }}>
             <img src={WDX_PAGES[wdxPage]} alt={`WDX page ${wdxPage + 1}`} style={{ width: "100%", display: "block" }} />
           </div>
           {/* Prev / Next nav */}
-          <div style={{ background: "#fff", borderTop: "1px solid #eaecef", padding: "10px 16px", display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
+          <div style={{ background: "var(--surface)", borderTop: "1px solid #eaecef", padding: "10px 16px", display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
             <button onClick={() => setWdxPage(p => Math.max(0, p - 1))} disabled={wdxPage === 0} style={{
               flex: 1, padding: "12px", borderRadius: 10, border: "1.5px solid #eaecef",
               background: wdxPage === 0 ? "#f8f9fb" : "#fff",
               color: wdxPage === 0 ? "#c4c9d4" : "#374151",
-              fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 600, cursor: wdxPage === 0 ? "default" : "pointer",
+              fontFamily: "var(--font,'Inter',sans-serif)", fontSize: 14, fontWeight: 600, cursor: wdxPage === 0 ? "default" : "pointer",
             }}>← Prev</button>
             {/* Page dots (show up to 20) */}
             <div style={{ display: "flex", gap: 4, alignItems: "center", overflowX: "auto", flexShrink: 0 }}>
@@ -1817,7 +1938,7 @@ function RefView() {
               flex: 1, padding: "12px", borderRadius: 10, border: "1.5px solid #eaecef",
               background: wdxPage === WDX_PAGES.length - 1 ? "#f8f9fb" : "#fff",
               color: wdxPage === WDX_PAGES.length - 1 ? "#c4c9d4" : "#374151",
-              fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 600, cursor: wdxPage === WDX_PAGES.length - 1 ? "default" : "pointer",
+              fontFamily: "var(--font,'Inter',sans-serif)", fontSize: 14, fontWeight: 600, cursor: wdxPage === WDX_PAGES.length - 1 ? "default" : "pointer",
             }}>Next →</button>
           </div>
         </div>
@@ -1826,10 +1947,10 @@ function RefView() {
       <div className="section">
         <div className="section-label">Charts &amp; References</div>
         <div className="tool-list">
-          {refs.map(({ label, sub, comingSoon, isOsg, isTapDrill, isCam, isWdx, isSmd, isWex, isGuhringForm, isGuhringCut, isGarr, isHss }) => (
+          {refs.map(({ label, sub, comingSoon, isOsg, isTapDrill, isCam, isWdx, isSmd, isWex, isGuhringForm, isGuhringCut, isGarr, isHss, isGdt }) => (
             <button
               key={label}
-              onClick={() => { if (isOsg) setShowOsg(true); if (isTapDrill) setShowTapDrill(true); if (isCam) setShowCam(true); if (isWdx) { setWdxPage(0); setShowWdx(true); } if (isSmd) { setSmdPage(0); setShowSmd(true); } if (isWex) { setWexPage(0); setShowWex(true); } if (isGuhringForm) setShowGuhringForm(true); if (isGuhringCut) setShowGuhringCut(true); if (isGarr) setShowGarr(true); if (isHss) setShowHss(true); }}
+              onClick={() => { if (isOsg) setShowOsg(true); if (isTapDrill) setShowTapDrill(true); if (isCam) setShowCam(true); if (isWdx) { setWdxPage(0); setShowWdx(true); } if (isSmd) { setSmdPage(0); setShowSmd(true); } if (isWex) { setWexPage(0); setShowWex(true); } if (isGuhringForm) setShowGuhringForm(true); if (isGuhringCut) setShowGuhringCut(true); if (isGarr) setShowGarr(true); if (isHss) setShowHss(true); if (isGdt) setShowGdt(true); }}
               className={`tool-btn${comingSoon ? " unavailable" : ""}`}
               style={{ flexDirection: "column", alignItems: "flex-start", gap: 3 }}
             >
@@ -1842,6 +1963,8 @@ function RefView() {
           ))}
         </div>
       </div>
+
+      {showGdt && <GdtModal onClose={() => setShowGdt(false)} />}
     </>
   );
 }
@@ -1892,7 +2015,7 @@ export default function App() {
                 </div>
                 <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 600, color: "#374151" }}>No result yet</div>
                 <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "#6b7280", textAlign: "center", maxWidth: 200, lineHeight: 1.6 }}>
-                  Make your selections on the left to see feeds &amp; speeds here
+                  Make your selections on the left to see results
                 </div>
               </div>
             )}
