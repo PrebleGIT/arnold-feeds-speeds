@@ -2,14 +2,22 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#ffffff" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Technical Data</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAA/UlEQVR4nGNkwAKkpOX+YxOnBnj29BEjMh+FQ0uLcTmEaSAsR7aPcSAsRwZMhJXQ2AED6XsGBgYGFlIUC6fcJkrd2zmqRJtJdBQQazmpaolyACkGkqqHqCjYnfUFhe86jYeg/O6sLwxGcwibzYgvEZ47dx6vZphF+ICRkSFeeZpnQ0KewOsAIyNDnD4wMjLEmdoJ+ZpoB5BjIEwtsh58oTDwJeGoA4atA5ATHr5ETHUHEMr3NHcAuiOoVhIiG0RsuUCMOrx1AbEAPdhJKbio4gBKwIBnw9Em2YA3yZjQ+2r0BkSFAClxSqoeJgYGzB4rpY4gVu2zp48YB7x3DADpJlt4lHgehgAAAABJRU5ErkJggg==" />
+    <link rel="icon" type="image/png" sizes="16x16" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAkElEQVR4nGNkgAIpabn/DCSCZ08fMTKSqxkGmCjRzMDAwMCCS0I45TYK/+0cVazqGNFdcO7ceRQFrtN4GHZnfYHzjYwMcRuArhkXQDaEiSgdeACKAejOI9kAcgyhrheIcQXeWMAGkGMGm8E4DUBOSLuzvuB0FVYD0FMhDGBLjRhhgEszLjmmZ08fMeLUQQQAAMgNKwAynR4BAAAAAElFTkSuQmCC" />
+
+    <!-- Apple Touch Icon (Home Screen on iPhone/iPad) -->
+    <link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAEvUlEQVR4nO3cTVLbQBSF0WcqO8gsqcosC4A1ZVlZEywgM6pgljUkIyjANpZk/XRfnTOP1Kg/Hm1DfKgGfPv+49/Wa2Aez0+Phy3vv8nNBbwfawe+2s1EzBpxL3oDEXPOUnEvclEhM9TcYd/MebEqMTPO3L3M9t0hZK41x7SeZUKLmTnM0dFV3xFCZilTp/XkCS1mljS1r0lBi5k1TOlsdNBiZk1jexsVtJjZwpjuBgctZrY0tL9BQYuZFgzp8GLQYqYll3qc/VffsKVPgzadadFnXZ4NWsy07FyfjhxEORm06UwPTnV6FLSY6cnHXh05iPIuaNOZHr3t1oQmiqCJ8hq04wY9e+nXhCaKoIlyqHLcIIcJTRRBE0XQRLlxfiaJCU2UL1svYGlff/3ZeglN+fv759ZLWFT0hBbzsfRnEht0+sZdI/nZxAbNPsUGnX5WvEbys4kNuip746ZKfyYH70OTJHpCsz+CJoqgiSJoogiaKIImiqCJImiiCJoogiZKd3/gf3//sPUSjtzd3U76d0t8LZfW8vaeU9fdsq4mdIsxV01b11Jfy5jr3t8/NPtMp+om6NYf/NiQljT2+klhdxF0Lw97yDrX+lpa+qmxpi6CZj29Ry1ojvQctaA5qdeouwi6l7eXWlrnHGvpMeougq5qK5ZTWlpfS2tZWzdBV7W7US2t69Ja7u5uR623tym9i/8kO3RT1gizpbVUtbeea3U1oeESQe/c0Mnby9FD0HRznBhC0AzWw5QWNFWVM6UFTRRBM0rrxw5B8yrh2CFoogiaKILmnSHHjpbP0YImiqCJImiiCJooguZIzy8MBU0UQRNF0EQRNFEETRRBE0XQRBE0UQRNFEETRdBEETRRBE0UQRNF0EQRNEeG/K1zq5/hIWiiCJoogiaKoIkiaN7p+QVhlaAJI2iiCJpXrX7WxhiCZpSWz89VgiaMoKmqjONGlaAZofXjRpWgqZzpXCXo3Rsacw/TuUrQhPmy9QI4beoxYOgkHXP9XqZzlQkd51Ko9/cPsTFXCTpS0ou8sQQdao6oe5vOVYLmjB5jrhI0J/Qac5Wg+aDnmKt2EvSQTVprI1u+T+8xV+0k6KrPN2vtjVz6fmOvf3d3GxFz1Y6Crjq90Vtt5FL3HXPdpJBfHL59//Fv60XAXHY1ocknaKIImiiCJoqgiSJoogiaKIImiqCJImiiCJoogiaKoIkiaKIImiiCJoqgiSJoogiaKIImiqCJEv/50F9//dl6CU35+/vn1ktYVPSEFvOx9GcSG3T6xl0j+dnEBs0+xQadfla8RvKziQ26Knvjpkp/JoeqKp9vR4roCc3+CJoogibKTVXV89PjYeuFwLWenx4PJjRRBE2U16AdO+jZS78mNFEETZR3QTt20KO33ZrQRDkK2pSmJx97PTmhRU0PTnXqyEGUs0Gb0rTsXJ+fTmhR06LPunTkIMrFoE1pWnKpx0ETWtS0YEiHg48comZLQ/sbdYYWNVsY093oF4WiZk1je5v0LoeoWcOUzia/bSdqljS1r1mi9EE1zOXaQTnLL1ZMa+YwR0ezh2haM9acA3H2X32b1owxdy+Lxmdac85Sg2+1aSpu1vjpvcnxQNz7sfYR9D+aoWI1AB2aSgAAAABJRU5ErkJggg==" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="apple-mobile-web-app-title" content="Feeds &amp; Speeds" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>Machinist Technical Data</title>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Technical Data" />
+
+    <!-- PWA manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#1a1b1e" />
   </head>
   <body>
     <div id="root"></div>
