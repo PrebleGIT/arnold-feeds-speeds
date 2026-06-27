@@ -3,23 +3,13 @@ import { useState, useEffect } from "react";
 // ─── DATA ─────────────────────────────────────────────────────────────────────
 
 const SQUARE_EM_INFO = {
-  ".0625": [{ loc: '0.2500"', partNo: "61102" }],
-  ".0938": [{ loc: '0.3750"', partNo: "61126" }],
-  ".125":  [{ loc: '0.5000"', partNo: "61927" }],
   ".1250": [{ loc: '0.5000"', partNo: "61927" }],
-  ".187":  [{ loc: '0.5625"', partNo: "62017" }],
   ".1875": [{ loc: '0.5625"', partNo: "62017" }],
-  ".250":  [{ loc: '0.7500"', partNo: "62147" }],
   ".2500": [{ loc: '0.7500"', partNo: "62147" }],
-  ".312":  [{ loc: '0.8125"', partNo: "62217" }],
   ".3125": [{ loc: '0.8125"', partNo: "62217" }],
-  ".375":  [{ loc: '0.8750"', partNo: "62327" }],
   ".3750": [{ loc: '0.8750"', partNo: "62327" }],
-  ".437":  [{ loc: '0.8750"', partNo: "62437" }],
   ".4375": [{ loc: '0.8750"', partNo: "62437" }],
-  ".500":  [{ loc: '1.2500"', partNo: "62535" }],
   ".5000": [{ loc: '1.2500"', partNo: "62535" }],
-  ".750":  [{ loc: '1.6250"', partNo: "61466" }],
   ".7500": [{ loc: '1.6250"', partNo: "61466" }],
 };
 
@@ -54,7 +44,7 @@ const ENDMILL_DATA = {
     },
   },
   "Shell Mill": {
-    materials: ["Aluminum", "CRS", "Tool Steel"],
+    materials: ["Aluminum", "CRS", "Stainless", "Tool Steel"],
     diameters: {
       "1.0000": { "Aluminum": { rpm: 7500, ipm: 100 }, "CRS": { rpm: 3056, ipm: 46 }, "Stainless": { rpm: 2292, ipm: 23 }, "Tool Steel": { rpm: 2292, ipm: 28 } },
       "1.2500": { "Aluminum": { rpm: 7500, ipm: 100 } },
@@ -63,8 +53,9 @@ const ENDMILL_DATA = {
     },
   },
 };
-const DRILL_MATERIALS = ["Aluminum", "CRS", "Stainless", "Tool Steel"];
 const TAP_MATERIALS   = ["Aluminum", "CRS", "Stainless", "Tool Steel"];
+
+const DRILL_MATERIALS = ["CRS", "Aluminum", "Tool Steel", "Stainless"];
 
 const DRILL_DATA = {
   ".1250": { "CRS": { rpm: 7500, ipm: 35 }, "Aluminum": { rpm: 7500, ipm: 75 }, "Tool Steel": { rpm: 5500, ipm: 18 }, "Stainless": { rpm: 5562, ipm: 18 } },
@@ -100,32 +91,95 @@ const SPADE_DATA = {
 
 
 const FORM_TAP_INCH = [
-  { tap: "4-40",    pitch: "0.0250", drill: '.1024" (2.6mm)', sfm: { "CRS": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "CRS": { rpm: 2040, ipm: 51 }, "Aluminum": { rpm: 3000, ipm: 75 }, "Tool Steel": { rpm: 1040, ipm: 26 }, "Stainless": { rpm: 1360, ipm: 34 } },
-  { tap: "5-40",    pitch: "0.0250", drill: '.1181" (3mm)',   sfm: { "CRS": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "CRS": { rpm: 1840, ipm: 46 }, "Aluminum": { rpm: 2760, ipm: 69 }, "Tool Steel": { rpm:  920, ipm: 23 }, "Stainless": { rpm: 1240, ipm: 31 } },
-  { tap: "6-32",    pitch: "0.0313", drill: '.1250"',         sfm: { "CRS": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "CRS": { rpm: 1664, ipm: 52 }, "Aluminum": { rpm: 2496, ipm: 78 }, "Tool Steel": { rpm:  832, ipm: 26 }, "Stainless": { rpm: 1120, ipm: 35 } },
-  { tap: "8-32",    pitch: "0.0313", drill: '.1496" (3.8mm)', sfm: { "CRS": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "CRS": { rpm: 1408, ipm: 44 }, "Aluminum": { rpm: 2112, ipm: 66 }, "Tool Steel": { rpm:  704, ipm: 22 }, "Stainless": { rpm:  928, ipm: 29 } },
-  { tap: "10-32",   pitch: "0.0313", drill: '.1772" (4.5mm)', sfm: { "CRS": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "CRS": { rpm: 1216, ipm: 38 }, "Aluminum": { rpm: 1824, ipm: 57 }, "Tool Steel": { rpm:  608, ipm: 19 }, "Stainless": { rpm:  800, ipm: 25 } },
-  { tap: "10-24",   pitch: "0.0417", drill: '.1693" (4.3mm)', sfm: { "CRS": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "CRS": { rpm: 1200, ipm: 50 }, "Aluminum": { rpm: 1800, ipm: 75 }, "Tool Steel": { rpm:  600, ipm: 25 }, "Stainless": { rpm:  816, ipm: 34 } },
-  { tap: "1/4-20",  pitch: "0.0500", drill: '.2283" (5.8mm)', sfm: { "CRS": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "CRS": { rpm:  920, ipm: 46 }, "Aluminum": { rpm: 1380, ipm: 69 }, "Tool Steel": { rpm:  460, ipm: 23 }, "Stainless": { rpm:  620, ipm: 31 } },
-  { tap: "5/16-18", pitch: "0.0556", drill: '.2874" (7.3mm)', sfm: { "CRS": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "CRS": { rpm:  738, ipm: 41 }, "Aluminum": { rpm: 1098, ipm: 61 }, "Tool Steel": { rpm:  360, ipm: 20 }, "Stainless": { rpm:  486, ipm: 27 } },
-  { tap: "3/8-16",  pitch: "0.0625", drill: '.3437"',         sfm: { "CRS": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "CRS": { rpm:  608, ipm: 38 }, "Aluminum": { rpm:  912, ipm: 57 }, "Tool Steel": { rpm:  304, ipm: 19 }, "Stainless": { rpm:  400, ipm: 25 } },
-  { tap: "7/16-14", pitch: "0.0714", drill: '.4063"',         sfm: { "CRS": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "CRS": { rpm:  518, ipm: 37 }, "Aluminum": { rpm:  784, ipm: 56 }, "Tool Steel": { rpm:  266, ipm: 19 }, "Stainless": { rpm:  350, ipm: 25 } },
-  { tap: "1/2-13",  pitch: "0.0769", drill: '.4646" (11.8mm)',sfm: { "CRS": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "CRS": { rpm:  455, ipm: 35 }, "Aluminum": { rpm:  689, ipm: 53 }, "Tool Steel": { rpm:  234, ipm: 18 }, "Stainless": { rpm:  312, ipm: 24 } },
-  { tap: "1/2-20",  pitch: "0.0500", drill: '.4843" (12.3mm)',sfm: { "CRS": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "CRS": { rpm:  460, ipm: 23 }, "Aluminum": { rpm:  680, ipm: 34 }, "Tool Steel": { rpm:  220, ipm: 11 }, "Stainless": { rpm:  300, ipm: 15 } },
-  { tap: "5/8-11",  pitch: "0.0909", drill: '.5787" (14.7mm)',sfm: { "CRS": 65, "Aluminum": 95, "Tool Steel": 33, "Stainless": 43 }, "CRS": { rpm:  363, ipm: 33 }, "Aluminum": { rpm:  550, ipm: 50 }, "Tool Steel": { rpm:  187, ipm: 17 }, "Stainless": { rpm:  242, ipm: 22 } },
+  { tap: "4-40",    pitch: "0.0250", drill: '.1024" (2.6mm)', sfm: { "Aluminum": 89.3, "CRS": 60.1, "Stainless": 39.5, "Tool Steel": 29.2 }, "Aluminum": { rpm: 2080, ipm: 52 }, "CRS": { rpm: 1400, ipm: 35 }, "Stainless": { rpm:  920, ipm: 23 }, "Tool Steel": { rpm:  680, ipm: 17 } },
+  { tap: "5-40",    pitch: "0.0250", drill: '.1181" (3mm)',   sfm: { "Aluminum": 90.8, "CRS": 59.3, "Stainless": 40.8, "Tool Steel": 29.7 }, "Aluminum": { rpm: 1960, ipm: 49 }, "CRS": { rpm: 1280, ipm: 32 }, "Stainless": { rpm:  880, ipm: 22 }, "Tool Steel": { rpm:  640, ipm: 16 } },
+  { tap: "6-32",    pitch: "0.0313", drill: '.1250"',         sfm: { "Aluminum": 90.7, "CRS": 60.5, "Stainless": 39.8, "Tool Steel": 30.2 }, "Aluminum": { rpm: 1824, ipm: 57 }, "CRS": { rpm: 1216, ipm: 38 }, "Stainless": { rpm:  800, ipm: 25 }, "Tool Steel": { rpm:  608, ipm: 19 } },
+  { tap: "8-32",    pitch: "0.0313", drill: '.1496" (3.8mm)', sfm: { "Aluminum": 90.5, "CRS": 59.7, "Stainless": 39.8, "Tool Steel": 30.8 }, "Aluminum": { rpm: 1600, ipm: 50 }, "CRS": { rpm: 1056, ipm: 33 }, "Stainless": { rpm:  704, ipm: 22 }, "Tool Steel": { rpm:  544, ipm: 17 } },
+  { tap: "10-32",   pitch: "0.0313", drill: '.1772" (4.5mm)', sfm: { "Aluminum": 89.2, "CRS": 60.8, "Stainless": 40.5, "Tool Steel": 30.4 }, "Aluminum": { rpm: 1408, ipm: 44 }, "CRS": { rpm:  960, ipm: 30 }, "Stainless": { rpm:  640, ipm: 20 }, "Tool Steel": { rpm:  480, ipm: 15 } },
+  { tap: "10-24",   pitch: "0.0417", drill: '.1693" (4.3mm)', sfm: { "Aluminum": 89.7, "CRS": 59.3, "Stainless": 39.5, "Tool Steel": 30.4 }, "Aluminum": { rpm: 1416, ipm: 59 }, "CRS": { rpm:  936, ipm: 39 }, "Stainless": { rpm:  624, ipm: 26 }, "Tool Steel": { rpm:  480, ipm: 20 } },
+  { tap: "1/4-20",  pitch: "0.0500", drill: '.2283" (5.8mm)', sfm: { "Aluminum": 90.3, "CRS": 60.2, "Stainless": 40.6, "Tool Steel": 30.1 }, "Aluminum": { rpm: 1380, ipm: 69 }, "CRS": { rpm:  920, ipm: 46 }, "Stainless": { rpm:  620, ipm: 31 }, "Tool Steel": { rpm:  460, ipm: 23 } },
+  { tap: "5/16-18", pitch: "0.0556", drill: '.2874" (7.3mm)', sfm: { "Aluminum": 89.8, "CRS": 60.4, "Stainless": 39.8, "Tool Steel": 29.5 }, "Aluminum": { rpm: 1098, ipm: 61 }, "CRS": { rpm:  738, ipm: 41 }, "Stainless": { rpm:  486, ipm: 27 }, "Tool Steel": { rpm:  360, ipm: 20 } },
+  { tap: "3/8-16",  pitch: "0.0625", drill: '.3437"',         sfm: { "Aluminum": 89.5, "CRS": 59.7, "Stainless": 39.3, "Tool Steel": 29.8 }, "Aluminum": { rpm:  912, ipm: 57 }, "CRS": { rpm:  608, ipm: 38 }, "Stainless": { rpm:  400, ipm: 25 }, "Tool Steel": { rpm:  304, ipm: 19 } },
+  { tap: "7/16-14", pitch: "0.0714", drill: '.4063"',         sfm: { "Aluminum": 89.8, "CRS": 59.3, "Stainless": 40.1, "Tool Steel": 30.5 }, "Aluminum": { rpm:  784, ipm: 56 }, "CRS": { rpm:  518, ipm: 37 }, "Stainless": { rpm:  350, ipm: 25 }, "Tool Steel": { rpm:  266, ipm: 19 } },
+  { tap: "1/2-13",  pitch: "0.0769", drill: '.4646" (11.8mm)',sfm: { "Aluminum": 90.2, "CRS": 59.6, "Stainless": 40.8, "Tool Steel": 30.6 }, "Aluminum": { rpm:  689, ipm: 53 }, "CRS": { rpm:  455, ipm: 35 }, "Stainless": { rpm:  312, ipm: 24 }, "Tool Steel": { rpm:  234, ipm: 18 } },
+  { tap: "1/2-20",  pitch: "0.0500", drill: '.4843" (12.3mm)',sfm: { "Aluminum": 89.0, "CRS": 60.2, "Stainless": 39.3, "Tool Steel": 28.8 }, "Aluminum": { rpm:  680, ipm: 34 }, "CRS": { rpm:  460, ipm: 23 }, "Stainless": { rpm:  300, ipm: 15 }, "Tool Steel": { rpm:  220, ipm: 11 } },
+  { tap: "5/8-11",  pitch: "0.0909", drill: '.5787" (14.7mm)',sfm: { "Aluminum": 90.0, "CRS": 59.4, "Stainless": 39.6, "Tool Steel": 30.6 }, "Aluminum": { rpm:  550, ipm: 50 }, "CRS": { rpm:  363, ipm: 33 }, "Stainless": { rpm:  242, ipm: 22 }, "Tool Steel": { rpm:  187, ipm: 17 } },
 ];
 
 const FORM_TAP_METRIC = [
-  { tap: "M2 x .4",    pitch: "0.0157", drill: '.0729" (1.854mm)', sfm: { "CRS": 55, "Aluminum": 55, "Tool Steel": 28, "Stainless": 37 }, "CRS": { rpm: 2912, ipm: 45.8 }, "Aluminum": { rpm: 3000, ipm: 47.2 }, "Tool Steel": { rpm: 1456, ipm: 22.9 }, "Stainless": { rpm: 1942, ipm: 30.6 } },
-  { tap: "M3 x .5",    pitch: "0.0197", drill: '.1102" (2.8mm)',   sfm: { "CRS": 55, "Aluminum": 82, "Tool Steel": 28, "Stainless": 37 }, "CRS": { rpm: 1941, ipm: 38.2 }, "Aluminum": { rpm: 2911, ipm: 57.3 }, "Tool Steel": { rpm:  970, ipm: 19.1 }, "Stainless": { rpm: 1294, ipm: 25.5 } },
-  { tap: "M4 x .7",    pitch: "0.0276", drill: '.1457" (3.7mm)',   sfm: { "CRS": 55, "Aluminum": 82, "Tool Steel": 28, "Stainless": 37 }, "CRS": { rpm: 1456, ipm: 40.1 }, "Aluminum": { rpm: 2184, ipm: 60.2 }, "Tool Steel": { rpm:  728, ipm: 20.1 }, "Stainless": { rpm:  971, ipm: 26.8 } },
-  { tap: "M5 x .8",    pitch: "0.0315", drill: '.1811" (4.6mm)',   sfm: { "CRS": 55, "Aluminum": 82, "Tool Steel": 28, "Stainless": 37 }, "CRS": { rpm: 1165, ipm: 36.7 }, "Aluminum": { rpm: 1747, ipm: 55.0 }, "Tool Steel": { rpm:  582, ipm: 18.3 }, "Stainless": { rpm:  776, ipm: 24.4 } },
-  { tap: "M6 x 1",     pitch: "0.0394", drill: '.2189" (5.56mm)',  sfm: { "CRS": 55, "Aluminum": 82, "Tool Steel": 28, "Stainless": 37 }, "CRS": { rpm:  970, ipm: 38.2 }, "Aluminum": { rpm: 1456, ipm: 57.3 }, "Tool Steel": { rpm:  485, ipm: 19.1 }, "Stainless": { rpm:  647, ipm: 25.5 } },
-  { tap: "M8 x 1.25",  pitch: "0.0492", drill: '.2913" (7.4mm)',   sfm: { "CRS": 55, "Aluminum": 82, "Tool Steel": 28, "Stainless": 37 }, "CRS": { rpm:  728, ipm: 35.8 }, "Aluminum": { rpm: 1092, ipm: 53.7 }, "Tool Steel": { rpm:  364, ipm: 17.9 }, "Stainless": { rpm:  485, ipm: 23.9 } },
-  { tap: "M10 x 1.5",  pitch: "0.0591", drill: '.3661" (9.3mm)',   sfm: { "CRS": 55, "Aluminum": 82, "Tool Steel": 28, "Stainless": 37 }, "CRS": { rpm:  582, ipm: 34.4 }, "Aluminum": { rpm:  873, ipm: 51.6 }, "Tool Steel": { rpm:  291, ipm: 17.2 }, "Stainless": { rpm:  388, ipm: 22.9 } },
-  { tap: "M12 x 1.75", pitch: "0.0689", drill: '.4375" (11.11mm)', sfm: { "CRS": 55, "Aluminum": 82, "Tool Steel": 28, "Stainless": 37 }, "CRS": { rpm:  485, ipm: 33.4 }, "Aluminum": { rpm:  728, ipm: 50.2 }, "Tool Steel": { rpm:  243, ipm: 16.7 }, "Stainless": { rpm:  323, ipm: 22.3 } },
+  { tap: "M2 x .4",    pitch: "0.0157", drill: '.0729" (1.854mm)', sfm: { "Aluminum": 82.5, "CRS": 55.0, "Stainless": 36.7, "Tool Steel": 27.5 }, "Aluminum": { rpm: 4000, ipm: 63 }, "CRS": { rpm: 2667, ipm: 42 }, "Stainless": { rpm: 1778, ipm: 28 }, "Tool Steel": { rpm: 1333, ipm: 21 } },
+  { tap: "M3 x .5",    pitch: "0.0197", drill: '.1102" (2.8mm)',   sfm: { "Aluminum": 81.7, "CRS": 55.0, "Stainless": 37.7, "Tool Steel": 28.3 }, "Aluminum": { rpm: 2642, ipm: 52 }, "CRS": { rpm: 1778, ipm: 35 }, "Stainless": { rpm: 1219, ipm: 24 }, "Tool Steel": { rpm:  914, ipm: 18 } },
+  { tap: "M4 x .7",    pitch: "0.0276", drill: '.1457" (3.7mm)',   sfm: { "Aluminum": 82.3, "CRS": 55.4, "Stainless": 37.4, "Tool Steel": 28.4 }, "Aluminum": { rpm: 1996, ipm: 55 }, "CRS": { rpm: 1343, ipm: 37 }, "Stainless": { rpm:  907, ipm: 25 }, "Tool Steel": { rpm:  689, ipm: 19 } },
+  { tap: "M5 x .8",    pitch: "0.0315", drill: '.1811" (4.6mm)',   sfm: { "Aluminum": 81.8, "CRS": 55.6, "Stainless": 37.6, "Tool Steel": 27.8 }, "Aluminum": { rpm: 1587, ipm: 50 }, "CRS": { rpm: 1079, ipm: 34 }, "Stainless": { rpm:  730, ipm: 23 }, "Tool Steel": { rpm:  540, ipm: 17 } },
+  { tap: "M6 x 1",     pitch: "0.0394", drill: '.2189" (5.56mm)',  sfm: { "Aluminum": 81.7, "CRS": 55.0, "Stainless": 37.7, "Tool Steel": 28.3 }, "Aluminum": { rpm: 1321, ipm: 52 }, "CRS": { rpm:  889, ipm: 35 }, "Stainless": { rpm:  610, ipm: 24 }, "Tool Steel": { rpm:  457, ipm: 18 } },
+  { tap: "M8 x 1.25",  pitch: "0.0492", drill: '.2913" (7.4mm)',   sfm: { "Aluminum": 82.1, "CRS": 55.3, "Stainless": 36.9, "Tool Steel": 28.5 }, "Aluminum": { rpm:  996, ipm: 49 }, "CRS": { rpm:  671, ipm: 33 }, "Stainless": { rpm:  447, ipm: 22 }, "Tool Steel": { rpm:  345, ipm: 17 } },
+  { tap: "M10 x 1.5",  pitch: "0.0591", drill: '.3661" (9.3mm)',   sfm: { "Aluminum": 82.0, "CRS": 55.9, "Stainless": 36.7, "Tool Steel": 27.9 }, "Aluminum": { rpm:  796, ipm: 47 }, "CRS": { rpm:  542, ipm: 32 }, "Stainless": { rpm:  356, ipm: 21 }, "Tool Steel": { rpm:  271, ipm: 16 } },
+  { tap: "M12 x 1.75", pitch: "0.0689", drill: '.4375" (11.11mm)', sfm: { "Aluminum": 82.6, "CRS": 55.7, "Stainless": 37.7, "Tool Steel": 28.7 }, "Aluminum": { rpm:  668, ipm: 46 }, "CRS": { rpm:  450, ipm: 31 }, "Stainless": { rpm:  305, ipm: 21 }, "Tool Steel": { rpm:  232, ipm: 16 } },
+];const CUT_TAP_INCH = [
+  { tap: "0-80",    pitch: "0.0125", drill: '#56 (.0465")', sfm: { "Aluminum": 50.3, "CRS": 40.2, "Stainless": 30.2, "Tool Steel": 25.1 }, "Aluminum": { rpm: 3200, ipm: 40 }, "CRS": { rpm: 2560, ipm: 32 }, "Stainless": { rpm: 1920, ipm: 24 }, "Tool Steel": { rpm: 1600, ipm: 20 } },
+  { tap: "1-64",    pitch: "0.0156", drill: '#53 (.0595")', sfm: { "Aluminum": 50.3, "CRS": 33.5, "Stainless": 33.5, "Tool Steel": 24.9 }, "Aluminum": { rpm: 192,  ipm: 3  }, "CRS": { rpm: 128,  ipm: 2  }, "Stainless": { rpm: 128,  ipm: 2  }, "Tool Steel": { rpm: 95,   ipm: 1  } },
+  { tap: "1-72",    pitch: "0.0139", drill: '#53 (.0595")', sfm: { "Aluminum": 56.5, "CRS": 37.7, "Stainless": 30.1, "Tool Steel": 24.9 }, "Aluminum": { rpm: 216,  ipm: 3  }, "CRS": { rpm: 144,  ipm: 2  }, "Stainless": { rpm: 115,  ipm: 2  }, "Tool Steel": { rpm: 95,   ipm: 1  } },
+  { tap: "2-56",    pitch: "0.0179", drill: '#50 (.0700")', sfm: { "Aluminum": 50.4, "CRS": 40.3, "Stainless": 30.3, "Tool Steel": 25.2 }, "Aluminum": { rpm: 2240, ipm: 40 }, "CRS": { rpm: 1792, ipm: 32 }, "Stainless": { rpm: 1344, ipm: 24 }, "Tool Steel": { rpm: 1120, ipm: 20 } },
+  { tap: "2-64",    pitch: "0.0156", drill: '#50 (.0700")', sfm: { "Aluminum": 50.4, "CRS": 40.3, "Stainless": 30.3, "Tool Steel": 24.5 }, "Aluminum": { rpm: 2240, ipm: 35 }, "CRS": { rpm: 1792, ipm: 28 }, "Stainless": { rpm: 1344, ipm: 21 }, "Tool Steel": { rpm: 1088, ipm: 17 } },
+  { tap: "3-48",    pitch: "0.0208", drill: '#47 (.0785")', sfm: { "Aluminum": 49.8, "CRS": 39.8, "Stainless": 29.9, "Tool Steel": 24.9 }, "Aluminum": { rpm: 1920, ipm: 40 }, "CRS": { rpm: 1536, ipm: 32 }, "Stainless": { rpm: 1152, ipm: 24 }, "Tool Steel": { rpm: 960,  ipm: 20 } },
+  { tap: "3-56",    pitch: "0.0179", drill: '#45 (.0820")', sfm: { "Aluminum": 49.3, "CRS": 40.6, "Stainless": 30.5, "Tool Steel": 24.7 }, "Aluminum": { rpm: 1904, ipm: 34 }, "CRS": { rpm: 1568, ipm: 28 }, "Stainless": { rpm: 1176, ipm: 21 }, "Tool Steel": { rpm: 952,  ipm: 17 } },
+  { tap: "4-40",    pitch: "0.0250", drill: '#43 (.0890")', sfm: { "Aluminum": 50.4, "CRS": 39.9, "Stainless": 30.5, "Tool Steel": 24.6 }, "Aluminum": { rpm: 1720, ipm: 43 }, "CRS": { rpm: 1360, ipm: 34 }, "Stainless": { rpm: 1040, ipm: 26 }, "Tool Steel": { rpm: 840,  ipm: 21 } },
+  { tap: "4-48",    pitch: "0.0208", drill: '#42 (.0935")', sfm: { "Aluminum": 50.7, "CRS": 39.4, "Stainless": 29.6, "Tool Steel": 25.3 }, "Aluminum": { rpm: 1728, ipm: 36 }, "CRS": { rpm: 1344, ipm: 28 }, "Stainless": { rpm: 1008, ipm: 21 }, "Tool Steel": { rpm: 864,  ipm: 18 } },
+  { tap: "5-40",    pitch: "0.0250", drill: '#38 (.1015")', sfm: { "Aluminum": 49.7, "CRS": 40.6, "Stainless": 30.1, "Tool Steel": 24.9 }, "Aluminum": { rpm: 1520, ipm: 38 }, "CRS": { rpm: 1240, ipm: 31 }, "Stainless": { rpm: 920,  ipm: 23 }, "Tool Steel": { rpm: 760,  ipm: 19 } },
+  { tap: "5-44",    pitch: "0.0227", drill: '#37 (.1040")', sfm: { "Aluminum": 50.4, "CRS": 40.3, "Stainless": 30.2, "Tool Steel": 24.5 }, "Aluminum": { rpm: 1540, ipm: 35 }, "CRS": { rpm: 1232, ipm: 28 }, "Stainless": { rpm: 924,  ipm: 21 }, "Tool Steel": { rpm: 748,  ipm: 17 } },
+  { tap: "6-32",    pitch: "0.0312", drill: '#36 (.1065")', sfm: { "Aluminum": 49.7, "CRS": 40.5, "Stainless": 30.1, "Tool Steel": 25.4 }, "Aluminum": { rpm: 1376, ipm: 43 }, "CRS": { rpm: 1120, ipm: 35 }, "Stainless": { rpm: 832,  ipm: 26 }, "Tool Steel": { rpm: 704,  ipm: 22 } },
+  { tap: "6-40",    pitch: "0.0250", drill: '#33 (.1130")', sfm: { "Aluminum": 50.6, "CRS": 40.5, "Stainless": 30.3, "Tool Steel": 24.6 }, "Aluminum": { rpm: 1400, ipm: 35 }, "CRS": { rpm: 1120, ipm: 28 }, "Stainless": { rpm: 840,  ipm: 21 }, "Tool Steel": { rpm: 680,  ipm: 17 } },
+  { tap: "8-32",    pitch: "0.0312", drill: '#29 (.1360")', sfm: { "Aluminum": 49.5, "CRS": 39.8, "Stainless": 30.2, "Tool Steel": 24.7 }, "Aluminum": { rpm: 1152, ipm: 36 }, "CRS": { rpm: 928,  ipm: 29 }, "Stainless": { rpm: 704,  ipm: 22 }, "Tool Steel": { rpm: 576,  ipm: 18 } },
+  { tap: "8-36",    pitch: "0.0278", drill: '#29 (.1360")', sfm: { "Aluminum": 49.5, "CRS": 40.2, "Stainless": 29.4, "Tool Steel": 24.7 }, "Aluminum": { rpm: 1152, ipm: 32 }, "CRS": { rpm: 936,  ipm: 26 }, "Stainless": { rpm: 684,  ipm: 19 }, "Tool Steel": { rpm: 576,  ipm: 16 } },
+  { tap: "10-24",   pitch: "0.0417", drill: '#25 (.1495")', sfm: { "Aluminum": 50.1, "CRS": 40.6, "Stainless": 29.8, "Tool Steel": 25.1 }, "Aluminum": { rpm: 1008, ipm: 42 }, "CRS": { rpm: 816,  ipm: 34 }, "Stainless": { rpm: 600,  ipm: 25 }, "Tool Steel": { rpm: 504,  ipm: 21 } },
+  { tap: "10-32",   pitch: "0.0312", drill: '#21 (.1590")', sfm: { "Aluminum": 49.3, "CRS": 39.8, "Stainless": 30.2, "Tool Steel": 25.5 }, "Aluminum": { rpm: 992,  ipm: 31 }, "CRS": { rpm: 800,  ipm: 25 }, "Stainless": { rpm: 608,  ipm: 19 }, "Tool Steel": { rpm: 512,  ipm: 16 } },
+  { tap: "12-24",   pitch: "0.0417", drill: '#16 (.1770")', sfm: { "Aluminum": 50.2, "CRS": 39.4, "Stainless": 29.9, "Tool Steel": 24.4 }, "Aluminum": { rpm: 888,  ipm: 37 }, "CRS": { rpm: 696,  ipm: 29 }, "Stainless": { rpm: 528,  ipm: 22 }, "Tool Steel": { rpm: 432,  ipm: 18 } },
+  { tap: "12-28",   pitch: "0.0357", drill: '#15 (.1800")', sfm: { "Aluminum": 50.7, "CRS": 39.6, "Stainless": 30.1, "Tool Steel": 25.3 }, "Aluminum": { rpm: 896,  ipm: 32 }, "CRS": { rpm: 700,  ipm: 25 }, "Stainless": { rpm: 532,  ipm: 19 }, "Tool Steel": { rpm: 448,  ipm: 16 } },
+  { tap: "1/4-20",  pitch: "0.0500", drill: '#7  (.2010")', sfm: { "Aluminum": 49.7, "CRS": 40.6, "Stainless": 30.1, "Tool Steel": 24.9 }, "Aluminum": { rpm: 760,  ipm: 38 }, "CRS": { rpm: 620,  ipm: 31 }, "Stainless": { rpm: 460,  ipm: 23 }, "Tool Steel": { rpm: 380,  ipm: 19 } },
+  { tap: "1/4-28",  pitch: "0.0357", drill: '#3  (.2130")', sfm: { "Aluminum": 49.5, "CRS": 40.3, "Stainless": 29.3, "Tool Steel": 25.7 }, "Aluminum": { rpm: 756,  ipm: 27 }, "CRS": { rpm: 616,  ipm: 22 }, "Stainless": { rpm: 448,  ipm: 16 }, "Tool Steel": { rpm: 392,  ipm: 14 } },
+  { tap: "5/16-18", pitch: "0.0556", drill: 'F   (.2570")', sfm: { "Aluminum": 50.1, "CRS": 39.8, "Stainless": 29.5, "Tool Steel": 25.0 }, "Aluminum": { rpm: 612,  ipm: 34 }, "CRS": { rpm: 486,  ipm: 27 }, "Stainless": { rpm: 360,  ipm: 20 }, "Tool Steel": { rpm: 306,  ipm: 17 } },
+  { tap: "5/16-24", pitch: "0.0417", drill: 'I   (.2720")', sfm: { "Aluminum": 49.1, "CRS": 39.3, "Stainless": 29.5, "Tool Steel": 25.5 }, "Aluminum": { rpm: 600,  ipm: 25 }, "CRS": { rpm: 480,  ipm: 20 }, "Stainless": { rpm: 360,  ipm: 15 }, "Tool Steel": { rpm: 312,  ipm: 13 } },
+  { tap: "3/8-16",  pitch: "0.0625", drill: '5/16" (.3125")', sfm: { "Aluminum": 50.3, "CRS": 39.3, "Stainless": 29.8, "Tool Steel": 25.1 }, "Aluminum": { rpm: 512,  ipm: 32 }, "CRS": { rpm: 400,  ipm: 25 }, "Stainless": { rpm: 304,  ipm: 19 }, "Tool Steel": { rpm: 256,  ipm: 16 } },
+  { tap: "3/8-24",  pitch: "0.0417", drill: 'Q   (.3320")', sfm: { "Aluminum": 49.5, "CRS": 40.1, "Stainless": 30.6, "Tool Steel": 25.9 }, "Aluminum": { rpm: 504,  ipm: 21 }, "CRS": { rpm: 408,  ipm: 17 }, "Stainless": { rpm: 312,  ipm: 13 }, "Tool Steel": { rpm: 264,  ipm: 11 } },
+  { tap: "7/16-14", pitch: "0.0714", drill: 'U   (.3680")', sfm: { "Aluminum": 49.7, "CRS": 40.1, "Stainless": 30.5, "Tool Steel": 25.7 }, "Aluminum": { rpm: 434,  ipm: 31 }, "CRS": { rpm: 350,  ipm: 25 }, "Stainless": { rpm: 266,  ipm: 19 }, "Tool Steel": { rpm: 224,  ipm: 16 } },
+  { tap: "7/16-20", pitch: "0.0500", drill: '25/64" (.3906")', sfm: { "Aluminum": 50.4, "CRS": 38.9, "Stainless": 29.8, "Tool Steel": 25.2 }, "Aluminum": { rpm: 440,  ipm: 22 }, "CRS": { rpm: 340,  ipm: 17 }, "Stainless": { rpm: 260,  ipm: 13 }, "Tool Steel": { rpm: 220,  ipm: 11 } },
+  { tap: "1/2-13",  pitch: "0.0769", drill: '27/64" (.4219")', sfm: { "Aluminum": 49.3, "CRS": 40.8, "Stainless": 30.6, "Tool Steel": 25.5 }, "Aluminum": { rpm: 377,  ipm: 29 }, "CRS": { rpm: 312,  ipm: 24 }, "Stainless": { rpm: 234,  ipm: 18 }, "Tool Steel": { rpm: 195,  ipm: 15 } },
+  { tap: "1/2-20",  pitch: "0.0500", drill: '29/64" (.4531")', sfm: { "Aluminum": 49.7, "CRS": 39.3, "Stainless": 28.8, "Tool Steel": 26.2 }, "Aluminum": { rpm: 380,  ipm: 19 }, "CRS": { rpm: 300,  ipm: 15 }, "Stainless": { rpm: 220,  ipm: 11 }, "Tool Steel": { rpm: 200,  ipm: 10 } },
+  { tap: "9/16-12", pitch: "0.0833", drill: '31/64" (.4844")', sfm: { "Aluminum": 49.5, "CRS": 40.6, "Stainless": 30.0, "Tool Steel": 24.7 }, "Aluminum": { rpm: 336,  ipm: 28 }, "CRS": { rpm: 276,  ipm: 23 }, "Stainless": { rpm: 204,  ipm: 17 }, "Tool Steel": { rpm: 168,  ipm: 14 } },
+  { tap: "9/16-18", pitch: "0.0556", drill: '33/64" (.5156")', sfm: { "Aluminum": 50.4, "CRS": 39.8, "Stainless": 29.2, "Tool Steel": 23.9 }, "Aluminum": { rpm: 342,  ipm: 19 }, "CRS": { rpm: 270,  ipm: 15 }, "Stainless": { rpm: 198,  ipm: 11 }, "Tool Steel": { rpm: 162,  ipm: 9  } },
+  { tap: "5/8-11",  pitch: "0.0909", drill: '17/32" (.5313")', sfm: { "Aluminum": 50.4, "CRS": 39.6, "Stainless": 30.6, "Tool Steel": 25.2 }, "Aluminum": { rpm: 308,  ipm: 28 }, "CRS": { rpm: 242,  ipm: 22 }, "Stainless": { rpm: 187,  ipm: 17 }, "Tool Steel": { rpm: 154,  ipm: 14 } },
+  { tap: "5/8-18",  pitch: "0.0556", drill: '37/64" (.5781")', sfm: { "Aluminum": 50.1, "CRS": 41.2, "Stainless": 29.5, "Tool Steel": 23.6 }, "Aluminum": { rpm: 306,  ipm: 17 }, "CRS": { rpm: 252,  ipm: 14 }, "Stainless": { rpm: 180,  ipm: 10 }, "Tool Steel": { rpm: 144,  ipm: 8  } },
+  { tap: "3/4-10",  pitch: "0.1000", drill: '21/32" (.6563")', sfm: { "Aluminum": 49.1, "CRS": 39.3, "Stainless": 29.5, "Tool Steel": 25.5 }, "Aluminum": { rpm: 250,  ipm: 25 }, "CRS": { rpm: 200,  ipm: 20 }, "Stainless": { rpm: 150,  ipm: 15 }, "Tool Steel": { rpm: 130,  ipm: 13 } },
+  { tap: "3/4-16",  pitch: "0.0625", drill: '11/16" (.6875")', sfm: { "Aluminum": 50.3, "CRS": 40.8, "Stainless": 31.4, "Tool Steel": 25.1 }, "Aluminum": { rpm: 256,  ipm: 16 }, "CRS": { rpm: 208,  ipm: 13 }, "Stainless": { rpm: 160,  ipm: 10 }, "Tool Steel": { rpm: 128,  ipm: 8  } },
+  { tap: "7/8-9",   pitch: "0.1111", drill: '49/64" (.7656")', sfm: { "Aluminum": 49.5, "CRS": 39.2, "Stainless": 30.9, "Tool Steel": 24.7 }, "Aluminum": { rpm: 216,  ipm: 24 }, "CRS": { rpm: 171,  ipm: 19 }, "Stainless": { rpm: 135,  ipm: 15 }, "Tool Steel": { rpm: 108,  ipm: 12 } },
+  { tap: "7/8-14",  pitch: "0.0714", drill: '13/16" (.8125")', sfm: { "Aluminum": 51.3, "CRS": 38.5, "Stainless": 28.9, "Tool Steel": 25.7 }, "Aluminum": { rpm: 224,  ipm: 16 }, "CRS": { rpm: 168,  ipm: 12 }, "Stainless": { rpm: 126,  ipm: 9  }, "Tool Steel": { rpm: 112,  ipm: 8  } },
+  { tap: "1-8",     pitch: "0.1250", drill: '7/8"   (.8750")', sfm: { "Aluminum": 50.3, "CRS": 39.8, "Stainless": 29.3, "Tool Steel": 25.1 }, "Aluminum": { rpm: 192,  ipm: 24 }, "CRS": { rpm: 152,  ipm: 19 }, "Stainless": { rpm: 112,  ipm: 14 }, "Tool Steel": { rpm: 96,   ipm: 12 } },
+  { tap: "1-12",    pitch: "0.0833", drill: '59/64" (.9219")', sfm: { "Aluminum": 50.3, "CRS": 40.8, "Stainless": 31.4, "Tool Steel": 25.1 }, "Aluminum": { rpm: 192,  ipm: 16 }, "CRS": { rpm: 156,  ipm: 13 }, "Stainless": { rpm: 120,  ipm: 10 }, "Tool Steel": { rpm: 96,   ipm: 8  } },
+  { tap: "1-14",    pitch: "0.0714", drill: '15/16" (.9375")', sfm: { "Aluminum": 51.3, "CRS": 40.3, "Stainless": 29.3, "Tool Steel": 25.7 }, "Aluminum": { rpm: 196,  ipm: 14 }, "CRS": { rpm: 154,  ipm: 11 }, "Stainless": { rpm: 112,  ipm: 8  }, "Tool Steel": { rpm: 98,   ipm: 7  } },
 ];
 
+const CUT_TAP_METRIC = [
+  { tap: "M2 x 0.4",    pitch: "0.0157", drill: '1.6mm (.0630")',    sfm: { "Aluminum": 49.7, "CRS": 40.6, "Stainless": 30.1, "Tool Steel": 24.9 }, "Aluminum": { rpm: 2413, ipm: 38 }, "CRS": { rpm: 1968, ipm: 31 }, "Stainless": { rpm: 1460, ipm: 23 }, "Tool Steel": { rpm: 1206, ipm: 19 } },
+  { tap: "M2.5 x 0.45", pitch: "0.0177", drill: '2.05mm (.0807")',   sfm: { "Aluminum": 49.5, "CRS": 40.7, "Stainless": 30.5, "Tool Steel": 24.7 }, "Aluminum": { rpm: 1919, ipm: 34 }, "CRS": { rpm: 1580, ipm: 28 }, "Stainless": { rpm: 1185, ipm: 21 }, "Tool Steel": { rpm: 960,  ipm: 17 } },
+  { tap: "M3 x 0.5",    pitch: "0.0197", drill: '2.5mm (.0984")',    sfm: { "Aluminum": 50.3, "CRS": 39.3, "Stainless": 29.8, "Tool Steel": 25.1 }, "Aluminum": { rpm: 1626, ipm: 32 }, "CRS": { rpm: 1270, ipm: 25 }, "Stainless": { rpm: 965,  ipm: 19 }, "Tool Steel": { rpm: 813,  ipm: 16 } },
+  { tap: "M3.5 x 0.6",  pitch: "0.0236", drill: '2.9mm (.1142")',    sfm: { "Aluminum": 50.4, "CRS": 39.7, "Stainless": 30.5, "Tool Steel": 24.4 }, "Aluminum": { rpm: 1397, ipm: 33 }, "CRS": { rpm: 1101, ipm: 26 }, "Stainless": { rpm: 847,  ipm: 20 }, "Tool Steel": { rpm: 677,  ipm: 16 } },
+  { tap: "M4 x 0.7",    pitch: "0.0276", drill: '3.3mm (.1299")',    sfm: { "Aluminum": 49.4, "CRS": 40.4, "Stainless": 29.9, "Tool Steel": 25.4 }, "Aluminum": { rpm: 1197, ipm: 33 }, "CRS": { rpm: 980,  ipm: 27 }, "Stainless": { rpm: 726,  ipm: 20 }, "Tool Steel": { rpm: 617,  ipm: 17 } },
+  { tap: "M5 x 0.8",    pitch: "0.0315", drill: '4.2mm (.1654")',    sfm: { "Aluminum": 50.7, "CRS": 39.3, "Stainless": 29.5, "Tool Steel": 24.5 }, "Aluminum": { rpm: 984,  ipm: 31 }, "CRS": { rpm: 762,  ipm: 24 }, "Stainless": { rpm: 571,  ipm: 18 }, "Tool Steel": { rpm: 476,  ipm: 15 } },
+  { tap: "M6 x 1",      pitch: "0.0394", drill: '5.0mm (.1969")',    sfm: { "Aluminum": 50.3, "CRS": 39.3, "Stainless": 29.8, "Tool Steel": 25.1 }, "Aluminum": { rpm: 813,  ipm: 32 }, "CRS": { rpm: 635,  ipm: 25 }, "Stainless": { rpm: 483,  ipm: 19 }, "Tool Steel": { rpm: 406,  ipm: 16 } },
+  { tap: "M7 x 1",      pitch: "0.0394", drill: '6.0mm (.2362")',    sfm: { "Aluminum": 49.5, "CRS": 40.3, "Stainless": 29.3, "Tool Steel": 25.7 }, "Aluminum": { rpm: 686,  ipm: 27 }, "CRS": { rpm: 559,  ipm: 22 }, "Stainless": { rpm: 406,  ipm: 16 }, "Tool Steel": { rpm: 356,  ipm: 14 } },
+  { tap: "M8 x 1.25",   pitch: "0.0492", drill: '6.7mm (.2638")',    sfm: { "Aluminum": 50.3, "CRS": 40.2, "Stainless": 30.2, "Tool Steel": 25.1 }, "Aluminum": { rpm: 610,  ipm: 30 }, "CRS": { rpm: 488,  ipm: 24 }, "Stainless": { rpm: 366,  ipm: 18 }, "Tool Steel": { rpm: 305,  ipm: 15 } },
+  { tap: "M8 x 1",      pitch: "0.0394", drill: '7.0mm (.2756")',    sfm: { "Aluminum": 50.3, "CRS": 39.8, "Stainless": 29.3, "Tool Steel": 25.1 }, "Aluminum": { rpm: 610,  ipm: 24 }, "CRS": { rpm: 483,  ipm: 19 }, "Stainless": { rpm: 356,  ipm: 14 }, "Tool Steel": { rpm: 305,  ipm: 12 } },
+  { tap: "M10 x 1.5",   pitch: "0.0591", drill: '8.5mm (.3346")',    sfm: { "Aluminum": 50.6, "CRS": 40.1, "Stainless": 29.7, "Tool Steel": 24.4 }, "Aluminum": { rpm: 491,  ipm: 29 }, "CRS": { rpm: 389,  ipm: 23 }, "Stainless": { rpm: 288,  ipm: 17 }, "Tool Steel": { rpm: 237,  ipm: 14 } },
+  { tap: "M10 x 1.25",  pitch: "0.0492", drill: '8.7mm (.3425")',    sfm: { "Aluminum": 50.3, "CRS": 39.8, "Stainless": 29.3, "Tool Steel": 25.1 }, "Aluminum": { rpm: 488,  ipm: 24 }, "CRS": { rpm: 386,  ipm: 19 }, "Stainless": { rpm: 284,  ipm: 14 }, "Tool Steel": { rpm: 244,  ipm: 12 } },
+  { tap: "M12 x 1.75",  pitch: "0.0689", drill: '10.2mm (.4016")',   sfm: { "Aluminum": 50.3, "CRS": 39.5, "Stainless": 30.5, "Tool Steel": 25.1 }, "Aluminum": { rpm: 406,  ipm: 28 }, "CRS": { rpm: 319,  ipm: 22 }, "Stainless": { rpm: 247,  ipm: 17 }, "Tool Steel": { rpm: 203,  ipm: 14 } },
+  { tap: "M12 x 1.25",  pitch: "0.0492", drill: '10.8mm (.4252")',   sfm: { "Aluminum": 50.3, "CRS": 40.2, "Stainless": 30.2, "Tool Steel": 25.1 }, "Aluminum": { rpm: 406,  ipm: 20 }, "CRS": { rpm: 325,  ipm: 16 }, "Stainless": { rpm: 244,  ipm: 12 }, "Tool Steel": { rpm: 203,  ipm: 10 } },
+  { tap: "M14 x 2",     pitch: "0.0787", drill: '12.0mm (.4724")',   sfm: { "Aluminum": 49.5, "CRS": 40.3, "Stainless": 29.3, "Tool Steel": 25.7 }, "Aluminum": { rpm: 343,  ipm: 27 }, "CRS": { rpm: 279,  ipm: 22 }, "Stainless": { rpm: 203,  ipm: 16 }, "Tool Steel": { rpm: 178,  ipm: 14 } },
+  { tap: "M16 x 2",     pitch: "0.0787", drill: '14.0mm (.5512")',   sfm: { "Aluminum": 50.3, "CRS": 39.8, "Stainless": 29.3, "Tool Steel": 25.1 }, "Aluminum": { rpm: 305,  ipm: 24 }, "CRS": { rpm: 241,  ipm: 19 }, "Stainless": { rpm: 178,  ipm: 14 }, "Tool Steel": { rpm: 152,  ipm: 12 } },
+  { tap: "M18 x 2.5",   pitch: "0.0984", drill: '15.5mm (.6102")',   sfm: { "Aluminum": 50.9, "CRS": 39.6, "Stainless": 30.2, "Tool Steel": 24.5 }, "Aluminum": { rpm: 274,  ipm: 27 }, "CRS": { rpm: 213,  ipm: 21 }, "Stainless": { rpm: 163,  ipm: 16 }, "Tool Steel": { rpm: 132,  ipm: 13 } },
+  { tap: "M20 x 2.5",   pitch: "0.0984", drill: '17.5mm (.6890")',   sfm: { "Aluminum": 50.3, "CRS": 39.8, "Stainless": 29.3, "Tool Steel": 25.1 }, "Aluminum": { rpm: 244,  ipm: 24 }, "CRS": { rpm: 193,  ipm: 19 }, "Stainless": { rpm: 142,  ipm: 14 }, "Tool Steel": { rpm: 122,  ipm: 12 } },
+  { tap: "M22 x 2.5",   pitch: "0.0984", drill: '19.5mm (.7677")',   sfm: { "Aluminum": 50.7, "CRS": 39.2, "Stainless": 29.9, "Tool Steel": 25.3 }, "Aluminum": { rpm: 224,  ipm: 22 }, "CRS": { rpm: 173,  ipm: 17 }, "Stainless": { rpm: 132,  ipm: 13 }, "Tool Steel": { rpm: 112,  ipm: 11 } },
+  { tap: "M24 x 3",     pitch: "0.1181", drill: '21.0mm (.8268")',   sfm: { "Aluminum": 50.3, "CRS": 39.8, "Stainless": 29.3, "Tool Steel": 25.1 }, "Aluminum": { rpm: 203,  ipm: 24 }, "CRS": { rpm: 161,  ipm: 19 }, "Stainless": { rpm: 119,  ipm: 14 }, "Tool Steel": { rpm: 102,  ipm: 12 } },
+];
 // ─── ARNOLD LOGO ──────────────────────────────────────────────────────────────
 
 // ─── STYLES ───────────────────────────────────────────────────────────────────
@@ -133,64 +187,101 @@ const FORM_TAP_METRIC = [
 const css = `
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=DM+Mono:wght@400;500&display=swap');
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  body { background: #f0f1f3; }
-  .app { min-height: 100vh; background: #f0f1f3; font-family: 'DM Sans', sans-serif; max-width: 480px; margin: 0 auto; padding-bottom: 56px; }
-  .header { background: #fff; border-bottom: 1px solid #eaecef; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; box-shadow: 0 1px 0 #eaecef; }
-  .header-title { font-size: 19px; font-weight: 700; color: #0d0d0d; letter-spacing: -0.4px; }
-  .header-sub { font-size: 11px; color: #b0b7c3; font-weight: 500; margin-top: 2px; letter-spacing: 0.03em; }
-  .nav-tabs { background: #fff; border-bottom: 1px solid #eaecef; display: flex; padding: 0 12px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+
+  /* ── TOKENS ── */
+  :root {
+    --bg:        #1a1b1e;
+    --surface:   #25262b;
+    --surface2:  #2c2d33;
+    --border:    #373840;
+    --border2:   #42444e;
+    --text1:     #e8e9ed;
+    --text2:     #9a9cab;
+    --text3:     #5c5f70;
+    --accent:    #2d7ff9;
+    --accent-bg: rgba(45,127,249,0.12);
+    --accent-border: rgba(45,127,249,0.45);
+    --green:     #4ade80;
+    --green-bg:  rgba(74,222,128,0.10);
+    --green-border: rgba(74,222,128,0.30);
+  }
+
+  body { background: var(--bg); }
+  .app { min-height: 100vh; background: var(--bg); font-family: 'DM Sans', sans-serif; max-width: 480px; margin: 0 auto; padding-bottom: 56px; }
+
+  /* ── HEADER ── */
+  .header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
+  .header-title { font-size: 19px; font-weight: 700; color: var(--text1); letter-spacing: -0.4px; }
+  .header-sub { font-size: 11px; color: var(--text3); font-weight: 500; margin-top: 2px; letter-spacing: 0.03em; }
+
+  /* ── NAV TABS ── */
+  .nav-tabs { background: var(--surface); border-bottom: 1px solid var(--border); display: flex; padding: 0 12px; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
   .nav-tabs::-webkit-scrollbar { display: none; }
-  .nav-tab { flex-shrink: 0; padding: 12px 14px 11px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; color: #adb5bd; background: transparent; border: none; border-bottom: 2px solid transparent; cursor: pointer; transition: color 0.15s, border-color 0.15s; white-space: nowrap; letter-spacing: 0.01em; }
-  .nav-tab.active { color: #1a6ef5; border-bottom-color: #1a6ef5; }
+  .nav-tab { flex-shrink: 0; padding: 12px 14px 11px; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; color: var(--text3); background: transparent; border: none; border-bottom: 2px solid transparent; cursor: pointer; transition: color 0.15s, border-color 0.15s; white-space: nowrap; letter-spacing: 0.01em; }
+  .nav-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* ── LAYOUT ── */
   .desktop-body { display: block; }
   .desktop-result { display: none; }
   .section { padding: 20px 16px 0; }
-  .section.locked { opacity: 0.3; pointer-events: none; }
-  .section-label { font-size: 10px; font-weight: 700; color: #8a94a6; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+  .section.locked { opacity: 0.25; pointer-events: none; }
+  .section-label { font-size: 10px; font-weight: 700; color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 10px; }
+
+  /* ── TOOL BUTTONS ── */
   .tool-list { display: flex; flex-direction: column; gap: 7px; }
-  .tool-btn { width: 100%; padding: 15px 16px; background: #fff; border: 1.5px solid #eaecef; border-radius: 14px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; color: #1a1a1a; text-align: left; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: all 0.15s; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+  .tool-btn { width: 100%; padding: 14px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; color: var(--text1); text-align: left; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: all 0.15s; }
   .tool-btn:active { transform: scale(0.99); }
-  .tool-btn.selected { border-color: #0d0d0d; background: #0d0d0d; color: #fff; box-shadow: 0 4px 16px rgba(0,0,0,0.18); }
-  .tool-btn.unavailable { color: #c4c9d4; cursor: default; background: #fafafa; }
-  .tool-btn .badge { font-size: 10px; font-weight: 600; color: #c4c9d4; letter-spacing: 0.05em; text-transform: uppercase; }
-  .check { font-size: 15px; }
+  .tool-btn.selected { border-color: var(--accent-border); background: var(--accent-bg); color: var(--accent); }
+  .tool-btn.unavailable { color: var(--text3); cursor: default; background: var(--surface); border-color: var(--border); }
+  .tool-btn .badge { font-size: 10px; font-weight: 600; color: var(--text3); letter-spacing: 0.05em; text-transform: uppercase; }
+  .check { font-size: 15px; color: var(--accent); }
+
+  /* ── PILLS ── */
   .pill-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .pill { padding: 13px 8px; background: #fff; border: 1.5px solid #eaecef; border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: #374151; text-align: center; cursor: pointer; transition: all 0.15s; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+  .pill { padding: 13px 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--text2); text-align: center; cursor: pointer; transition: all 0.15s; }
   .pill:active { transform: scale(0.97); }
-  .pill.sel-green { border-color: #16a34a; background: #f0fdf4; color: #15803d; font-weight: 600; box-shadow: 0 0 0 3px rgba(22,163,74,0.08); }
+  .pill.sel-green { border-color: var(--accent-border); background: var(--accent-bg); color: var(--accent); font-weight: 600; }
+
+  /* ── DIAMETER PILLS ── */
   .dia-grid { display: flex; gap: 7px; flex-wrap: wrap; }
-  .dia-pill { flex: 1 1 calc(25% - 6px); padding: 12px 4px; background: #fff; border: 1.5px solid #eaecef; border-radius: 12px; font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; color: #374151; text-align: center; cursor: pointer; transition: all 0.15s; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+  .dia-pill { flex: 1 1 calc(25% - 6px); padding: 12px 4px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; color: var(--text2); text-align: center; cursor: pointer; transition: all 0.15s; }
   .dia-pill:active { transform: scale(0.97); }
-  .dia-pill.sel-blue { border-color: #1a6ef5; background: #eff4ff; color: #1a5fd4; font-weight: 600; box-shadow: 0 0 0 3px rgba(26,110,245,0.08); }
-  .result-card { margin: 20px 16px 0; background: linear-gradient(145deg, #141414, #1c1c1c); border-radius: 20px; padding: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.04); }
-  .result-eyebrow { font-size: 10px; font-weight: 700; color: #5a6072; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 14px; }
-  .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .result-stat { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 14px 16px; text-align: center; }
-  .result-stat-label { font-size: 10px; font-weight: 700; color: #5a6072; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+  .dia-pill.sel-blue { border-color: var(--accent-border); background: var(--accent-bg); color: var(--accent); font-weight: 600; }
+
+  /* ── RESULT CARD ── */
+  .result-card { margin: 20px 16px 0; background: #0e0f12; border-radius: 18px; padding: 20px; border: 1px solid var(--border); }
+  .result-eyebrow { font-size: 10px; font-weight: 700; color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 14px; }
+  .result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .result-stat { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; text-align: center; }
+  .result-stat-label { font-size: 10px; font-weight: 700; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
   .result-stat-value { font-family: 'DM Mono', monospace; font-size: 32px; font-weight: 500; line-height: 1; }
-  .result-stat-unit { font-size: 10px; color: #5a6072; margin-top: 4px; letter-spacing: 0.04em; }
+  .result-stat-unit { font-size: 10px; color: var(--text3); margin-top: 4px; letter-spacing: 0.04em; }
   .result-note { margin-top: 10px; padding: 10px 14px; background: rgba(255,255,255,0.04); border-radius: 8px; font-size: 12px; color: #f59e0b; }
-  .result-context { margin-top: 12px; font-size: 11px; color: #4a5060; text-align: center; font-family: 'DM Mono', monospace; letter-spacing: 0.03em; }
+  .result-context { margin-top: 12px; font-size: 11px; color: var(--text3); text-align: center; font-family: 'DM Mono', monospace; letter-spacing: 0.03em; }
+
+  /* ── TAP SIZE ── */
   .tap-tabs { display: flex; gap: 8px; }
-  .tap-tab { flex: 1; padding: 10px; border-radius: 12px; border: 1.5px solid #eaecef; background: #fff; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; color: #9ca3af; cursor: pointer; text-align: center; transition: all 0.15s; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
-  .tap-tab.active { border-color: #0d0d0d; background: #0d0d0d; color: #fff; }
-  .tap-size-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; }
-  .tap-size-btn { padding: 13px 6px; background: #fff; border: 1.5px solid #eaecef; border-radius: 12px; font-family: 'DM Mono', monospace; font-size: 13px; font-weight: 500; color: #374151; text-align: center; cursor: pointer; transition: all 0.15s; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+  .tap-tab { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; color: var(--text3); cursor: pointer; text-align: center; transition: all 0.15s; }
+  .tap-tab.active { border-color: var(--accent-border); background: var(--accent-bg); color: var(--accent); }
+  .tap-size-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  .tap-size-btn { padding: 12px 6px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; color: var(--text2); text-align: center; cursor: pointer; transition: all 0.15s; }
   .tap-size-btn:active { transform: scale(0.97); }
-  .tap-size-btn.active { border-color: #1a6ef5; background: #eff4ff; color: #1a5fd4; font-weight: 600; box-shadow: 0 0 0 3px rgba(26,110,245,0.08); }
-  .calc-card { background: #fff; border-radius: 16px; padding: 18px; margin: 16px 16px 0; box-shadow: 0 1px 4px rgba(0,0,0,0.06), 0 0 0 1px #eaecef; }
+  .tap-size-btn.active { border-color: var(--accent-border); background: var(--accent-bg); color: var(--accent); font-weight: 600; }
+
+  /* ── CALCULATORS ── */
+  .calc-card { background: var(--surface); border-radius: 14px; padding: 18px; margin: 14px 16px 0; border: 1px solid var(--border); }
   .calc-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
-  .calc-card-title { font-size: 13px; font-weight: 700; color: #1a1a1a; letter-spacing: -0.1px; }
-  .calc-reset { font-size: 11px; font-weight: 600; color: #adb5bd; background: #f5f6f8; border: none; border-radius: 7px; padding: 5px 10px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: color 0.15s, background 0.15s; }
-  .calc-reset:active { color: #374151; background: #eaecef; }
+  .calc-card-title { font-size: 13px; font-weight: 700; color: var(--text1); letter-spacing: -0.1px; }
+  .calc-reset { font-size: 11px; font-weight: 600; color: var(--text3); background: var(--surface2); border: none; border-radius: 7px; padding: 5px 10px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: color 0.15s, background 0.15s; }
+  .calc-reset:active { color: var(--text2); background: var(--border); }
   .calc-input-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .calc-input-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-  .calc-field label { font-size: 10px; font-weight: 700; color: #adb5bd; letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-bottom: 5px; }
-  .calc-field input { width: 100%; padding: 11px 12px; border-radius: 10px; border: 1.5px solid #eaecef; background: #f8f9fb; font-family: 'DM Mono', monospace; font-size: 15px; color: #111; outline: none; transition: border-color 0.15s; }
-  .calc-field input:focus { border-color: #1a6ef5; background: #fff; }
-  .calc-result { margin-top: 12px; background: linear-gradient(135deg, #141414, #1e1e1e); border-radius: 14px; padding: 16px 18px; display: flex; align-items: baseline; gap: 10px; }
+  .calc-field label { font-size: 10px; font-weight: 700; color: var(--text3); letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-bottom: 5px; }
+  .calc-field input { width: 100%; padding: 11px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface2); font-family: 'DM Mono', monospace; font-size: 15px; color: var(--text1); outline: none; transition: border-color 0.15s; }
+  .calc-field input:focus { border-color: var(--accent); background: var(--surface2); }
+  .calc-result { margin-top: 12px; background: #0e0f12; border-radius: 12px; padding: 16px 18px; display: flex; align-items: baseline; gap: 10px; border: 1px solid var(--border); }
   .calc-result-value { font-family: 'DM Mono', monospace; font-size: 34px; font-weight: 500; line-height: 1; }
-  .calc-result-unit { font-size: 11px; color: #5a6072; letter-spacing: 0.04em; }
+  .calc-result-unit { font-size: 11px; color: var(--text3); letter-spacing: 0.04em; }
 
   /* ── DESKTOP (768px+) ── */
   @media (min-width: 768px) {
@@ -198,13 +289,12 @@ const css = `
     .app { max-width: 100%; height: 100vh; display: grid; grid-template-rows: 56px auto 1fr; grid-template-columns: 200px 1fr; overflow: hidden; padding-bottom: 0; }
     .header { grid-column: 1 / -1; grid-row: 1; position: static; padding: 0 24px; }
     .header-title { font-size: 20px; }
-    .nav-tabs { grid-column: 1; grid-row: 2 / 4; flex-direction: column; padding: 16px 12px; border-bottom: none; border-right: 1px solid #eaecef; overflow-y: auto; overflow-x: hidden; background: #fff; align-items: stretch; gap: 2px; }
+    .nav-tabs { grid-column: 1; grid-row: 2 / 4; flex-direction: column; padding: 16px 12px; border-bottom: none; border-right: 1px solid var(--border); overflow-y: auto; overflow-x: hidden; background: var(--surface); align-items: stretch; gap: 2px; }
     .nav-tab { padding: 11px 14px; border-bottom: none; border-left: 3px solid transparent; border-radius: 10px; font-size: 13px; text-align: left; white-space: normal; }
-    .nav-tab.active { border-left-color: #1a6ef5; border-bottom-color: transparent; background: #eff4ff; color: #1a5fd4; }
+    .nav-tab.active { border-left-color: var(--accent); border-bottom-color: transparent; background: var(--accent-bg); color: var(--accent); }
     .desktop-body { grid-column: 2; grid-row: 2 / 4; display: grid; grid-template-columns: 360px 1fr; overflow: hidden; height: 100%; }
-    .desktop-selections { overflow-y: auto; background: #f0f1f3; padding-bottom: 32px; border-right: 1px solid #eaecef; }
-    .desktop-result { display: flex; overflow-y: auto; background: #f0f1f3; padding: 28px 24px; flex-direction: column; min-height: 0; }
-    .desktop-selections .result-card { display: none; }
+    .desktop-selections { overflow-y: auto; background: var(--bg); padding-bottom: 32px; border-right: 1px solid var(--border); }
+    .desktop-result { display: flex; overflow-y: auto; background: var(--bg); padding: 28px 24px; flex-direction: column; min-height: 0; }    .desktop-selections .result-card { display: none; }
     .desktop-selections .calc-result { display: none; }
     .desktop-result .result-card { display: block; margin: 0 0 16px 0; border-radius: 16px; }
     .desktop-result .result-stat-value { font-size: 42px; }
@@ -212,11 +302,11 @@ const css = `
     .desktop-result .result-eyebrow { font-size: 11px; }
     .section { padding: 20px 20px 0; }
     .pill { font-size: 15px; padding: 14px 10px; }
-    .tool-btn { font-size: 16px; padding: 16px 18px; }
+    .tool-btn { font-size: 16px; padding: 15px 18px; }
     .dia-pill { font-size: 13px; padding: 13px 6px; }
     .result-card { margin: 0; }
   }
-`;// ─── VIEWS ────────────────────────────────────────────────────────────────────
+`// ─── VIEWS ────────────────────────────────────────────────────────────────────
 
 function EndmillView({ onResult }) {
   const [toolType, setToolType] = useState("");
@@ -260,13 +350,13 @@ function EndmillView({ onResult }) {
           <div className="result-stat"><div className="result-stat-label">Feed</div><div className="result-stat-value" style={{ color: "#34d399" }}>{result.ipm}</div><div className="result-stat-unit">in / min</div></div>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 10 }}>
-          <div className="result-stat"><div className="result-stat-label">SFM</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 28, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sfm}</div><div className="result-stat-unit">ft / min</div></div>
-          <div className="result-stat"><div className="result-stat-label">IPR</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 28, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{ipr}</div><div className="result-stat-unit">in / rev</div></div>
+          <div className="result-stat"><div className="result-stat-label">SFM</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 28, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sfm}</div><div className="result-stat-unit">ft / min</div></div>
+          <div className="result-stat"><div className="result-stat-label">IPR</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 28, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{ipr}</div><div className="result-stat-unit">in / rev</div></div>
         </div>
         {toolData.info?.[diameter] && toolData.info[diameter].map(({ loc, partNo }) => (
           <div key={partNo} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 10 }}>
-            <div className="result-stat"><div className="result-stat-label">Length of Cut</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 22, color: "#fbbf24", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{loc}</div></div>
-            <div className="result-stat"><div className="result-stat-label">Part #</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 22, color: "#e879f9", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{partNo}</div></div>
+            <div className="result-stat"><div className="result-stat-label">Length of Cut</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, color: "#fbbf24", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{loc}</div></div>
+            <div className="result-stat"><div className="result-stat-label">Part #</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, color: "#e879f9", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{partNo}</div></div>
           </div>
         ))}
         <div className="result-context">{diameter}" · {material} · {toolType}</div>
@@ -296,15 +386,33 @@ function EndmillView({ onResult }) {
         </div>
       </div>
 
+      <div className={`section${!toolType ? " locked" : ""}`}>
+        <div className="section-label">Diameter (inches)</div>
+        <div style={ isShellMill ? { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 7 } : undefined }
+             className={ isShellMill ? undefined : "dia-grid" }>
+          {(toolData ? diameters : [".1250",".1875",".2500",".3125",".3750",".4375",".5000",".7500"]).map(d => {
+            const avail = isDiameterAvailable(d);
+            return (
+              <button key={d}
+                onClick={() => { if (avail) { setDiameter(d); if (isShellMill) setMaterial(""); } }}
+                className={`dia-pill${diameter === d ? " sel-blue" : ""}`}
+                style={!avail ? { opacity: 0.35, cursor: "default", pointerEvents: "none" } : {}}>
+                {Number(d).toFixed(4)}"
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       {toolData && (
-        <div className="section">
+        <div className={`section${!diameter ? " locked" : ""}`}>
           <div className="section-label">Material</div>
           <div className="pill-grid">
             {allMaterials.map(m => {
               const isDisabled = m === "Stainless" && !isShellMill;
               return (
                 <button key={m}
-                  onClick={() => { if (!isDisabled) { setMaterial(m); if (isShellMill && !toolData?.diameters[diameter]?.[m]) setDiameter(""); } }}
+                  onClick={() => { if (!isDisabled) setMaterial(m); }}
                   className={`pill${material === m ? " sel-green" : ""}`}
                   style={isDisabled ? { opacity: 0.35, cursor: "default", pointerEvents: "none" } : {}}>
                   {m}
@@ -324,24 +432,6 @@ function EndmillView({ onResult }) {
           </div>
         </div>
       )}
-
-      <div className={`section${!material ? " locked" : ""}`}>
-        <div className="section-label">Diameter (inches)</div>
-        <div style={ isShellMill ? { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 7 } : undefined }
-             className={ isShellMill ? undefined : "dia-grid" }>
-          {visibleDiameters.map(d => {
-            const avail = isDiameterAvailable(d);
-            return (
-              <button key={d}
-                onClick={() => { if (avail) setDiameter(d); }}
-                className={`dia-pill${diameter === d ? " sel-blue" : ""}`}
-                style={!avail ? { opacity: 0.35, cursor: "default", pointerEvents: "none" } : {}}>
-                {Number(d).toFixed(4)}"
-              </button>
-            );
-          })}
-        </div>
-      </div>
 
       {result && (() => {
         const dia = parseFloat(diameter);
@@ -366,12 +456,12 @@ function EndmillView({ onResult }) {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 10 }}>
               <div className="result-stat">
                 <div className="result-stat-label">SFM</div>
-                <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 22, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sfm}</div>
+                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sfm}</div>
                 <div className="result-stat-unit">ft / min</div>
               </div>
               <div className="result-stat">
                 <div className="result-stat-label">IPR</div>
-                <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 22, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{ipr}</div>
+                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{ipr}</div>
                 <div className="result-stat-unit">in / rev</div>
               </div>
             </div>
@@ -382,11 +472,11 @@ function EndmillView({ onResult }) {
                   <div key={partNo} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 10 }}>
                     <div className="result-stat">
                       <div className="result-stat-label">Length of Cut</div>
-                      <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 22, color: "#fbbf24", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{loc}</div>
+                      <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, color: "#fbbf24", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{loc}</div>
                     </div>
                     <div className="result-stat">
                       <div className="result-stat-label">Part #</div>
-                      <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 22, color: "#e879f9", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{partNo}</div>
+                      <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, color: "#e879f9", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{partNo}</div>
                     </div>
                   </div>
                 ))}
@@ -455,8 +545,8 @@ function DrillView({ onResult }) {
             <div className="result-stat"><div className="result-stat-label">Feed</div><div className="result-stat-value" style={{ color: "#34d399" }}>{Number(solidResult.ipm).toFixed(4)}</div><div className="result-stat-unit">in / min</div></div>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 10 }}>
-            <div className="result-stat"><div className="result-stat-label">SFM</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 28, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sfm}</div><div className="result-stat-unit">ft / min</div></div>
-            <div className="result-stat"><div className="result-stat-label">Feed / Rev</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 28, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{ipt}</div><div className="result-stat-unit">in / rev</div></div>
+            <div className="result-stat"><div className="result-stat-label">SFM</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 28, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sfm}</div><div className="result-stat-unit">ft / min</div></div>
+            <div className="result-stat"><div className="result-stat-label">Feed / Rev</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 28, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{ipt}</div><div className="result-stat-unit">in / rev</div></div>
           </div>
           <div className="result-context">{diameter}" · {material} · Solid Carbide Drill</div>
         </div>
@@ -466,8 +556,8 @@ function DrillView({ onResult }) {
         <div className="result-card">
           <div className="result-eyebrow">Sumitomo Flat Bottom Drill</div>
           <div className="result-grid">
-            <div className="result-stat"><div className="result-stat-label">SFM</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 32, color: "#60a5fa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{idxResult.sfm}</div><div className="result-stat-unit">surface ft / min</div></div>
-            <div className="result-stat"><div className="result-stat-label">Feed / Rev</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 32, color: "#34d399", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{idxResult.cl}</div><div className="result-stat-unit">in / rev</div></div>
+            <div className="result-stat"><div className="result-stat-label">SFM</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 32, color: "#60a5fa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{idxResult.sfm}</div><div className="result-stat-unit">surface ft / min</div></div>
+            <div className="result-stat"><div className="result-stat-label">Feed / Rev</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 32, color: "#34d399", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{idxResult.cl}</div><div className="result-stat-unit">in / rev</div></div>
           </div>
           <div className="result-context">{material} · Sumitomo Flat Bottom</div>
         </div>
@@ -477,12 +567,12 @@ function DrillView({ onResult }) {
         <div className="result-card">
           <div className="result-eyebrow">Sumitomo Spade Drill</div>
           <div className="result-grid">
-            <div className="result-stat"><div className="result-stat-label">SFM Range</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 16, color: "#60a5fa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{spdResult.sfm}</div><div className="result-stat-unit">surface ft / min</div></div>
-            <div className="result-stat"><div className="result-stat-label">IPR Range</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 16, color: "#34d399", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{spdResult.cl}</div><div className="result-stat-unit">in / rev</div></div>
+            <div className="result-stat"><div className="result-stat-label">SFM Range</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 16, color: "#60a5fa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{spdResult.sfm}</div><div className="result-stat-unit">surface ft / min</div></div>
+            <div className="result-stat"><div className="result-stat-label">IPR Range</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 16, color: "#34d399", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{spdResult.cl}</div><div className="result-stat-unit">in / rev</div></div>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 10 }}>
-            <div className="result-stat"><div className="result-stat-label">Recommended SFM</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 26, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{spdResult.sfmMid}</div><div className="result-stat-unit">ft / min</div></div>
-            <div className="result-stat"><div className="result-stat-label">Recommended IPR</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 26, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{spdResult.clMid}</div><div className="result-stat-unit">in / rev</div></div>
+            <div className="result-stat"><div className="result-stat-label">Recommended SFM</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 26, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{spdResult.sfmMid}</div><div className="result-stat-unit">ft / min</div></div>
+            <div className="result-stat"><div className="result-stat-label">Recommended IPR</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 26, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{spdResult.clMid}</div><div className="result-stat-unit">in / rev</div></div>
           </div>
           <div className="result-context">{material} · Sumitomo Spade</div>
         </div>
@@ -492,8 +582,8 @@ function DrillView({ onResult }) {
         <div className="result-card">
           <div className="result-eyebrow">Sandvik DS20 · Starting Parameters</div>
           <div className="result-grid">
-            <div className="result-stat"><div className="result-stat-label">SFM</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 32, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sandvikResult.sfm}</div><div className="result-stat-unit">surface ft / min</div></div>
-            <div className="result-stat"><div className="result-stat-label">Feed / Rev</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 32, color: "#34d399", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sandvikResult.ipr}</div><div className="result-stat-unit">in / rev</div></div>
+            <div className="result-stat"><div className="result-stat-label">SFM</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 32, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sandvikResult.sfm}</div><div className="result-stat-unit">surface ft / min</div></div>
+            <div className="result-stat"><div className="result-stat-label">Feed / Rev</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 32, color: "#34d399", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sandvikResult.ipr}</div><div className="result-stat-unit">in / rev</div></div>
           </div>
           <div className="result-context">{material} · Sandvik DS20</div>
         </div>
@@ -578,12 +668,12 @@ function DrillView({ onResult }) {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 12 }}>
               <div className="result-stat">
                 <div className="result-stat-label">SFM</div>
-                <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 22, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sfm}</div>
+                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sfm}</div>
                 <div className="result-stat-unit">ft / min</div>
               </div>
               <div className="result-stat">
                 <div className="result-stat-label">Feed / Rev</div>
-                <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 22, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{ipt}</div>
+                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{ipt}</div>
                 <div className="result-stat-unit">in / rev</div>
               </div>
             </div>
@@ -601,12 +691,12 @@ function DrillView({ onResult }) {
             <div className="result-grid">
               <div className="result-stat">
                 <div className="result-stat-label">SFM Range</div>
-                <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: isSpade ? 16 : 32, color: "#60a5fa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{r.sfm}</div>
+                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: isSpade ? 16 : 32, color: "#60a5fa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{r.sfm}</div>
                 <div className="result-stat-unit">surface ft / min</div>
               </div>
               <div className="result-stat">
                 <div className="result-stat-label">IPR Range</div>
-                <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: isSpade ? 16 : 26, color: "#34d399", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{r.cl}</div>
+                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: isSpade ? 16 : 26, color: "#34d399", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{r.cl}</div>
                 <div className="result-stat-unit">in / rev</div>
               </div>
             </div>
@@ -614,12 +704,12 @@ function DrillView({ onResult }) {
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 10 }}>
                 <div className="result-stat">
                   <div className="result-stat-label">Recommended SFM</div>
-                  <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 26, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{r.sfmMid}</div>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 26, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{r.sfmMid}</div>
                   <div className="result-stat-unit">ft / min</div>
                 </div>
                 <div className="result-stat">
                   <div className="result-stat-label">Recommended IPR</div>
-                  <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 26, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{r.clMid}</div>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 26, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{r.clMid}</div>
                   <div className="result-stat-unit">in / rev</div>
                 </div>
               </div>
@@ -635,12 +725,12 @@ function DrillView({ onResult }) {
           <div className="result-grid">
             <div className="result-stat">
               <div className="result-stat-label">SFM</div>
-              <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 32, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sandvikResult.sfm}</div>
+              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 32, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sandvikResult.sfm}</div>
               <div className="result-stat-unit">surface ft / min</div>
             </div>
             <div className="result-stat">
               <div className="result-stat-label">Feed / Rev</div>
-              <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 32, color: "#34d399", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sandvikResult.ipr}</div>
+              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 32, color: "#34d399", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{sandvikResult.ipr}</div>
               <div className="result-stat-unit">in / rev</div>
             </div>
           </div>
@@ -652,25 +742,25 @@ function DrillView({ onResult }) {
 }
 
 function TapView({ onResult }) {
-  const [mode,     setMode]     = useState("tap");  // "tap" | "thread"
-  const [tapType,  setTapType]  = useState("");
+  const [mode,     setMode]     = useState("");       // "form" | "cut" | "thread"
   const [system,   setSystem]   = useState("");
   const [tapSize,  setTapSize]  = useState(null);
   const [material, setMaterial] = useState("");
 
-  const rows     = system === "inch" ? FORM_TAP_INCH : system === "metric" ? FORM_TAP_METRIC : [];
-  const selected = tapSize ? rows.find(r => r.tap === tapSize) : null;
-  const sf       = selected ? selected[material] : null;
-  const isMetric = system === "metric";
+  const tapData = mode === "form"
+    ? (system === "inch" ? FORM_TAP_INCH : system === "metric" ? FORM_TAP_METRIC : [])
+    : mode === "cut"
+    ? (system === "inch" ? CUT_TAP_INCH : system === "metric" ? CUT_TAP_METRIC : [])
+    : [];
 
-  function switchSystem(s) { setSystem(s); setTapSize(null); }
-  function switchTapType(t) { setTapType(t); setSystem(""); setTapSize(null); setMaterial(""); }
+  const selected  = tapSize ? tapData.find(r => r.tap === tapSize) : null;
+  const sf        = selected ? selected[material] : null;
+  const isMetric  = system === "metric";
+  const drillLabel = mode === "form" ? "Form Drill" : "Tap Drill";
+  const typeLabel  = mode === "form" ? "Form Tap" : "Cut Tap";
 
-  const TAP_TYPES = [
-    { key: "form", label: "Form Tap" },
-    { key: "cut",  label: "Cut Tap",  comingSoon: true },
-    { key: "npt",  label: "NPT Tap",  comingSoon: true },
-  ];
+  function switchSystem(s) { setSystem(s); setTapSize(null); setMaterial(""); }
+  function switchMode(m)   { setMode(m);   setSystem(""); setTapSize(null); setMaterial(""); }
 
   const displayIpm = (ipm) => {
     if (!ipm && ipm !== 0) return "—";
@@ -679,62 +769,86 @@ function TapView({ onResult }) {
 
   useEffect(() => {
     if (!onResult) return;
-    if (mode === "tap" && selected && sf) {
+    if ((mode === "form" || mode === "cut") && selected && sf) {
       onResult(
         <div className="result-card">
-          <div className="result-eyebrow">Form Tap · {selected.tap} · {material}</div>
+          <div className="result-eyebrow">{typeLabel} · {selected.tap} · {material}</div>
           <div className="result-grid">
-            <div className="result-stat"><div className="result-stat-label">RPM</div><div className="result-stat-value" style={{ color: "#60a5fa" }}>{sf.rpm.toLocaleString()}</div><div className="result-stat-unit">rev / min</div></div>
-            <div className="result-stat"><div className="result-stat-label">Feed</div><div className="result-stat-value" style={{ color: "#34d399", fontSize: isMetric ? 24 : 32 }}>{displayIpm(sf.ipm)}</div><div className="result-stat-unit">in / min</div></div>
+            <div className="result-stat">
+              <div className="result-stat-label">RPM</div>
+              <div className="result-stat-value" style={{ color: "#60a5fa" }}>{sf.rpm.toLocaleString()}</div>
+              <div className="result-stat-unit">rev / min</div>
+            </div>
+            <div className="result-stat">
+              <div className="result-stat-label">Feed</div>
+              <div className="result-stat-value" style={{ color: "#34d399", fontSize: isMetric ? 24 : 32 }}>{displayIpm(sf.ipm)}</div>
+              <div className="result-stat-unit">in / min</div>
+            </div>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginTop: 10 }}>
-            <div className="result-stat"><div className="result-stat-label">SFM</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 22, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{selected.sfm[material]}</div><div className="result-stat-unit">ft / min</div></div>
-            <div className="result-stat"><div className="result-stat-label">Form Drill</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 11, color: "#f9fafb", fontWeight: 500, lineHeight: 1.3, marginTop: 4 }}>{selected.drill}</div></div>
-            <div className="result-stat"><div className="result-stat-label">Pitch</div><div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 18, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{selected.pitch}"</div><div className="result-stat-unit">in / rev</div></div>
+            <div className="result-stat">
+              <div className="result-stat-label">SFM</div>
+              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{selected.sfm[material]}</div>
+              <div className="result-stat-unit">ft / min</div>
+            </div>
+            <div className="result-stat">
+              <div className="result-stat-label">{drillLabel}</div>
+              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: "#f9fafb", fontWeight: 500, lineHeight: 1.3, marginTop: 4 }}>{selected.drill}</div>
+            </div>
+            <div className="result-stat">
+              <div className="result-stat-label">Pitch</div>
+              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 18, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{selected.pitch}"</div>
+              <div className="result-stat-unit">in / rev</div>
+            </div>
           </div>
         </div>
       );
-    } else {
+    } else if (mode !== "thread") {
       onResult(null);
     }
-  }, [selected, sf, material, isMetric, mode]);
+  }, [selected, sf, material, isMetric, mode, typeLabel, drillLabel]);
 
   return (
     <>
-      {/* Type selector */}
+      {/* Type */}
       <div className="section">
         <div className="section-label">Type</div>
-        <div className="pill-grid">
-          <button className={`pill${mode === "tap" ? " sel-green" : ""}`}
-            onClick={() => setMode("tap")}>Tap Speeds</button>
-          <button className={`pill${mode === "thread" ? " sel-green" : ""}`}
-            onClick={() => { setMode("thread"); onResult && onResult(null); }}>Thread Dimensions</button>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+          <button className={`pill${mode === "form"   ? " sel-green" : ""}`} onClick={() => switchMode("form")}>Form Tap</button>
+          <button className={`pill${mode === "cut"    ? " sel-green" : ""}`} onClick={() => switchMode("cut")}>Cut Tap</button>
+          <button className={`pill${mode === "thread" ? " sel-green" : ""}`} onClick={() => { switchMode("thread"); onResult && onResult(null); }}>Thread Dims</button>
         </div>
       </div>
 
-      {/* ── TAP SPEEDS ── */}
-      {mode === "tap" && (
+      {/* SFM Reference */}
+      {(mode === "form" || mode === "cut") && (
+        <div style={{ margin: "12px 16px 0", background: "var(--surface)", border: "1px solid var(--border)", borderRadius: 14, padding: "14px 16px" }}>
+          <div style={{ fontSize: 10, fontWeight: 700, color: "var(--text3)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 10 }}>
+            {mode === "form" ? "Form Tap" : "Cut Tap"} SFM
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
+            {[
+              { mat: "Aluminum",   sfm: mode === "form" ? 90 : 50,  color: "#60a5fa" },
+              { mat: "CRS",        sfm: mode === "form" ? 60 : 40,  color: "#34d399" },
+              { mat: "Stainless",  sfm: mode === "form" ? 40 : 30,  color: "#fb923c" },
+              { mat: "Tool Steel", sfm: mode === "form" ? 30 : 25,  color: "#a78bfa" },
+            ].map(({ mat, sfm, color }) => (
+              <div key={mat} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "8px 12px", background: "var(--surface2)", borderRadius: 8 }}>
+                <span style={{ fontSize: 12, fontWeight: 500, color: "var(--text2)" }}>{mat}</span>
+                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 14, fontWeight: 600, color }}>{sfm}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ── FORM TAP / CUT TAP ── */}
+      {(mode === "form" || mode === "cut") && (
         <>
           <div className="section">
-            <div className="section-label">Tap Type</div>
-            <div className="tool-list">
-              {TAP_TYPES.map(({ key, label, comingSoon }) => (
-                <button key={key}
-                  onClick={() => { if (!comingSoon) switchTapType(key); }}
-                  className={`tool-btn${tapType === key ? " selected" : ""}${comingSoon ? " unavailable" : ""}`}>
-                  <span>{label}</span>
-                  {comingSoon
-                    ? <span className="badge">Coming Soon</span>
-                    : tapType === key && <span className="check">✓</span>}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className={`section${!tapType ? " locked" : ""}`}>
             <div className="section-label">Thread System</div>
             <div className="tool-list">
-              <button className={`tool-btn${system === "inch" ? " selected" : ""}`} onClick={() => switchSystem("inch")}>
+              <button className={`tool-btn${system === "inch"   ? " selected" : ""}`} onClick={() => switchSystem("inch")}>
                 <span>Inch</span>{system === "inch" && <span className="check">✓</span>}
               </button>
               <button className={`tool-btn${system === "metric" ? " selected" : ""}`} onClick={() => switchSystem("metric")}>
@@ -746,8 +860,8 @@ function TapView({ onResult }) {
           <div className={`section${!system ? " locked" : ""}`}>
             <div className="section-label">Tap Size</div>
             <div className="tap-size-grid">
-              {(system ? rows : FORM_TAP_INCH).map(row => (
-                <button key={row.tap} onClick={() => setTapSize(row.tap)}
+              {(system ? tapData : CUT_TAP_INCH).map(row => (
+                <button key={row.tap} onClick={() => { setTapSize(row.tap); setMaterial(""); }}
                   className={`tap-size-btn${tapSize === row.tap ? " active" : ""}`}>
                   {row.tap}
                 </button>
@@ -767,7 +881,7 @@ function TapView({ onResult }) {
 
           {selected && sf && (
             <div className="result-card">
-              <div className="result-eyebrow">Form Tap · {selected.tap} · {material}</div>
+              <div className="result-eyebrow">{typeLabel} · {selected.tap} · {material}</div>
               <div className="result-grid">
                 <div className="result-stat">
                   <div className="result-stat-label">RPM</div>
@@ -783,16 +897,16 @@ function TapView({ onResult }) {
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginTop: 12 }}>
                 <div className="result-stat">
                   <div className="result-stat-label">SFM</div>
-                  <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 22, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{selected.sfm[material]}</div>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{selected.sfm[material]}</div>
                   <div className="result-stat-unit">ft / min</div>
                 </div>
                 <div className="result-stat">
-                  <div className="result-stat-label">Form Drill</div>
-                  <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 11, color: "#f9fafb", fontWeight: 500, lineHeight: 1.3, marginTop: 4 }}>{selected.drill}</div>
+                  <div className="result-stat-label">{drillLabel}</div>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: "#f9fafb", fontWeight: 500, lineHeight: 1.3, marginTop: 4 }}>{selected.drill}</div>
                 </div>
                 <div className="result-stat">
                   <div className="result-stat-label">Pitch</div>
-                  <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 18, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{selected.pitch}"</div>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 18, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{selected.pitch}"</div>
                   <div className="result-stat-unit">in / rev</div>
                 </div>
               </div>
@@ -812,11 +926,10 @@ const TABS = [
   { key: "drill",       label: "Drilling" },
   { key: "tap",         label: "Threading" },
   { key: "turning",     label: "Turning" },
+  { key: "calc",        label: "Calculators" },
   { key: "keyway",      label: "Keyways" },
   { key: "countersink", label: "Countersinks" },
-  { key: "calc",        label: "Calculators" },
-  { key: "ref",         label: "Charts" },
-  { key: "links",       label: "Links" },
+  { key: "ref",         label: "Reference" },
 ];
 
 // Keyway data: shaft size → keyway width → depth value
@@ -911,7 +1024,7 @@ function KeywayView({ onResult }) {
         <div className="result-card">
           <div className="result-eyebrow">Keyway Depth</div>
           <div style={{ textAlign: "center", padding: "16px 0" }}>
-            <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 52, fontWeight: 500, color: "#60a5fa", lineHeight: 1 }}>{parseFloat(result).toFixed(4).replace(/^0/, "")}"</div>
+            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 52, fontWeight: 500, color: "#60a5fa", lineHeight: 1 }}>{parseFloat(result).toFixed(4).replace(/^0/, "")}"</div>
           </div>
           <div className="result-context">{shaft}" shaft · {keyway}" keyway</div>
 
@@ -956,7 +1069,7 @@ function KeywayView({ onResult }) {
         <div className="result-card">
           <div className="result-eyebrow">Keyway Depth</div>
           <div style={{ textAlign: "center", padding: "16px 0" }}>
-            <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 52, fontWeight: 500, color: "#60a5fa", lineHeight: 1 }}>{parseFloat(result).toFixed(4).replace(/^0/, "")}"</div>
+            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 52, fontWeight: 500, color: "#60a5fa", lineHeight: 1 }}>{parseFloat(result).toFixed(4).replace(/^0/, "")}"</div>
           </div>
           <div className="result-context">{shaft}" shaft · {keyway}" keyway</div>
 
@@ -998,15 +1111,23 @@ function CalcView({ onResult }) {
   const ciAdjIpm = ciClpt !== null
     ? ciClpt * parseFloat(ciRpm) * parseFloat(ciFlutes)
     : null;
+  const ciTotalClpt = ciClpt !== null ? ciClpt * parseFloat(ciFlutes) : null;
 
-  const hasAnyResult = rpmResult !== null || feedFromIpr !== null || feedFromIpt !== null || sfmResult !== null || ciClpt !== null;
+  const [dpDia,    setDpDia]   = useState("");
+  const [dpAngle,  setDpAngle] = useState("");
+  // Drill point height = (dia / 2) / tan(angle/2)
+  const dpResult = dpDia && dpAngle
+    ? (parseFloat(dpDia) / 2) / Math.tan((parseFloat(dpAngle) / 2) * (Math.PI / 180))
+    : null;
+
+  const hasAnyResult = rpmResult !== null || feedFromIpr !== null || feedFromIpt !== null || sfmResult !== null || ciClpt !== null || dpResult !== null;
 
   const ResultRow = ({ label, value, unit, color }) => (
     <div style={{ display:"flex", justifyContent:"space-between", alignItems:"baseline", padding:"12px 14px", background:"rgba(255,255,255,0.04)", borderRadius:10, border:"1px solid rgba(255,255,255,0.06)", marginBottom:6 }}>
-      <span style={{ fontSize:11, color:"#5a6072", fontWeight:600, textTransform:"uppercase", letterSpacing:"0.06em" }}>{label}</span>
+      <span style={{ fontSize:11, color:"var(--text3)", fontWeight:600, textTransform:"uppercase", letterSpacing:"0.06em" }}>{label}</span>
       <div style={{ textAlign:"right" }}>
         <span style={{ fontFamily:"'DM Mono',monospace", fontSize:22, fontWeight:500, color }}>{value}</span>
-        <span style={{ fontSize:10, color:"#5a6072", marginLeft:6 }}>{unit}</span>
+        <span style={{ fontSize:10, color:"var(--text3)", marginLeft:6 }}>{unit}</span>
       </div>
     </div>
   );
@@ -1018,15 +1139,16 @@ function CalcView({ onResult }) {
       <div className="result-card">
         <div className="result-eyebrow">Calculator Results</div>
         <div style={{ marginTop: 4 }}>
-          {ciClpt !== null && !isNaN(ciClpt) && <><div style={{ fontSize:10, fontWeight:700, color:"#5a6072", letterSpacing:"0.08em", textTransform:"uppercase", margin:"8px 0 6px" }}>Circular Interpolation</div><ResultRow label="Adj. CLPT" value={ciClpt.toFixed(4)} unit="in/tooth" color="#a78bfa" /><ResultRow label="Adj. IPM" value={ciAdjIpm.toFixed(4)} unit="in/min" color="#34d399" /></>}
-          {rpmResult !== null && !isNaN(rpmResult) && <><div style={{ fontSize:10, fontWeight:700, color:"#5a6072", letterSpacing:"0.08em", textTransform:"uppercase", margin:"8px 0 6px" }}>RPM from SFM</div><ResultRow label="RPM" value={rpmResult.toLocaleString()} unit="rev/min" color="#60a5fa" /></>}
-          {feedFromIpr !== null && !isNaN(feedFromIpr) && <><div style={{ fontSize:10, fontWeight:700, color:"#5a6072", letterSpacing:"0.08em", textTransform:"uppercase", margin:"8px 0 6px" }}>Feed from IPR</div><ResultRow label="Feed" value={feedFromIpr} unit="in/min" color="#34d399" /></>}
-          {feedFromIpt !== null && !isNaN(feedFromIpt) && <><div style={{ fontSize:10, fontWeight:700, color:"#5a6072", letterSpacing:"0.08em", textTransform:"uppercase", margin:"8px 0 6px" }}>Feed from IPT</div><ResultRow label="Feed" value={feedFromIpt} unit="in/min" color="#34d399" /></>}
-          {sfmResult !== null && !isNaN(sfmResult) && <><div style={{ fontSize:10, fontWeight:700, color:"#5a6072", letterSpacing:"0.08em", textTransform:"uppercase", margin:"8px 0 6px" }}>SFM from RPM</div><ResultRow label="SFM" value={sfmResult.toLocaleString()} unit="ft/min" color="#fb923c" /></>}
+          {ciClpt !== null && !isNaN(ciClpt) && <><div style={{ fontSize:10, fontWeight:700, color:"var(--text3)", letterSpacing:"0.08em", textTransform:"uppercase", margin:"8px 0 6px" }}>Circular Interpolation</div><ResultRow label="Adj. CLPT" value={ciClpt.toFixed(4)} unit="in/tooth" color="#a78bfa" /><ResultRow label="IPR" value={ciTotalClpt.toFixed(4)} unit="in/rev" color="#60a5fa" /><ResultRow label="Adj. IPM" value={ciAdjIpm.toFixed(4)} unit="in/min" color="#34d399" /></>}
+          {dpResult !== null && !isNaN(dpResult) && <><div style={{ fontSize:10, fontWeight:700, color:"var(--text3)", letterSpacing:"0.08em", textTransform:"uppercase", margin:"8px 0 6px" }}>Drill Point</div><ResultRow label="Point Height" value={dpResult.toFixed(4)} unit="in" color="#f472b6" /></>}
+          {rpmResult !== null && !isNaN(rpmResult) && <><div style={{ fontSize:10, fontWeight:700, color:"var(--text3)", letterSpacing:"0.08em", textTransform:"uppercase", margin:"8px 0 6px" }}>RPM from SFM</div><ResultRow label="RPM" value={rpmResult.toLocaleString()} unit="rev/min" color="#60a5fa" /></>}
+          {feedFromIpr !== null && !isNaN(feedFromIpr) && <><div style={{ fontSize:10, fontWeight:700, color:"var(--text3)", letterSpacing:"0.08em", textTransform:"uppercase", margin:"8px 0 6px" }}>Feed from IPR</div><ResultRow label="Feed" value={feedFromIpr} unit="in/min" color="#34d399" /></>}
+          {feedFromIpt !== null && !isNaN(feedFromIpt) && <><div style={{ fontSize:10, fontWeight:700, color:"var(--text3)", letterSpacing:"0.08em", textTransform:"uppercase", margin:"8px 0 6px" }}>Feed from IPT</div><ResultRow label="Feed" value={feedFromIpt} unit="in/min" color="#34d399" /></>}
+          {sfmResult !== null && !isNaN(sfmResult) && <><div style={{ fontSize:10, fontWeight:700, color:"var(--text3)", letterSpacing:"0.08em", textTransform:"uppercase", margin:"8px 0 6px" }}>SFM from RPM</div><ResultRow label="SFM" value={sfmResult.toLocaleString()} unit="ft/min" color="#fb923c" /></>}
         </div>
       </div>
     );
-  }, [rpmResult, feedFromIpr, feedFromIpt, sfmResult, ciClpt, ciAdjIpm, hasAnyResult]);
+  }, [rpmResult, feedFromIpr, feedFromIpt, sfmResult, ciClpt, ciAdjIpm, ciTotalClpt, dpResult, hasAnyResult]);
 
   const CalcResult = ({ label, value, unit, color }) => (
     <div className="calc-result">
@@ -1073,11 +1195,39 @@ function CalcView({ onResult }) {
               <span className="calc-result-value" style={{ color: "#a78bfa", fontSize: 26 }}>{ciClpt.toFixed(4)}</span>
               <span className="calc-result-unit">adjusted CLPT</span>
             </div>
+            <div className="calc-result" style={{ marginBottom: 6 }}>
+              <span className="calc-result-value" style={{ color: "#60a5fa", fontSize: 26 }}>{ciTotalClpt.toFixed(4)}</span>
+              <span className="calc-result-unit">IPR (in/rev)</span>
+            </div>
             <div className="calc-result">
               <span className="calc-result-value" style={{ color: "#34d399" }}>{ciAdjIpm.toFixed(4)}</span>
               <span className="calc-result-unit">adjusted IPM</span>
             </div>
           </>
+        )}
+      </div>
+
+      {/* Drill Point */}
+      <div className="calc-card">
+        <div className="calc-card-header">
+          <span className="calc-card-title">Drill Point</span>
+          <button className="calc-reset" onClick={() => { setDpDia(""); setDpAngle(""); }}>Reset</button>
+        </div>
+        <div className="calc-input-grid-2">
+          <div className="calc-field">
+            <label>Drill Dia (in)</label>
+            <input type="number" inputMode="decimal" placeholder="0.500" value={dpDia} onChange={e => setDpDia(e.target.value)} />
+          </div>
+          <div className="calc-field">
+            <label>Point Angle (°)</label>
+            <input type="number" inputMode="decimal" placeholder="118" value={dpAngle} onChange={e => setDpAngle(e.target.value)} />
+          </div>
+        </div>
+        {dpResult !== null && !isNaN(dpResult) && (
+          <div className="calc-result">
+            <span className="calc-result-value" style={{ color: "#f472b6" }}>{dpResult.toFixed(4)}</span>
+            <span className="calc-result-unit">inches</span>
+          </div>
         )}
       </div>
 
@@ -1326,7 +1476,7 @@ function ThreadDimView({ onResult }) {
       <div className="result-card">
         <div className="result-eyebrow">{threadLabel} · {result.tdLabel}</div>
         <div style={{ marginTop:12 }}>
-          <div style={{ fontSize:10, fontWeight:700, color:"#5a6072", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:8 }}>Nominal</div>
+          <div style={{ fontSize:10, fontWeight:700, color:"var(--text3)", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:8 }}>Nominal</div>
           {[
             ["Major Diameter", `${result.major} ${unit}`],
             ["Pitch", result.pitch],
@@ -1344,7 +1494,7 @@ function ThreadDimView({ onResult }) {
           ))}
         </div>
         <div style={{ marginTop:12 }}>
-          <div style={{ fontSize:10, fontWeight:700, color:"#5a6072", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:8 }}>Tolerance Range</div>
+          <div style={{ fontSize:10, fontWeight:700, color:"var(--text3)", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:8 }}>Tolerance Range</div>
           {result.allowance > 0 && (
             <div style={{ display:"flex", justifyContent:"space-between", padding:"8px 12px", background:"rgba(255,255,255,0.04)", borderRadius:8, border:"1px solid rgba(255,255,255,0.06)", marginBottom:5 }}>
               <span style={{ fontSize:11, color:"#9ca3af" }}>Allowance</span>
@@ -1375,7 +1525,7 @@ function ThreadDimView({ onResult }) {
       border:"1px solid rgba(255,255,255,0.06)", marginBottom:6 }}>
       <div>
         <span style={{ fontSize:12, color:"#9ca3af", fontWeight:600 }}>{label}</span>
-        {sub && <span style={{ fontSize:10, color:"#5a6072", marginLeft:6 }}>{sub}</span>}
+        {sub && <span style={{ fontSize:10, color:"var(--text3)", marginLeft:6 }}>{sub}</span>}
       </div>
       <span style={{ fontFamily:"'DM Mono',monospace", fontSize:15, color:"#f9fafb", fontWeight:500 }}>{value}</span>
     </div>
@@ -1479,7 +1629,7 @@ function ThreadDimView({ onResult }) {
           </div>
 
           <div style={{ marginTop:12 }}>
-            <div style={{ fontSize:10, fontWeight:700, color:"#5a6072", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:8 }}>Nominal Dimensions</div>
+            <div style={{ fontSize:10, fontWeight:700, color:"var(--text3)", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:8 }}>Nominal Dimensions</div>
             <StatRow label="Major Diameter" value={`${result.major} ${system==="inch"?"in":"mm"}`} />
             <StatRow label="Pitch" value={result.pitch} />
             <StatRow label="Pitch (Distance)" value={`${result.pitchDist} ${system==="inch"?"in":"mm"}`} />
@@ -1491,7 +1641,7 @@ function ThreadDimView({ onResult }) {
           </div>
 
           <div style={{ marginTop:14 }}>
-            <div style={{ fontSize:10, fontWeight:700, color:"#5a6072", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:8 }}>Tolerance Range</div>
+            <div style={{ fontSize:10, fontWeight:700, color:"var(--text3)", letterSpacing:"0.08em", textTransform:"uppercase", marginBottom:8 }}>Tolerance Range</div>
             {result.allowance > 0 && <StatRow label="Allowance" value={`${result.allowance} ${system==="inch"?"in":"mm"}`} />}
             <RangeRow label="Major Diameter" min={result.majorMin} max={result.majorMax} color="#60a5fa" />
             <RangeRow label="Pitch Diameter" min={result.pdMin}    max={result.pdMax}    color="#34d399" />
@@ -1509,41 +1659,299 @@ function ThreadDimView({ onResult }) {
   );
 }
 
-function TurningView() {
-  return (
-    <div className="section">
-      <div className="section-label">Operations</div>
-      <div className="tool-list">
-        {["Facing", "OD Turning", "ID Boring", "Grooving", "Threading"].map(op => (
-          <button key={op} className="tool-btn unavailable">
-            <span>{op}</span>
-            <span className="badge">Coming Soon</span>
-          </button>
-        ))}
+const TURNING_DATA = {
+  facing: {
+    label: "Facing",
+    operations: [
+      {
+        key:          "facing_rough",
+        label:        "Rough",
+        sublabel:     "Rough",
+        insertRadius: '.0312"',
+        insertGrade:  "—",
+        doc:          '.030"–.040"',
+        materials: {
+          "Aluminum":      { sfm: 1400, ipr: .016 },
+          "CRS":           { sfm: 800,  ipr: .012 },
+          "304 Stainless": { sfm: 400,  ipr: .008 },
+          "303 Stainless": { sfm: 588,  ipr: .010 },
+          "Tool Steel":    { sfm: 600,  ipr: .010 },
+        },
+      },
+      {
+        key:          "facing_finish",
+        label:        "Finish",
+        sublabel:     "Finish",
+        insertRadius: '.0156"',
+        insertGrade:  "—",
+        doc:          '.003"',
+        materials: {
+          "Aluminum":      { sfm: 1600, ipr: .006 },
+          "CRS":           { sfm: 1000, ipr: .006 },
+          "304 Stainless": { sfm: 710,  ipr: .004 },
+          "303 Stainless": { sfm: 710,  ipr: .004 },
+          "Tool Steel":    { sfm: 1000, ipr: .004 },
+        },
+      },
+    ],
+  },
+  od: {
+    label: "OD Turning",
+    operations: [
+      {
+        key:          "od_rough_trigon",
+        label:        "Trigon / 80°",
+        sublabel:     "Rough",
+        insertRadius: '.0312"',
+        insertGrade:  "—",
+        doc:          '.060"–.100"',
+        materials: {
+          "Aluminum":      { sfm: 1400, ipr: .016 },
+          "CRS":           { sfm: 800,  ipr: .012 },
+          "304 Stainless": { sfm: 400,  ipr: .008 },
+          "303 Stainless": { sfm: 588,  ipr: .010 },
+          "Tool Steel":    { sfm: 600,  ipr: .010 },
+        },
+      },
+      {
+        key:          "od_finish_trigon",
+        label:        "Trigon / 35°",
+        sublabel:     "Finish",
+        insertRadius: '.0156"',
+        insertGrade:  "—",
+        doc:          '.010" dia / .003" face',
+        materials: {
+          "Aluminum":      { sfm: 1600, ipr: .006 },
+          "CRS":           { sfm: 1000, ipr: .006 },
+          "304 Stainless": { sfm: 710,  ipr: .004 },
+          "303 Stainless": { sfm: 710,  ipr: .004 },
+          "Tool Steel":    { sfm: 1000, ipr: .004 },
+        },
+      },
+      {
+        key:          "od_cutoff",
+        label:        ".118\" / .200\" Cutoff",
+        sublabel:     "Rough / Finish",
+        insertRadius: '.008"',
+        insertGrade:  "—",
+        doc:          "—",
+        materials: {
+          "Aluminum":      { sfm: 800, ipr: .006 },
+          "CRS":           { sfm: 400, ipr: .003 },
+          "304 Stainless": { sfm: 350, ipr: .002 },
+          "303 Stainless": { sfm: 400, ipr: .002 },
+          "Tool Steel":    { sfm: 400, ipr: .002 },
+        },
+      },
+    ],
+  },
+  id: {
+    label: "ID Boring",
+    operations: [
+      {
+        key:          "id_rough_1469",
+        label:        "80° — 1.469\" Min. Bore",
+        sublabel:     "Rough",
+        insertRadius: '.0312"',
+        insertGrade:  "—",
+        doc:          '.060"–.100"',
+        materials: {
+          "Aluminum":      { sfm: 1400, ipr: .016 },
+          "CRS":           { sfm: 800,  ipr: .012 },
+          "304 Stainless": { sfm: 400,  ipr: .008 },
+          "303 Stainless": { sfm: 588,  ipr: .010 },
+          "Tool Steel":    { sfm: 600,  ipr: .010 },
+        },
+      },
+      {
+        key:          "id_rough_929",
+        label:        "80° — .929\" Min. Bore",
+        sublabel:     "Rough",
+        insertRadius: '.0156"',
+        insertGrade:  "—",
+        doc:          '.040"–.050"',
+        materials: {
+          "Aluminum":      { sfm: 1400, ipr: .012 },
+          "CRS":           { sfm: 800,  ipr: .008 },
+          "304 Stainless": { sfm: 400,  ipr: .008 },
+          "303 Stainless": { sfm: 400,  ipr: .008 },
+          "Tool Steel":    { sfm: 600,  ipr: .008 },
+        },
+      },
+      {
+        key:          "id_finish_929",
+        label:        "80° — .929\" Min. Bore",
+        sublabel:     "Finish",
+        insertRadius: '.0156"',
+        insertGrade:  "—",
+        doc:          '.005" dia / .002" face',
+        materials: {
+          "Aluminum":      { sfm: 1400, ipr: .006 },
+          "CRS":           { sfm: 1000, ipr: .006 },
+          "304 Stainless": { sfm: 710,  ipr: .004 },
+          "303 Stainless": { sfm: 710,  ipr: .004 },
+          "Tool Steel":    { sfm: 1000, ipr: .004 },
+        },
+      },
+      {
+        key:          "id_finish_trigon_1705",
+        label:        "Trigon — 1.705\" Min. Bore",
+        sublabel:     "Finish",
+        insertRadius: '.0156"',
+        insertGrade:  "—",
+        doc:          '.005" dia / .002" face',
+        materials: {
+          "Aluminum":      { sfm: 1600, ipr: .006 },
+          "CRS":           { sfm: 1000, ipr: .006 },
+          "304 Stainless": { sfm: 710,  ipr: .004 },
+          "303 Stainless": { sfm: 710,  ipr: .004 },
+          "Tool Steel":    { sfm: 1000, ipr: .006 },
+        },
+      },
+      {
+        key:          "id_finish_tcmt_1260",
+        label:        "TCMT Anti-Vibe — 1.260\" Min. Bore",
+        sublabel:     "Finish",
+        insertRadius: '.0156"',
+        insertGrade:  "—",
+        doc:          '.005" dia / .002" face',
+        materials: {
+          "Aluminum":      { sfm: 1600, ipr: .006 },
+          "CRS":           { sfm: 1450, ipr: .004 },
+          "304 Stainless": { sfm: 710,  ipr: .004 },
+          "303 Stainless": { sfm: 710,  ipr: .004 },
+          "Tool Steel":    { sfm: 1200, ipr: .004 },
+        },
+      },
+    ],
+  },
+};
+
+const TURNING_MATERIALS = ["Aluminum", "CRS", "303 Stainless", "304 Stainless", "Tool Steel"];
+
+function TurningView({ onResult }) {
+  const [category,  setCategory]  = useState("");   // "od" | "id" | "facing"
+  const [opKey,     setOpKey]     = useState("");
+  const [material,  setMaterial]  = useState("");
+
+  const catData  = category ? TURNING_DATA[category] : null;
+  const opData   = catData ? catData.operations.find(o => o.key === opKey) : null;
+  const result   = opData && material ? opData.materials[material] : null;
+
+  function selectCat(c) { setCategory(c); setOpKey(""); setMaterial(""); }
+  function selectOp(k)  { setOpKey(k);   setMaterial(""); }
+
+  const ResultCard = ({ op, mat, res }) => (
+    <div className="result-card">
+      <div className="result-eyebrow">{op.label} · {op.sublabel} · {mat}</div>
+      <div className="result-grid">
+        <div className="result-stat">
+          <div className="result-stat-label">SFM</div>
+          <div className="result-stat-value" style={{ color: "#60a5fa" }}>{res.sfm.toLocaleString()}</div>
+          <div className="result-stat-unit">ft / min</div>
+        </div>
+        <div className="result-stat">
+          <div className="result-stat-label">Feed</div>
+          <div className="result-stat-value" style={{ color: "#34d399", fontSize: 28 }}>{res.ipr.toFixed(3)}</div>
+          <div className="result-stat-unit">in / rev</div>
+        </div>
       </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginTop: 10 }}>
+        <div className="result-stat">
+          <div className="result-stat-label">Depth of Cut</div>
+          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 12, color: "#fb923c", fontWeight: 500, lineHeight: 1.4, marginTop: 4 }}>{op.doc}</div>
+        </div>
+        <div className="result-stat">
+          <div className="result-stat-label">Insert Radius</div>
+          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 13, color: "#a78bfa", fontWeight: 500, lineHeight: 1.3, marginTop: 4 }}>{op.insertRadius}</div>
+        </div>
+        <div className="result-stat">
+          <div className="result-stat-label">Insert Grade</div>
+          <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 14, color: "#fbbf24", fontWeight: 500, lineHeight: 1.3, marginTop: 4 }}>{op.insertGrade}</div>
+        </div>
+      </div>
+      <div className="result-context">Sandvik · {catData?.label}</div>
     </div>
+  );
+
+  useEffect(() => {
+    if (!onResult) return;
+    if (result && opData) {
+      onResult(<ResultCard op={opData} mat={material} res={result} />);
+    } else {
+      onResult(null);
+    }
+  }, [result, opData, material, category]);
+
+  return (
+    <>
+      {/* Category */}
+      <div className="section">
+        <div className="section-label">Category</div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+          {Object.entries(TURNING_DATA).map(([key, val]) => (
+            <button key={key}
+              onClick={() => selectCat(key)}
+              className={`pill${category === key ? " sel-green" : ""}`}>
+              {val.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Tool / Operation */}
+      <div className={`section${!category ? " locked" : ""}`}>
+        <div className="section-label">Tool</div>
+        <div className="tool-list">
+          {(catData ? catData.operations : []).map(op => (
+            <button key={op.key}
+              onClick={() => selectOp(op.key)}
+              className={`tool-btn${opKey === op.key ? " selected" : ""}`}
+              style={{ flexDirection: "column", alignItems: "flex-start", gap: 3 }}>
+              <div style={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center" }}>
+                <span>{op.label}</span>
+                {opKey === op.key && <span className="check">✓</span>}
+              </div>
+              <span style={{ fontSize: 11, color: opKey === op.key ? "rgba(255,255,255,0.55)" : "#9ca3af", fontWeight: 400 }}>
+                {op.sublabel} · {op.insertRadius} radius
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Material */}
+      <div className={`section${!opKey ? " locked" : ""}`}>
+        <div className="section-label">Material</div>
+        <div className="pill-grid">
+          {TURNING_MATERIALS.map(m => (
+            <button key={m} onClick={() => setMaterial(m)}
+              className={`pill${material === m ? " sel-green" : ""}`}>{m}</button>
+          ))}
+        </div>
+      </div>
+
+      {/* Inline result (mobile) */}
+      {result && opData && <ResultCard op={opData} mat={material} res={result} />}
+    </>
   );
 }
 
 function CountersinkView({ onResult }) {
-  const [machine,  setMachine]  = useState("");
-  const [system,   setSystem]   = useState("");
+  const [machine, setMachine] = useState("");
+  const [system,  setSystem]  = useState("");
 
-  const MACHINES = ["Haas", "Mazak"];
-
-  const info = machine && system ? {
-    angle: system === "metric" ? "90°" : "82°",
-    label: system === "metric" ? "Metric (90°)" : "Inch (82°)",
-  } : null;
+  const angle = system === "metric" ? "90°" : system === "inch" ? "82°" : null;
+  const label = system === "metric" ? "Metric (90°)" : system === "inch" ? "Inch (82°)" : null;
 
   useEffect(() => {
     if (!onResult) return;
-    if (info) {
+    if (machine && angle) {
       onResult(
         <div className="result-card">
-          <div className="result-eyebrow">{machine} · {info.label}</div>
+          <div className="result-eyebrow">{machine} · {label}</div>
           <div style={{ textAlign: "center", padding: "20px 0" }}>
-            <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 64, fontWeight: 500, color: "#60a5fa", lineHeight: 1 }}>{info.angle}</div>
+            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 64, fontWeight: 500, color: "#60a5fa", lineHeight: 1 }}>{angle}</div>
             <div style={{ fontSize: 12, color: "#5a6072", marginTop: 8, letterSpacing: "0.04em" }}>countersink angle</div>
           </div>
           <div className="result-context">{machine} · {system === "metric" ? "Metric threads" : "Inch threads"}</div>
@@ -1555,16 +1963,15 @@ function CountersinkView({ onResult }) {
     } else {
       onResult(null);
     }
-  }, [info, machine, system]);
+  }, [angle, label, machine, system]);
 
   return (
     <>
       <div className="section">
         <div className="section-label">Machine</div>
         <div className="tool-list">
-          {MACHINES.map(m => (
-            <button key={m}
-              onClick={() => { setMachine(m); setSystem(""); }}
+          {["Haas", "Mazak"].map(m => (
+            <button key={m} onClick={() => { setMachine(m); setSystem(""); }}
               className={`tool-btn${machine === m ? " selected" : ""}`}>
               <span>{m}</span>
               {machine === m && <span className="check">✓</span>}
@@ -1576,26 +1983,22 @@ function CountersinkView({ onResult }) {
       <div className={`section${!machine ? " locked" : ""}`}>
         <div className="section-label">Thread System</div>
         <div className="tool-list">
-          <button
-            onClick={() => setSystem("metric")}
-            className={`tool-btn${system === "metric" ? " selected" : ""}`}>
-            <span>Metric</span>
-            <span style={{ fontSize: 11, color: system === "metric" ? "rgba(255,255,255,0.6)" : "#9ca3af", fontWeight: 400 }}>90°</span>
-          </button>
-          <button
-            onClick={() => setSystem("inch")}
-            className={`tool-btn${system === "inch" ? " selected" : ""}`}>
+          <button onClick={() => setSystem("inch")} className={`tool-btn${system === "inch" ? " selected" : ""}`}>
             <span>Inch</span>
             <span style={{ fontSize: 11, color: system === "inch" ? "rgba(255,255,255,0.6)" : "#9ca3af", fontWeight: 400 }}>82°</span>
+          </button>
+          <button onClick={() => setSystem("metric")} className={`tool-btn${system === "metric" ? " selected" : ""}`}>
+            <span>Metric</span>
+            <span style={{ fontSize: 11, color: system === "metric" ? "rgba(255,255,255,0.6)" : "#9ca3af", fontWeight: 400 }}>90°</span>
           </button>
         </div>
       </div>
 
-      {info && (
+      {machine && angle && (
         <div className="result-card">
-          <div className="result-eyebrow">{machine} · {info.label}</div>
+          <div className="result-eyebrow">{machine} · {label}</div>
           <div style={{ textAlign: "center", padding: "20px 0" }}>
-            <div style={{ fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 64, fontWeight: 500, color: "#60a5fa", lineHeight: 1 }}>{info.angle}</div>
+            <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 64, fontWeight: 500, color: "#60a5fa", lineHeight: 1 }}>{angle}</div>
             <div style={{ fontSize: 12, color: "#5a6072", marginTop: 8, letterSpacing: "0.04em" }}>countersink angle</div>
           </div>
           <div className="result-context">{machine} · {system === "metric" ? "Metric threads" : "Inch threads"}</div>
@@ -1625,7 +2028,7 @@ function LinksView() {
               <div>{label}</div>
               <div style={{ fontSize: 11, color: "var(--text3)", fontWeight: 400, marginTop: 3 }}>{sub}</div>
             </div>
-            <span style={{ fontSize: 16, color: "var(--text3)", flexShrink: 0 }}></span>
+            <span style={{ fontSize: 16, color: "var(--text3)", flexShrink: 0 }}>↗</span>
           </a>
         ))}
       </div>
@@ -1674,35 +2077,35 @@ const GDT_SYMBOLS = [
 
 function GdtModal({ onClose }) {
   return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 100, display: "flex", flexDirection: "column", background: "#f0f1f3" }}>
-      <div style={{ background: "#fff", borderBottom: "1px solid #eaecef", padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
+    <div style={{ position: "fixed", inset: 0, zIndex: 100, display: "flex", flexDirection: "column", background: "var(--bg)" }}>
+      <div style={{ background: "var(--surface)", borderBottom: "1px solid var(--border)", padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
         <div>
-          <div style={{ fontSize: 15, fontWeight: 700, color: "#111" }}>GD&T Reference</div>
-          <div style={{ fontSize: 11, color: "#9ca3af" }}>Geometric Dimensioning &amp; Tolerancing</div>
+          <div style={{ fontSize: 15, fontWeight: 700, color: "var(--text1)" }}>GD&T Reference</div>
+          <div style={{ fontSize: 11, color: "var(--text3)" }}>Geometric Dimensioning &amp; Tolerancing</div>
         </div>
-        <button onClick={onClose} style={{ background: "#f3f4f6", border: "none", borderRadius: 8, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: "#374151", cursor: "pointer" }}>✕</button>
+        <button onClick={onClose} style={{ background: "var(--surface2)", border: "none", borderRadius: 8, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: "var(--text2)", cursor: "pointer" }}>✕</button>
       </div>
       <div style={{ overflowY: "auto", flex: 1, WebkitOverflowScrolling: "touch", padding: "16px 16px 8px" }}>
         {GDT_SYMBOLS.map(({ category, symbols }) => (
           <div key={category} style={{ marginBottom: 20 }}>
-            <div style={{ fontSize: 10, fontWeight: 700, color: "#adb5bd", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 8 }}>{category}</div>
+            <div style={{ fontSize: 10, fontWeight: 700, color: "var(--text3)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 8 }}>{category}</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
               {symbols.map(({ sym, name, def }) => (
-                <div key={name} style={{ background: "#fff", borderRadius: 12, padding: "14px 16px", border: "1.5px solid #eaecef", display: "flex", gap: 14, alignItems: "flex-start" }}>
-                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, fontWeight: 600, color: "#1a6ef5", minWidth: 36, textAlign: "center", flexShrink: 0, lineHeight: 1.2 }}>{sym}</div>
+                <div key={name} style={{ background: "var(--surface)", borderRadius: 12, padding: "14px 16px", border: "1px solid var(--border)", display: "flex", gap: 14, alignItems: "flex-start" }}>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 22, fontWeight: 600, color: "var(--accent)", minWidth: 36, textAlign: "center", flexShrink: 0, lineHeight: 1.2 }}>{sym}</div>
                   <div>
-                    <div style={{ fontSize: 14, fontWeight: 600, color: "#111", marginBottom: 4 }}>{name}</div>
-                    <div style={{ fontSize: 12, color: "#6b7280", lineHeight: 1.6 }}>{def}</div>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text1)", marginBottom: 4 }}>{name}</div>
+                    <div style={{ fontSize: 12, color: "var(--text3)", lineHeight: 1.6 }}>{def}</div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
         ))}
+        <button onClick={onClose} style={{ position: "sticky", bottom: 0, display: "block", width: "100%", padding: "18px 16px", background: "var(--surface)", border: "none", borderTop: "1px solid var(--border)", fontFamily: "'DM Sans', sans-serif", fontSize: 16, fontWeight: 700, color: "var(--text3)", cursor: "pointer" }}>
+          ✕ Close
+        </button>
       </div>
-      <button onClick={onClose} style={{ flexShrink: 0, width: "100%", padding: "18px 16px", background: "#fff", border: "none", borderTop: "1px solid #eaecef", fontFamily: "'DM Sans', sans-serif", fontSize: 16, fontWeight: 700, color: "#6b7280", cursor: "pointer" }}>
-        ✕ Close
-      </button>
     </div>
   );
 }
@@ -1744,17 +2147,19 @@ function RefView() {
   };
 
   const refs = [
-    { label: "CAM Hole Size Chart", sub: "Inch & Metric", comingSoon: false, isCam: true },
-    { label: "Garr Endmills", sub: "VRX Series — Milling Guide", comingSoon: false, isGarr: true },
-    { label: "Guhring Cut Taps", sub: "SFM Reference Chart", comingSoon: false, isGuhringCut: true },
-    { label: "Guhring Form Taps", sub: "SFM Reference Chart", comingSoon: false, isGuhringForm: true },
-    { label: "HSS Drill Chart", sub: "YG-1 Straight Shank — Recommended Cutting Conditions", comingSoon: false, isHss: true },
-    { label: "OSG HY-PRO CARB Drill Chart", sub: "HP253 · HP255 · HP258", comingSoon: false, isOsg: true },
-    { label: "Sumitomo Face Mills", sub: "WEX Series", comingSoon: false, isWex: true },
-    { label: "Sumitomo Flat Bottom Drills", sub: "WDX Series — Inserts 4D Technical Data", comingSoon: false, isWdx: true },
-    { label: "Sumitomo Spade Drills", sub: "SMD Series — Cutting Conditions", comingSoon: false, isSmd: true },
-    { label: "Tap Drill Chart", sub: "Inch & Metric", comingSoon: false, isTapDrill: true },
-    { label: "GD&T Reference", sub: "Symbols & Definitions", comingSoon: false, isGdt: true },
+    { label: "CAM Hole Size Chart",              sub: "Inch & Metric",                                        comingSoon: false, isCam: true },
+    { label: "GARR Technical Advisor",           sub: "Speeds, feeds & tool selection calculator",            comingSoon: false, isLink: true, url: "https://www.garrtool.com/calc/index.html" },
+    { label: "Garr Endmills",                    sub: "VRX Series — Milling Guide",                           comingSoon: false, isGarr: true },
+    { label: "GD&T Reference",                   sub: "Symbols & Definitions",                                comingSoon: false, isGdt: true },
+    { label: "Guhring Cut Taps",                 sub: "SFM Reference Chart",                                  comingSoon: false, isGuhringCut: true },
+    { label: "Guhring Form Taps",                sub: "SFM Reference Chart",                                  comingSoon: false, isGuhringForm: true },
+    { label: "HSS Drill Chart",                  sub: "YG-1 Straight Shank — Recommended Cutting Conditions", comingSoon: false, isHss: true },
+    { label: "Integrex Reference",               sub: "Mazak Integrex i200 · i300",                          comingSoon: false, isMachineRef: true },
+    { label: "OSG HY-PRO CARB Drill Chart",      sub: "HP253 · HP255 · HP258",                               comingSoon: false, isOsg: true },
+    { label: "Sumitomo Face Mills",              sub: "WEX Series",                                           comingSoon: false, isWex: true },
+    { label: "Sumitomo Flat Bottom Drills",      sub: "WDX Series — Inserts 4D Technical Data",               comingSoon: false, isWdx: true },
+    { label: "Sumitomo Spade Drills",            sub: "SMD Series — Cutting Conditions",                      comingSoon: false, isSmd: true },
+    { label: "Tap Drill Chart",                  sub: "Inch & Metric",                                        comingSoon: false, isTapDrill: true },
   ];
 
   const [showOsg,          setShowOsg]          = useState(false);
@@ -1771,33 +2176,34 @@ function RefView() {
   const [showGarr,         setShowGarr]          = useState(false);
   const [showHss,          setShowHss]           = useState(false);
   const [showGdt,          setShowGdt]           = useState(false);
+  const [showMachineRef,   setShowMachineRef]     = useState(false);
   const [camSystem,    setCamSystem]    = useState("inch");
 
   const Modal = ({ title, sub, img, onClose }) => (
     <div style={{ position: "fixed", inset: 0, zIndex: 100, display: "flex", flexDirection: "column" }}>
       {/* Header */}
-      <div style={{ background: "var(--surface)", borderBottom: "1px solid #eaecef", padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
+      <div style={{ background: "var(--surface)", borderBottom: "1px solid var(--border)", padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
         <div>
-          <div style={{ fontSize: 15, fontWeight: 600, color: "#111" }}>{title}</div>
+          <div style={{ fontSize: 15, fontWeight: 600, color: "var(--text1)" }}>{title}</div>
           {sub && <div style={{ fontSize: 11, color: "var(--text3)" }}>{sub}</div>}
         </div>
-        <button onClick={onClose} style={{ background: "#f3f4f6", border: "none", borderRadius: 8, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: "var(--text2)", cursor: "pointer" }}>✕</button>
+        <button onClick={onClose} style={{ background: "var(--surface2)", border: "none", borderRadius: 8, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: "var(--text2)", cursor: "pointer" }}>✕</button>
       </div>
       {/* Scrollable content */}
       <div style={{ overflowY: "auto", flex: 1, WebkitOverflowScrolling: "touch", background: "#000" }}>
         {Array.isArray(img)
           ? img.map((src, i) => <img key={i} src={src} alt={`${title} page ${i+1}`} style={{ width: "100%", display: "block" }} />)
           : <img src={img} alt={title} style={{ width: "100%", display: "block" }} />}
+        {/* Sticky close inside scroll area — always reachable when zoomed */}
+        <button onClick={onClose} style={{
+          position: "sticky", bottom: 0, display: "block", width: "100%", padding: "18px 16px",
+          background: "var(--surface)", border: "none", borderTop: "1px solid var(--border)",
+          fontFamily: "'DM Sans', sans-serif", fontSize: 16, fontWeight: 700,
+          color: "var(--text2)", cursor: "pointer", letterSpacing: 0.2,
+        }}>
+          ✕ Close
+        </button>
       </div>
-      {/* Large close bar at bottom — easy to tap */}
-      <button onClick={onClose} style={{
-        flexShrink: 0, width: "100%", padding: "18px 16px",
-        background: "var(--surface)", border: "none", borderTop: "1px solid #eaecef",
-        fontFamily: "var(--font,'Inter',sans-serif)", fontSize: 16, fontWeight: 700,
-        color: "var(--text2)", cursor: "pointer", letterSpacing: 0.2,
-      }}>
-        ✕ Close
-      </button>
     </div>
   );
 
@@ -1812,12 +2218,12 @@ function RefView() {
     return (
       <div style={{ position: "fixed", inset: 0, background: "var(--bg)", zIndex: 100, display: "flex", flexDirection: "column" }}>
         {/* Header */}
-        <div style={{ background: "var(--surface)", borderBottom: "1px solid #eaecef", padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
+        <div style={{ background: "var(--surface)", borderBottom: "1px solid var(--border)", padding: "12px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
           <div>
-            <div style={{ fontSize: 15, fontWeight: 700, color: "#111" }}>CAM Hole Size Chart</div>
+            <div style={{ fontSize: 15, fontWeight: 700, color: "var(--text1)" }}>CAM Hole Size Chart</div>
             <div style={{ fontSize: 11, color: "var(--text3)", marginTop: 1 }}>All values in inches</div>
           </div>
-          <button onClick={() => setShowCam(false)} style={{ background: "#f3f4f6", border: "none", borderRadius: 8, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: "var(--text2)", cursor: "pointer" }}>✕ Close</button>
+          <button onClick={() => setShowCam(false)} style={{ background: "var(--surface2)", border: "none", borderRadius: 8, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: "var(--text2)", cursor: "pointer" }}>✕ Close</button>
         </div>
 
         {/* System toggle */}
@@ -1825,34 +2231,34 @@ function RefView() {
           {["inch", "metric"].map(s => (
             <button key={s} onClick={() => setCamSystem(s)} style={{
               flex: 1, padding: "10px", borderRadius: 10, border: "1.5px solid",
-              borderColor: camSystem === s ? "#0d0d0d" : "#eaecef",
-              background: camSystem === s ? "#0d0d0d" : "#fff",
-              color: camSystem === s ? "#fff" : "#374151",
-              fontFamily: "var(--font,'Inter',sans-serif)", fontSize: 13, fontWeight: 600, cursor: "pointer",
+              borderColor: camSystem === s ? "var(--accent-border)" : "var(--border)",
+              background: camSystem === s ? "var(--accent-bg)" : "var(--surface)",
+              color: camSystem === s ? "var(--accent)" : "var(--text2)",
+              fontFamily: "'DM Sans',sans-serif", fontSize: 13, fontWeight: 600, cursor: "pointer",
             }}>{s === "inch" ? "Inch" : "Metric"}</button>
           ))}
         </div>
 
         {/* Legend */}
         <div style={{ padding: "10px 16px 0", display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
-          <div style={{ width: 14, height: 14, background: "#fef08a", border: "1px solid #ca8a04", borderRadius: 3 }} />
+          <div style={{ width: 14, height: 14, background: "rgba(251,191,36,0.3)", border: "1px solid rgba(251,191,36,0.5)", borderRadius: 3 }} />
           <span style={{ fontSize: 11, color: "var(--text3)", fontFamily: "var(--font,'Inter',sans-serif)" }}>Internal Minor Diameter (CAM entry)</span>
         </div>
 
         {/* Table */}
-        <div style={{ overflowY: "auto", flex: 1, WebkitOverflowScrolling: "touch", padding: "10px 16px 24px" }}>
-          <div style={{ background: "var(--surface)", borderRadius: 14, overflow: "hidden", border: "1px solid #eaecef", boxShadow: "0 1px 4px rgba(0,0,0,0.06)" }}>
+        <div style={{ overflowY: "auto", flex: 1, WebkitOverflowScrolling: "touch", padding: "10px 16px 0" }}>
+          <div style={{ background: "var(--surface)", borderRadius: 14, overflow: "hidden", border: "1px solid var(--border)", boxShadow: "0 1px 4px rgba(0,0,0,0.06)" }}>
             {/* Column headers */}
-            <div style={{ display: "grid", gridTemplateColumns: "1.1fr 1fr 1.2fr 1fr", background: "#f8f9fb", borderBottom: "2px solid #eaecef" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1.1fr 1fr 1.2fr 1fr", background: "var(--surface2)", borderBottom: "2px solid var(--border)" }}>
               {cols.map(c => (
                 <div key={c.key} style={{
                   padding: "10px 10px",
-                  background: c.yellow ? "#fef9c3" : "#f8f9fb",
-                  fontSize: 10, fontWeight: 700, color: c.yellow ? "#854d0e" : "#6b7280",
+                  background: c.yellow ? "rgba(251,191,36,0.15)" : "var(--surface2)",
+                  fontSize: 10, fontWeight: 700, color: c.yellow ? "#fbbf24" : "var(--text3)",
                   letterSpacing: "0.05em", textTransform: "uppercase",
                   textAlign: "center", lineHeight: 1.3,
-                  fontFamily: "var(--font,'Inter',sans-serif)",
-                  borderRight: "1px solid #eaecef",
+                  fontFamily: "'DM Sans', sans-serif",
+                  borderRight: "1px solid var(--border)",
                 }}>{c.label}</div>
               ))}
             </div>
@@ -1860,16 +2266,19 @@ function RefView() {
             {rows.map((row, i) => (
               <div key={row.thread} style={{
                 display: "grid", gridTemplateColumns: "1.1fr 1fr 1.2fr 1fr",
-                borderBottom: i < rows.length - 1 ? "1px solid #f3f4f6" : "none",
-                background: i % 2 === 0 ? "#fff" : "#fafafa",
+                borderBottom: i < rows.length - 1 ? "1px solid var(--border)" : "none",
+                background: i % 2 === 0 ? "var(--surface)" : "var(--surface2)",
               }}>
-                <div style={{ padding: "12px 10px", fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 13, fontWeight: 600, color: "var(--text1)", textAlign: "center", borderRight: "1px solid #f3f4f6" }}>{row.thread}</div>
-                <div style={{ padding: "12px 10px", fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 13, color: "#2563eb", textAlign: "center", borderRight: "1px solid #f3f4f6" }}>{row.tap}</div>
-                <div style={{ padding: "12px 10px", fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 13, fontWeight: 600, color: "#854d0e", textAlign: "center", background: "#fef9c3", borderRight: "1px solid #f3f4f6" }}>{row.minor}</div>
-                <div style={{ padding: "12px 10px", fontFamily: "var(--mono,'JetBrains Mono',monospace)", fontSize: 13, color: "var(--text2)", textAlign: "center" }}>{row.nominal}</div>
+                <div style={{ padding: "12px 10px", fontFamily: "'DM Mono', monospace", fontSize: 13, fontWeight: 600, color: "var(--text1)", textAlign: "center", borderRight: "1px solid var(--border)" }}>{row.thread}</div>
+                <div style={{ padding: "12px 10px", fontFamily: "'DM Mono', monospace", fontSize: 13, color: "var(--accent)", textAlign: "center", borderRight: "1px solid var(--border)" }}>{row.tap}</div>
+                <div style={{ padding: "12px 10px", fontFamily: "'DM Mono', monospace", fontSize: 13, fontWeight: 600, color: "#fbbf24", textAlign: "center", background: "rgba(251,191,36,0.12)", borderRight: "1px solid var(--border)" }}>{row.minor}</div>
+                <div style={{ padding: "12px 10px", fontFamily: "'DM Mono', monospace", fontSize: 13, color: "var(--text2)", textAlign: "center" }}>{row.nominal}</div>
               </div>
             ))}
           </div>
+          <button onClick={() => setShowCam(false)} style={{ position: "sticky", bottom: 0, display: "block", width: "100%", marginTop: 12, padding: "18px 16px", background: "var(--surface)", border: "none", borderTop: "1px solid var(--border)", fontFamily: "'DM Sans', sans-serif", fontSize: 16, fontWeight: 700, color: "var(--text3)", cursor: "pointer" }}>
+            ✕ Close
+          </button>
         </div>
       </div>
     );
@@ -1883,25 +2292,26 @@ function RefView() {
       {showHss         && <Modal title="HSS Drill Chart" sub="YG-1 Straight Shank — A242 · A243 (scroll right for page 2)" img={[HSS_DRILL_P1, HSS_DRILL_P2]} onClose={() => setShowHss(false)} />}
       {showWex && (
         <div style={{ position: "fixed", inset: 0, background: "#000", zIndex: 100, display: "flex", flexDirection: "column" }}>
-          <div style={{ background: "var(--surface)", borderBottom: "1px solid #eaecef", padding: "10px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
+          <div style={{ background: "var(--surface)", borderBottom: "1px solid var(--border)", padding: "10px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
             <div>
-              <div style={{ fontSize: 15, fontWeight: 700, color: "#111" }}>Sumitomo WEX Series</div>
+              <div style={{ fontSize: 15, fontWeight: 700, color: "var(--text1)" }}>Sumitomo WEX Series</div>
               <div style={{ fontSize: 11, color: "var(--text3)" }}>Page {wexPage + 1} of {WEX_PAGES.length} · Face Mills</div>
             </div>
-            <button onClick={() => setShowWex(false)} style={{ background: "#f3f4f6", border: "none", borderRadius: 8, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: "var(--text2)", cursor: "pointer" }}>✕ Close</button>
+            <button onClick={() => setShowWex(false)} style={{ background: "var(--surface2)", border: "none", borderRadius: 8, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: "var(--text2)", cursor: "pointer" }}>✕ Close</button>
           </div>
           <div style={{ flex: 1, overflowY: "auto", WebkitOverflowScrolling: "touch", background: "#1a1a1a" }}>
             <img src={WEX_PAGES[wexPage]} alt={`WEX page ${wexPage + 1}`} style={{ width: "100%", display: "block" }} />
+            <button onClick={() => setShowWex(false)} style={{ position:"sticky", bottom:0, display:"block", width:"100%", padding:"14px 16px", background:"var(--surface)", border:"none", borderTop:"1px solid var(--border)", fontFamily:"'DM Sans',sans-serif", fontSize:15, fontWeight:700, color:"var(--text3)", cursor:"pointer" }}>✕ Close</button>
           </div>
           {WEX_PAGES.length > 1 && (
-            <div style={{ background: "var(--surface)", borderTop: "1px solid #eaecef", padding: "10px 16px", display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
-              <button onClick={() => setWexPage(p => Math.max(0, p - 1))} disabled={wexPage === 0} style={{ flex: 1, padding: "12px", borderRadius: 10, border: "1.5px solid #eaecef", background: wexPage === 0 ? "#f8f9fb" : "#fff", color: wexPage === 0 ? "#c4c9d4" : "#374151", fontFamily: "var(--font,'Inter',sans-serif)", fontSize: 14, fontWeight: 600, cursor: wexPage === 0 ? "default" : "pointer" }}>← Prev</button>
+            <div style={{ background: "var(--surface)", borderTop: "1px solid var(--border)", padding: "10px 16px", display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
+              <button onClick={() => setWexPage(p => Math.max(0, p - 1))} disabled={wexPage === 0} style={{ flex: 1, padding: "12px", borderRadius: 10, border: "1px solid var(--border)", background: wexPage === 0 ? "#f8f9fb" : "#fff", color: wexPage === 0 ? "#c4c9d4" : "#374151", fontFamily: "var(--font,'Inter',sans-serif)", fontSize: 14, fontWeight: 600, cursor: wexPage === 0 ? "default" : "pointer" }}>← Prev</button>
               <div style={{ display: "flex", gap: 4, alignItems: "center", overflowX: "auto", flexShrink: 0 }}>
                 {WEX_PAGES.map((_, i) => (
-                  <button key={i} onClick={() => setWexPage(i)} style={{ width: i === wexPage ? 20 : 7, height: 7, borderRadius: 4, border: "none", padding: 0, cursor: "pointer", background: i === wexPage ? "#0d0d0d" : "#d1d5db", transition: "all 0.2s", flexShrink: 0 }} />
+                  <button key={i} onClick={() => setWexPage(i)} style={{ width: i === wexPage ? 20 : 7, height: 7, borderRadius: 4, border: "none", padding: 0, cursor: "pointer", background: i === wexPage ? "var(--accent)" : "var(--border)", transition: "all 0.2s", flexShrink: 0 }} />
                 ))}
               </div>
-              <button onClick={() => setWexPage(p => Math.min(WEX_PAGES.length - 1, p + 1))} disabled={wexPage === WEX_PAGES.length - 1} style={{ flex: 1, padding: "12px", borderRadius: 10, border: "1.5px solid #eaecef", background: wexPage === WEX_PAGES.length - 1 ? "#f8f9fb" : "#fff", color: wexPage === WEX_PAGES.length - 1 ? "#c4c9d4" : "#374151", fontFamily: "var(--font,'Inter',sans-serif)", fontSize: 14, fontWeight: 600, cursor: wexPage === WEX_PAGES.length - 1 ? "default" : "pointer" }}>Next →</button>
+              <button onClick={() => setWexPage(p => Math.min(WEX_PAGES.length - 1, p + 1))} disabled={wexPage === WEX_PAGES.length - 1} style={{ flex: 1, padding: "12px", borderRadius: 10, border: "1px solid var(--border)", background: wexPage === WEX_PAGES.length - 1 ? "var(--surface2)" : "var(--surface)", color: wexPage === WEX_PAGES.length - 1 ? "var(--text3)" : "var(--text1)", fontFamily: "'DM Sans',sans-serif", fontSize: 14, fontWeight: 600, cursor: wexPage === WEX_PAGES.length - 1 ? "default" : "pointer" }}>Next →</button>
             </div>
           )}
         </div>
@@ -1909,24 +2319,25 @@ function RefView() {
       {showOsg      && <Modal title="OSG HY-PRO CARB" sub="HP253 · HP255 · HP258 — Scroll for page 2" img={[OSG_IMG_1, OSG_IMG_2]} onClose={() => setShowOsg(false)} />}
       {showSmd && (
         <div style={{ position: "fixed", inset: 0, background: "#000", zIndex: 100, display: "flex", flexDirection: "column" }}>
-          <div style={{ background: "var(--surface)", borderBottom: "1px solid #eaecef", padding: "10px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
+          <div style={{ background: "var(--surface)", borderBottom: "1px solid var(--border)", padding: "10px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
             <div>
-              <div style={{ fontSize: 15, fontWeight: 700, color: "#111" }}>Sumitomo SMD Series</div>
+              <div style={{ fontSize: 15, fontWeight: 700, color: "var(--text1)" }}>Sumitomo SMD Series</div>
               <div style={{ fontSize: 11, color: "var(--text3)" }}>Page {smdPage + 1} of {SMD_PAGES.length} · Replaceable Tip Drills</div>
             </div>
-            <button onClick={() => setShowSmd(false)} style={{ background: "#f3f4f6", border: "none", borderRadius: 8, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: "var(--text2)", cursor: "pointer" }}>✕ Close</button>
+            <button onClick={() => setShowSmd(false)} style={{ background: "var(--surface2)", border: "none", borderRadius: 8, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: "var(--text2)", cursor: "pointer" }}>✕ Close</button>
           </div>
           <div style={{ flex: 1, overflowY: "auto", WebkitOverflowScrolling: "touch", background: "#1a1a1a" }}>
             <img src={SMD_PAGES[smdPage]} alt={`SMD page ${smdPage + 1}`} style={{ width: "100%", display: "block" }} />
+            <button onClick={() => setShowSmd(false)} style={{ position:"sticky", bottom:0, display:"block", width:"100%", padding:"14px 16px", background:"var(--surface)", border:"none", borderTop:"1px solid var(--border)", fontFamily:"'DM Sans',sans-serif", fontSize:15, fontWeight:700, color:"var(--text3)", cursor:"pointer" }}>✕ Close</button>
           </div>
-          <div style={{ background: "var(--surface)", borderTop: "1px solid #eaecef", padding: "10px 16px", display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
-            <button onClick={() => setSmdPage(p => Math.max(0, p - 1))} disabled={smdPage === 0} style={{ flex: 1, padding: "12px", borderRadius: 10, border: "1.5px solid #eaecef", background: smdPage === 0 ? "#f8f9fb" : "#fff", color: smdPage === 0 ? "#c4c9d4" : "#374151", fontFamily: "var(--font,'Inter',sans-serif)", fontSize: 14, fontWeight: 600, cursor: smdPage === 0 ? "default" : "pointer" }}>← Prev</button>
+          <div style={{ background: "var(--surface)", borderTop: "1px solid var(--border)", padding: "10px 16px", display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
+            <button onClick={() => setSmdPage(p => Math.max(0, p - 1))} disabled={smdPage === 0} style={{ flex: 1, padding: "12px", borderRadius: 10, border: "1px solid var(--border)", background: smdPage === 0 ? "var(--surface2)" : "var(--surface)", color: smdPage === 0 ? "var(--text3)" : "var(--text1)", fontFamily: "'DM Sans',sans-serif", fontSize: 14, fontWeight: 600, cursor: smdPage === 0 ? "default" : "pointer" }}>← Prev</button>
             <div style={{ display: "flex", gap: 4, alignItems: "center", overflowX: "auto", flexShrink: 0 }}>
               {SMD_PAGES.map((_, i) => (
-                <button key={i} onClick={() => setSmdPage(i)} style={{ width: i === smdPage ? 20 : 7, height: 7, borderRadius: 4, border: "none", padding: 0, cursor: "pointer", background: i === smdPage ? "#0d0d0d" : "#d1d5db", transition: "all 0.2s", flexShrink: 0 }} />
+                <button key={i} onClick={() => setSmdPage(i)} style={{ width: i === smdPage ? 20 : 7, height: 7, borderRadius: 4, border: "none", padding: 0, cursor: "pointer", background: i === smdPage ? "var(--accent)" : "var(--border)", transition: "all 0.2s", flexShrink: 0 }} />
               ))}
             </div>
-            <button onClick={() => setSmdPage(p => Math.min(SMD_PAGES.length - 1, p + 1))} disabled={smdPage === SMD_PAGES.length - 1} style={{ flex: 1, padding: "12px", borderRadius: 10, border: "1.5px solid #eaecef", background: smdPage === SMD_PAGES.length - 1 ? "#f8f9fb" : "#fff", color: smdPage === SMD_PAGES.length - 1 ? "#c4c9d4" : "#374151", fontFamily: "var(--font,'Inter',sans-serif)", fontSize: 14, fontWeight: 600, cursor: smdPage === SMD_PAGES.length - 1 ? "default" : "pointer" }}>Next →</button>
+            <button onClick={() => setSmdPage(p => Math.min(SMD_PAGES.length - 1, p + 1))} disabled={smdPage === SMD_PAGES.length - 1} style={{ flex: 1, padding: "12px", borderRadius: 10, border: "1px solid var(--border)", background: smdPage === SMD_PAGES.length - 1 ? "var(--surface2)" : "var(--surface)", color: smdPage === SMD_PAGES.length - 1 ? "var(--text3)" : "var(--text1)", fontFamily: "'DM Sans',sans-serif", fontSize: 14, fontWeight: 600, cursor: smdPage === SMD_PAGES.length - 1 ? "default" : "pointer" }}>Next →</button>
           </div>
         </div>
       )}
@@ -1935,40 +2346,41 @@ function RefView() {
       {showWdx && (
         <div style={{ position: "fixed", inset: 0, background: "#000", zIndex: 100, display: "flex", flexDirection: "column" }}>
           {/* Header */}
-          <div style={{ background: "var(--surface)", borderBottom: "1px solid #eaecef", padding: "10px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
+          <div style={{ background: "var(--surface)", borderBottom: "1px solid var(--border)", padding: "10px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
             <div>
-              <div style={{ fontSize: 15, fontWeight: 700, color: "#111" }}>Sumitomo WDX Series</div>
+              <div style={{ fontSize: 15, fontWeight: 700, color: "var(--text1)" }}>Sumitomo WDX Series</div>
               <div style={{ fontSize: 11, color: "var(--text3)" }}>Page {wdxPage + 1} of {WDX_PAGES.length}</div>
             </div>
-            <button onClick={() => setShowWdx(false)} style={{ background: "#f3f4f6", border: "none", borderRadius: 8, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: "var(--text2)", cursor: "pointer" }}>✕ Close</button>
+            <button onClick={() => setShowWdx(false)} style={{ background: "var(--surface2)", border: "none", borderRadius: 8, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: "var(--text2)", cursor: "pointer" }}>✕ Close</button>
           </div>
           {/* Page image */}
           <div style={{ flex: 1, overflowY: "auto", WebkitOverflowScrolling: "touch", background: "#1a1a1a" }}>
             <img src={WDX_PAGES[wdxPage]} alt={`WDX page ${wdxPage + 1}`} style={{ width: "100%", display: "block" }} />
+            <button onClick={() => setShowWdx(false)} style={{ position:"sticky", bottom:0, display:"block", width:"100%", padding:"14px 16px", background:"var(--surface)", border:"none", borderTop:"1px solid var(--border)", fontFamily:"'DM Sans',sans-serif", fontSize:15, fontWeight:700, color:"var(--text3)", cursor:"pointer" }}>✕ Close</button>
           </div>
           {/* Prev / Next nav */}
-          <div style={{ background: "var(--surface)", borderTop: "1px solid #eaecef", padding: "10px 16px", display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
+          <div style={{ background: "var(--surface)", borderTop: "1px solid var(--border)", padding: "10px 16px", display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
             <button onClick={() => setWdxPage(p => Math.max(0, p - 1))} disabled={wdxPage === 0} style={{
-              flex: 1, padding: "12px", borderRadius: 10, border: "1.5px solid #eaecef",
-              background: wdxPage === 0 ? "#f8f9fb" : "#fff",
-              color: wdxPage === 0 ? "#c4c9d4" : "#374151",
-              fontFamily: "var(--font,'Inter',sans-serif)", fontSize: 14, fontWeight: 600, cursor: wdxPage === 0 ? "default" : "pointer",
+              flex: 1, padding: "12px", borderRadius: 10, border: "1px solid var(--border)",
+              background: wdxPage === 0 ? "var(--surface2)" : "var(--surface)",
+              color: wdxPage === 0 ? "var(--text3)" : "var(--text1)",
+              fontFamily: "'DM Sans',sans-serif", fontSize: 14, fontWeight: 600, cursor: wdxPage === 0 ? "default" : "pointer",
             }}>← Prev</button>
             {/* Page dots (show up to 20) */}
             <div style={{ display: "flex", gap: 4, alignItems: "center", overflowX: "auto", flexShrink: 0 }}>
               {WDX_PAGES.map((_, i) => (
                 <button key={i} onClick={() => setWdxPage(i)} style={{
                   width: i === wdxPage ? 20 : 7, height: 7, borderRadius: 4, border: "none", padding: 0, cursor: "pointer",
-                  background: i === wdxPage ? "#0d0d0d" : "#d1d5db",
+                  background: i === wdxPage ? "var(--accent)" : "var(--border)",
                   transition: "all 0.2s", flexShrink: 0,
                 }} />
               ))}
             </div>
             <button onClick={() => setWdxPage(p => Math.min(WDX_PAGES.length - 1, p + 1))} disabled={wdxPage === WDX_PAGES.length - 1} style={{
-              flex: 1, padding: "12px", borderRadius: 10, border: "1.5px solid #eaecef",
-              background: wdxPage === WDX_PAGES.length - 1 ? "#f8f9fb" : "#fff",
-              color: wdxPage === WDX_PAGES.length - 1 ? "#c4c9d4" : "#374151",
-              fontFamily: "var(--font,'Inter',sans-serif)", fontSize: 14, fontWeight: 600, cursor: wdxPage === WDX_PAGES.length - 1 ? "default" : "pointer",
+              flex: 1, padding: "12px", borderRadius: 10, border: "1px solid var(--border)",
+              background: wdxPage === WDX_PAGES.length - 1 ? "var(--surface2)" : "var(--surface)",
+              color: wdxPage === WDX_PAGES.length - 1 ? "var(--text3)" : "var(--text1)",
+              fontFamily: "'DM Sans',sans-serif", fontSize: 14, fontWeight: 600, cursor: wdxPage === WDX_PAGES.length - 1 ? "default" : "pointer",
             }}>Next →</button>
           </div>
         </div>
@@ -1977,28 +2389,160 @@ function RefView() {
       <div className="section">
         <div className="section-label">Charts &amp; References</div>
         <div className="tool-list">
-          {refs.map(({ label, sub, comingSoon, isOsg, isTapDrill, isCam, isWdx, isSmd, isWex, isGuhringForm, isGuhringCut, isGarr, isHss, isGdt }) => (
-            <button
-              key={label}
-              onClick={() => { if (isOsg) setShowOsg(true); if (isTapDrill) setShowTapDrill(true); if (isCam) setShowCam(true); if (isWdx) { setWdxPage(0); setShowWdx(true); } if (isSmd) { setSmdPage(0); setShowSmd(true); } if (isWex) { setWexPage(0); setShowWex(true); } if (isGuhringForm) setShowGuhringForm(true); if (isGuhringCut) setShowGuhringCut(true); if (isGarr) setShowGarr(true); if (isHss) setShowHss(true); if (isGdt) setShowGdt(true); }}
-              className={`tool-btn${comingSoon ? " unavailable" : ""}`}
-              style={{ flexDirection: "column", alignItems: "flex-start", gap: 3 }}
-            >
-              <div style={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center" }}>
-                <span>{label}</span>
-                {comingSoon ? <span className="badge">Coming Soon</span> : null}
-              </div>
-              {sub ? <span style={{ fontSize: 12, color: comingSoon ? "#d1d5db" : "#9ca3af", fontWeight: 400 }}>{sub}</span> : null}
-            </button>
+          {refs.map(({ label, sub, comingSoon, isOsg, isTapDrill, isCam, isWdx, isSmd, isWex, isGuhringForm, isGuhringCut, isGarr, isHss, isGdt, isLink, url, isMachineRef }) => (
+            isLink
+              ? <a key={label} href={url} target="_blank" rel="noopener noreferrer"
+                  className="tool-btn" style={{ flexDirection:"column", alignItems:"flex-start", gap:3, textDecoration:"none" }}>
+                  <div style={{ display:"flex", width:"100%", justifyContent:"space-between", alignItems:"center" }}>
+                    <span>{label}</span>
+                  </div>
+                  {sub && <span style={{ fontSize:12, color:"#9ca3af", fontWeight:400 }}>{sub}</span>}
+                </a>
+              : <button
+                  key={label}
+                  onClick={() => { if (isOsg) setShowOsg(true); if (isTapDrill) setShowTapDrill(true); if (isCam) setShowCam(true); if (isWdx) { setWdxPage(0); setShowWdx(true); } if (isSmd) { setSmdPage(0); setShowSmd(true); } if (isWex) { setWexPage(0); setShowWex(true); } if (isGuhringForm) setShowGuhringForm(true); if (isGuhringCut) setShowGuhringCut(true); if (isGarr) setShowGarr(true); if (isHss) setShowHss(true); if (isGdt) setShowGdt(true); if (isMachineRef) setShowMachineRef(true); }}
+                  className={`tool-btn${comingSoon ? " unavailable" : ""}`}
+                  style={{ flexDirection: "column", alignItems: "flex-start", gap: 3 }}
+                >
+                  <div style={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center" }}>
+                    <span>{label}</span>
+                    {comingSoon ? <span className="badge">Coming Soon</span> : null}
+                  </div>
+                  {sub ? <span style={{ fontSize: 12, color: comingSoon ? "#d1d5db" : "#9ca3af", fontWeight: 400 }}>{sub}</span> : null}
+                </button>
           ))}
         </div>
       </div>
 
       {showGdt && <GdtModal onClose={() => setShowGdt(false)} />}
+      {showMachineRef && (
+        <div style={{ position:"fixed", inset:0, zIndex:100, display:"flex", flexDirection:"column", background:"var(--bg)" }}>
+          <div style={{ background:"var(--surface)", borderBottom:"1px solid var(--border)", padding:"12px 16px", display:"flex", alignItems:"center", justifyContent:"space-between", flexShrink:0 }}>
+            <div>
+              <div style={{ fontSize:15, fontWeight:700, color:"var(--text1)" }}>Integrex Reference</div>
+              <div style={{ fontSize:11, color:"var(--text3)" }}>Mazak i200 · i300 · Smooth X Control</div>
+            </div>
+            <button onClick={() => setShowMachineRef(false)} style={{ background:"var(--surface2)", border:"none", borderRadius:8, padding:"8px 14px", fontSize:13, fontWeight:600, color:"var(--text2)", cursor:"pointer" }}>&#x2715;</button>
+          </div>
+          <div style={{ overflowY:"auto", flex:1, WebkitOverflowScrolling:"touch", padding:"16px 16px 0" }}>
+            <MachineRefView />
+            <button onClick={() => setShowMachineRef(false)} style={{ position:"sticky", bottom:0, display:"block", width:"100%", padding:"18px 16px", background:"var(--surface)", border:"none", borderTop:"1px solid var(--border)", fontFamily:"'DM Sans',sans-serif", fontSize:16, fontWeight:700, color:"var(--text3)", cursor:"pointer" }}>
+              &#x2715; Close
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 }
 
+
+function MachineRefView() {
+  const sections = [
+    {
+      title: "Stock to Leave — OD",
+      icon: "○",
+      items: [
+        { label: "Mazatrol", value: '.010" Dia. / .003" Face' },
+        { label: "GibbsCAM", value: '.005" Rad. / .003" Face' },
+      ],
+    },
+    {
+      title: "Stock to Leave — Groove / Cutoff",
+      icon: "⊂",
+      items: [
+        { label: "Mazatrol", value: '.002" Finish Allowance' },
+        { label: "GibbsCAM", value: '.002" Rad. / .002" Face' },
+      ],
+    },
+    {
+      title: "Stock to Leave — ID",
+      icon: "●",
+      items: [
+        { label: "Mazatrol", value: '.005" Dia. / .002" Face' },
+        { label: "GibbsCAM", value: '.0025" Rad. / .002" Face' },
+      ],
+    },
+    {
+      title: "Threading Undercut",
+      icon: "⌀",
+      sub: "35° / .0156\" Radius Insert",
+      items: [
+        { label: "GibbsCAM", value: '.015" under minor / 1½ threads wide' },
+        { label: "Mazatrol", value: '—' },
+      ],
+    },
+    {
+      title: "Parameters",
+      icon: "⚙",
+      items: [
+        { label: "Cutoff Max RPM",         value: "TC49" },
+        { label: "Bore Retract Clearance", value: "TC38 (.010\")" },
+      ],
+    },
+    {
+      title: "Mazatrol Pecking Cycles",
+      icon: "↕",
+      items: [
+        { label: "Peck 1", value: "High-Speed Peck" },
+        { label: "Peck 2", value: "Full Retract Peck" },
+      ],
+    },
+    {
+      title: "OD / ID Gripping",
+      icon: "+",
+      items: [
+        { label: "ID Chucking", value: "M272" },
+        { label: "OD Chucking", value: "M273" },
+      ],
+    },
+    {
+      title: "Tailstock",
+      icon: "→",
+      sub: 'Ref. i300 Program: LIVECENTER',
+      items: [
+        { label: "Tailstock Position 1",    value: "M841" },
+        { label: "Turning Spindle Stop",    value: "M205" },
+        { label: "Tailstock Reverse (Home)",value: "M232" },
+      ],
+    },
+    {
+      title: "Thru Spindle Air",
+      icon: "~",
+      items: [
+        { label: "i300", value: "M132 — Turning Only" },
+        { label: "i200", value: "M132 — Turning & Milling" },
+      ],
+    },
+  ];
+
+  return (
+    <div style={{ paddingBottom: 32 }}>
+      {sections.map(({ title, sub, items }) => (
+        <div key={title} style={{ margin: "12px 16px 0" }}>
+          <div style={{ fontSize: 10, fontWeight: 700, color: "var(--text3)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 8, paddingLeft: 2 }}>
+            {title}
+          </div>
+          {sub && (
+            <div style={{ fontSize: 11, color: "var(--text3)", marginBottom: 6, paddingLeft: 2 }}>{sub}</div>
+          )}
+          <div style={{ background: "var(--surface)", borderRadius: 14, border: "1px solid var(--border)", overflow: "hidden" }}>
+            {items.map(({ label, value }, i) => (
+              <div key={label} style={{
+                display: "flex", justifyContent: "space-between", alignItems: "center",
+                padding: "13px 16px",
+                borderBottom: i < items.length - 1 ? "1px solid var(--border)" : "none",
+              }}>
+                <span style={{ fontSize: 13, fontWeight: 600, color: "var(--text2)" }}>{label}</span>
+                <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 13, fontWeight: 500, color: value === "—" ? "var(--text3)" : "var(--accent)", textAlign: "right", maxWidth: "60%" }}>{value}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function App() {
   const [tab, setTab] = useState("endmill");
@@ -2022,15 +2566,14 @@ export default function App() {
         </div>
         <div className="desktop-body">
           <div className="desktop-selections">
-            {tab === "endmill" && <EndmillView onResult={setResultNode} />}
-            {tab === "drill"   && <DrillView   onResult={setResultNode} />}
-            {tab === "tap"     && <TapView     onResult={setResultNode} />}
-            {tab === "turning" && <TurningView />}
-            {tab === "calc"        && <CalcView onResult={setResultNode} />}
+            {tab === "endmill"     && <EndmillView      onResult={setResultNode} />}
+            {tab === "drill"       && <DrillView        onResult={setResultNode} />}
+            {tab === "tap"         && <TapView          onResult={setResultNode} />}
+            {tab === "turning"     && <TurningView onResult={setResultNode} />}
+            {tab === "calc"        && <CalcView         onResult={setResultNode} />}
+            {tab === "keyway"      && <KeywayView       onResult={setResultNode} />}
+            {tab === "countersink" && <CountersinkView  onResult={setResultNode} />}
             {tab === "ref"         && <RefView />}
-            {tab === "keyway"      && <KeywayView onResult={setResultNode} />}
-            {tab === "countersink" && <CountersinkView onResult={setResultNode} />}
-            {tab === "links"       && <LinksView />}
           </div>
           <div className="desktop-result">
             {resultNode ?? (
@@ -2043,8 +2586,8 @@ export default function App() {
                     <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
                   </svg>
                 </div>
-                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 600, color: "#374151" }}>No result yet</div>
-                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "#6b7280", textAlign: "center", maxWidth: 200, lineHeight: 1.6 }}>
+                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 600, color: "var(--text2)" }}>No result yet</div>
+                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "var(--text3)", textAlign: "center", maxWidth: 200, lineHeight: 1.6 }}>
                   Make your selections on the left to see results
                 </div>
               </div>
