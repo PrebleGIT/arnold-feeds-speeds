@@ -127,10 +127,10 @@ const DRILL_DATA = {
 };
 
 const INDEXABLE_DATA = {
-  "Aluminum":   { sfm: 800, cl: ".005" },
-  "CRS":        { sfm: 450, cl: ".003" },
-  "Stainless":  { sfm: 400, cl: ".003" },
-  "Tool Steel": { sfm: 400, cl: ".003" },
+  "Aluminum":   { sfm: "800 – 1500", cl: ".004 – .014", sfmMid: 800,  clMid: ".005" },
+  "CRS":        { sfm: "200 – 725",  cl: ".002 – .010", sfmMid: 500,  clMid: ".003" },
+  "Stainless":  { sfm: "80 – 250",   cl: ".002 – .006", sfmMid: 400,  clMid: ".003" },
+  "Tool Steel": { sfm: "200 – 500",  cl: ".002 – .008", sfmMid: 400,  clMid: ".003" },
 };
 
 const SPADE_DATA = {
@@ -372,6 +372,7 @@ const css = `
     .pill { font-size: 15px; padding: 14px 10px; }
     .tool-btn { font-size: 16px; padding: 15px 18px; }
     .dia-pill { font-size: 13px; padding: 13px 6px; }
+    .tap-size-btn { font-size: 13px; padding: 12px 6px; }
     .result-card { margin: 0; }
   }
 `// ─── VIEWS ────────────────────────────────────────────────────────────────────
@@ -631,12 +632,16 @@ function DrillView({ onResult }) {
     } else if (idxResult) {
       onResult(
         <div className="result-card">
-          <div className="result-eyebrow">Sumitomo Flat Bottom Drill</div>
+          <div className="result-eyebrow">Sumitomo Flat Bottom Drill · WDX Series</div>
           <div className="result-grid">
-            <div className="result-stat"><div className="result-stat-label">SFM</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 32, color: "#60a5fa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{idxResult.sfm}</div><div className="result-stat-unit">surface ft / min</div></div>
-            <div className="result-stat"><div className="result-stat-label">Feed / Rev</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 32, color: "#34d399", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{idxResult.cl}</div><div className="result-stat-unit">in / rev</div></div>
+            <div className="result-stat"><div className="result-stat-label">SFM Range</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 16, color: "#60a5fa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{idxResult.sfm}</div><div className="result-stat-unit">surface ft / min</div></div>
+            <div className="result-stat"><div className="result-stat-label">IPR Range</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 16, color: "#34d399", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{idxResult.cl}</div><div className="result-stat-unit">in / rev</div></div>
           </div>
-          <div className="result-context">{material} · Sumitomo Flat Bottom</div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 10 }}>
+            <div className="result-stat"><div className="result-stat-label">Recommended SFM</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 26, color: "#fb923c", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{idxResult.sfmMid}</div><div className="result-stat-unit">ft / min</div></div>
+            <div className="result-stat"><div className="result-stat-label">Recommended IPR</div><div style={{ fontFamily: "'DM Mono', monospace", fontSize: 26, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{idxResult.clMid}</div><div className="result-stat-unit">in / rev</div></div>
+          </div>
+          <div className="result-context">{material} · Sumitomo WDX Flat Bottom</div>
         </div>
       );
     } else if (spdResult) {
@@ -763,22 +768,24 @@ function DrillView({ onResult }) {
       {(drillType === "indexable" || drillType === "spade") && (idxResult || spdResult) && (() => {
         const r = idxResult || spdResult;
         const isSpade = drillType === "spade";
+        const label = isSpade ? "Sumitomo Spade Drill" : "Sumitomo Flat Bottom · WDX Series";
+        const ctx   = isSpade ? "Sumitomo Spade" : "Sumitomo WDX Flat Bottom";
         return (
           <div className="result-card">
-            <div className="result-eyebrow">{isSpade ? "Sumitomo Spade Drill" : "Sumitomo Flat Bottom Drill"}</div>
+            <div className="result-eyebrow">{label}</div>
             <div className="result-grid">
               <div className="result-stat">
                 <div className="result-stat-label">SFM Range</div>
-                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: isSpade ? 16 : 32, color: "#60a5fa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{r.sfm}</div>
+                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 16, color: "#60a5fa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{r.sfm}</div>
                 <div className="result-stat-unit">surface ft / min</div>
               </div>
               <div className="result-stat">
                 <div className="result-stat-label">IPR Range</div>
-                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: isSpade ? 16 : 26, color: "#34d399", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{r.cl}</div>
+                <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 16, color: "#34d399", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{r.cl}</div>
                 <div className="result-stat-unit">in / rev</div>
               </div>
             </div>
-            {isSpade && r.sfmMid && (
+            {r.sfmMid && (
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 10 }}>
                 <div className="result-stat">
                   <div className="result-stat-label">Recommended SFM</div>
@@ -792,7 +799,7 @@ function DrillView({ onResult }) {
                 </div>
               </div>
             )}
-            <div className="result-context">{material} · {isSpade ? "Sumitomo Spade" : "Sumitomo Flat Bottom"} Drill</div>
+            <div className="result-context">{material} · {ctx}</div>
           </div>
         );
       })()}
@@ -938,19 +945,14 @@ function TapView({ onResult }) {
         <>
           <div className="section" ref={sizeRef}>
             <div className="section-label">Tap Size</div>
-            <div className="tool-list">
+            <div className="tap-size-grid">
               {NPT_TAPS.map(row => (
                 <button key={row.tap}
                   onClick={() => { setTapSize(row.tap); }}
-                  className={`tool-btn${tapSize === row.tap ? " selected" : ""}`}
-                  style={{ flexDirection: "column", alignItems: "flex-start", gap: 3 }}>
-                  <div style={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center" }}>
-                    <span>{row.tap}</span>
-                    {tapSize === row.tap && <span className="check">✓</span>}
-                  </div>
-                  <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: tapSize === row.tap ? "rgba(45,127,249,0.7)" : "var(--text3)", fontWeight: 400 }}>
-                    Drill: {row.drill}
-                  </span>
+                  className={`tap-size-btn${tapSize === row.tap ? " active" : ""}`}
+                  style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, padding: "10px 4px" }}>
+                  <span style={{ fontSize: 12 }}>{row.tap}</span>
+                  <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, color: tapSize === row.tap ? "rgba(45,127,249,0.75)" : "var(--text3)", fontWeight: 400, lineHeight: 1.2, textAlign: "center" }}>{row.drill.split(' ')[0]}</span>
                 </button>
               ))}
             </div>
@@ -1026,8 +1028,10 @@ function TapView({ onResult }) {
             <div className="tap-size-grid">
               {(system ? tapData : CUT_TAP_INCH).map(row => (
                 <button key={row.tap} onClick={() => { setTapSize(row.tap); setMaterial(""); }}
-                  className={`tap-size-btn${tapSize === row.tap ? " active" : ""}`}>
-                  {row.tap}
+                  className={`tap-size-btn${tapSize === row.tap ? " active" : ""}`}
+                  style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, padding: "10px 4px" }}>
+                  <span style={{ fontSize: 12 }}>{row.tap}</span>
+                  <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, color: tapSize === row.tap ? "rgba(45,127,249,0.75)" : "var(--text3)", fontWeight: 400, lineHeight: 1.2, textAlign: "center" }}>{row.drill.split(' ')[0]}</span>
                 </button>
               ))}
             </div>
@@ -1143,26 +1147,26 @@ const KEYWAY_DATA = {
   "2-9/16":  { "1/8":".0015","3/16":".0034","1/4":".0061","5/16":".0094","3/8":".0142","7/16":".0189","1/2":".0247","9/16":".0313","5/8":".0387","11/16":".047","3/4":".0561","13/16":".0661","7/8":".0771","15/16":".0889","1":".1016" },
   "2-5/8":   { "1/8":".0015","3/16":".0033","1/4":".006","5/16":".009","3/8":".0139","7/16":".0185","1/2":".0242","9/16":".0305","5/8":".0378","11/16":".0459","3/4":".0548","13/16":".0645","7/8":".0751","15/16":".0867","1":".0989" },
   "2-11/16": { "1/8":".0014","3/16":".0032","1/4":".0059","5/16":".0089","3/8":".0136","7/16":".018","1/2":".0236","9/16":".0293","5/8":".037","11/16":".0447","3/4":".0531","13/16":".0629","7/8":".0733","15/16":".0845","1":".0968" },
-  "2-3/4":   { "1/8":".0014","3/16":".0031","1/4":".0058","5/16":".0088","3/8":".0133","7/16":".0176","1/2":".023","9/16":".0285","5/8":".0352","11/16":".0427","3/4":".051","13/16":".06","7/8":".0699","15/16":".0804","1":".092" },
-  "2-13/16": { "1/8":".0014","3/16":".0031","1/4":".0057","5/16":".0086","3/8":".0129","7/16":".0172","1/2":".0226","9/16":".0278","5/8":".0344","11/16":".0417","3/4":".0498","13/16":".0587","7/8":".0682","15/16":".0786","1":".0898" },
-  "2-7/8":   { "1/8":".0013","3/16":".003","1/4":".0056","5/16":".0084","3/8":".0126","7/16":".0168","1/2":".022","9/16":".0278","5/8":".0336","11/16":".0408","3/4":".0487","13/16":".0573","7/8":".067","15/16":".0769","1":".0877" },
-  "2-15/16": { "1/8":".0013","3/16":".003","1/4":".0054","5/16":".0083","3/8":".0122","7/16":".0164","1/2":".0216","9/16":".0273","5/8":".0329","11/16":".04","3/4":".0477","13/16":".0561","7/8":".0652","15/16":".0752","1":".0858" },
-  "3":       { "1/8":".0013","3/16":".0029","1/4":".0053","5/16":".0081","3/8":".0119","7/16":".0161","1/2":".0211","9/16":".0266","5/8":".0329","11/16":".0391","3/4":".0466","13/16":".0549","7/8":".0639","15/16":".0735","1":".0841" },
-  "3-1/16":  { "3/16":".0029","1/4":".0052","5/16":".008","3/8":".0116","7/16":".0155","1/2":".0202","9/16":".0256","5/8":".0316","11/16":".0382","3/4":".0455","13/16":".0538","7/8":".0625","15/16":".0721","1":".0821" },
-  "3-1/8":   { "3/16":".0028","1/4":".0051","5/16":".0078","3/8":".0114","7/16":".0152","1/2":".0198","9/16":".0251","5/8":".031","11/16":".0375","3/4":".0447","13/16":".0526","7/8":".0613","15/16":".0705","1":".0805" },
-  "3-3/16":  { "1/4":".005","5/16":".0076","3/8":".0112","7/16":".0149","1/2":".0194","9/16":".0246","5/8":".0304","11/16":".0369","3/4":".0439","13/16":".0517","7/8":".06","15/16":".0691","1":".0789" },
-  "3-1/4":   { "1/4":".0049","5/16":".0075","3/8":".011","7/16":".0146","1/2":".0191","9/16":".0241","5/8":".0298","11/16":".0362","3/4":".043","13/16":".0506","7/8":".0589","15/16":".0677","1":".0773" },
-  "3-5/16":  { "1/4":".0048","5/16":".0074","3/8":".0108","7/16":".0143","1/2":".0187","9/16":".0237","5/8":".0292","11/16":".0354","3/4":".0421","13/16":".0497","7/8":".0578","15/16":".0664","1":".0752" },
-  "3-3/8":   { "1/4":".0047","5/16":".0072","3/8":".0106","7/16":".014","1/2":".0184","9/16":".0232","5/8":".0287","11/16":".0348","3/4":".0414","13/16":".0487","7/8":".0567","15/16":".0651","1":".0744" },
-  "3-7/16":  { "1/4":".0046","5/16":".0071","3/8":".0104","7/16":".0138","1/2":".018","9/16":".0228","5/8":".0282","11/16":".0342","3/4":".0406","13/16":".0478","7/8":".0555","15/16":".064","1":".073" },
-  "3-1/2":   { "1/4":".0045","5/16":".007","3/8":".0102","7/16":".0135","1/2":".0178","9/16":".0224","5/8":".0277","11/16":".0335","3/4":".04","13/16":".047","7/8":".0546","15/16":".0628","1":".0716" },
-  "3-9/16":  { "1/4":".0044","5/16":".0069","3/8":".0101","7/16":".0133","1/2":".0174","9/16":".022","5/8":".0269","11/16":".0329","3/4":".0392","13/16":".0461","7/8":".0536","15/16":".0618","1":".0704" },
-  "3-5/8":   { "1/4":".0043","5/16":".0067","3/8":".01","7/16":".0131","1/2":".0171","9/16":".0216","5/8":".0266","11/16":".0324","3/4":".0386","13/16":".0454","7/8":".0528","15/16":".0607","1":".0691" },
-  "3-11/16": { "1/4":".0042","5/16":".0066","3/8":".0099","7/16":".013","1/2":".0168","9/16":".0213","5/8":".0263","11/16":".0318","3/4":".038","13/16":".0447","7/8":".0519","15/16":".0596","1":".0679" },
-  "3-3/4":   { "1/4":".0042","5/16":".0065","3/8":".0098","7/16":".0128","1/2":".0166","9/16":".0209","5/8":".0258","11/16":".0313","3/4":".0379","13/16":".0438","7/8":".0509","15/16":".0584","1":".0667" },
-  "3-13/16": { "1/4":".0041","5/16":".0064","3/8":".0097","7/16":".0126","1/2":".0163","9/16":".0206","5/8":".0254","11/16":".0308","3/4":".0367","13/16":".0431","7/8":".05","15/16":".0576","1":".0656" },
-  "3-7/8":   { "1/4":".0041","5/16":".0063","3/8":".0096","7/16":".0124","1/2":".0161","9/16":".0202","5/8":".025","11/16":".0302","3/4":".0361","13/16":".0424","7/8":".0492","15/16":".0566","1":".0645" },
-  "3-15/16": { "1/4":".0041","5/16":".0062","3/8":".0095","7/16":".0123","1/2":".0161","9/16":".0199","5/8":".0246","11/16":".0297","3/4":".0355","13/16":".0417","7/8":".0485","15/16":".0557","1":".0636" },
+  "2-3/4":   { "1/8":".0014","3/16":".0031","1/4":".0058","5/16":".0088","3/8":".0133","7/16":".0176","1/2":".023","9/16":".0289","5/8":".036","11/16":".0437","3/4":".0521","13/16":".0614","7/8":".0715","15/16":".0824","1":".0941" },
+  "2-13/16": { "1/8":".0014","3/16":".0031","1/4":".0057","5/16":".0086","3/8":".0129","7/16":".0172","1/2":".0226","9/16":".0285","5/8":".0352","11/16":".0427","3/4":".051","13/16":".06","7/8":".0699","15/16":".0804","1":".092" },
+  "2-7/8":   { "1/8":".0013","3/16":".003","1/4":".0056","5/16":".0084","3/8":".0126","7/16":".0168","1/2":".022","9/16":".0278","5/8":".0344","11/16":".0417","3/4":".0498","13/16":".0587","7/8":".0682","15/16":".0786","1":".0898" },
+  "2-15/16": { "1/8":".0013","3/16":".003","1/4":".0054","5/16":".0083","3/8":".0122","7/16":".0164","1/2":".0216","9/16":".0273","5/8":".0336","11/16":".0408","3/4":".0487","13/16":".0573","7/8":".067","15/16":".0769","1":".0877" },
+  "3":       { "1/8":".0013","3/16":".0029","1/4":".0053","5/16":".0081","3/8":".0119","7/16":".0161","1/2":".0211","9/16":".0266","5/8":".0329","11/16":".04","3/4":".0477","13/16":".0561","7/8":".0652","15/16":".0752","1":".0858" },
+  "3-1/16":  { "3/16":".0029","1/4":".0052","5/16":".008","3/8":".0116","7/16":".0158","1/2":".0207","9/16":".0261","5/8":".0322","11/16":".0391","3/4":".0466","13/16":".0549","7/8":".0639","15/16":".0735","1":".0841" },
+  "3-1/8":   { "3/16":".0028","1/4":".0051","5/16":".0078","3/8":".0114","7/16":".0155","1/2":".0202","9/16":".0256","5/8":".0316","11/16":".0382","3/4":".0455","13/16":".0538","7/8":".0625","15/16":".0721","1":".0821" },
+  "3-3/16":  { "1/4":".005","5/16":".0076","3/8":".0112","7/16":".0152","1/2":".0198","9/16":".0251","5/8":".031","11/16":".0375","3/4":".0447","13/16":".0526","7/8":".0613","15/16":".0705","1":".0805" },
+  "3-1/4":   { "1/4":".0049","5/16":".0075","3/8":".011","7/16":".0149","1/2":".0194","9/16":".0246","5/8":".0304","11/16":".0369","3/4":".0439","13/16":".0517","7/8":".06","15/16":".0691","1":".0789" },
+  "3-5/16":  { "1/4":".0048","5/16":".0074","3/8":".0108","7/16":".0146","1/2":".0191","9/16":".0241","5/8":".0298","11/16":".0362","3/4":".043","13/16":".0506","7/8":".0589","15/16":".0677","1":".0773" },
+  "3-3/8":   { "1/4":".0047","5/16":".0072","3/8":".0106","7/16":".0143","1/2":".0187","9/16":".0237","5/8":".0292","11/16":".0354","3/4":".0421","13/16":".0497","7/8":".0578","15/16":".0664","1":".0752" },
+  "3-7/16":  { "1/4":".0046","5/16":".0071","3/8":".0104","7/16":".014","1/2":".0184","9/16":".0232","5/8":".0287","11/16":".0348","3/4":".0414","13/16":".0487","7/8":".0567","15/16":".0651","1":".0744" },
+  "3-1/2":   { "1/4":".0045","5/16":".007","3/8":".0102","7/16":".0138","1/2":".018","9/16":".0228","5/8":".0282","11/16":".0342","3/4":".0406","13/16":".0478","7/8":".0555","15/16":".064","1":".073" },
+  "3-9/16":  { "1/4":".0044","5/16":".0069","3/8":".0101","7/16":".0135","1/2":".0178","9/16":".0224","5/8":".0277","11/16":".0335","3/4":".04","13/16":".047","7/8":".0546","15/16":".0628","1":".0716" },
+  "3-5/8":   { "1/4":".0043","5/16":".0067","3/8":".01","7/16":".0133","1/2":".0174","9/16":".022","5/8":".0269","11/16":".0329","3/4":".0392","13/16":".0461","7/8":".0536","15/16":".0618","1":".0704" },
+  "3-11/16": { "1/4":".0042","5/16":".0066","3/8":".0099","7/16":".0131","1/2":".0171","9/16":".0216","5/8":".0266","11/16":".0324","3/4":".0386","13/16":".0454","7/8":".0528","15/16":".0607","1":".0691" },
+  "3-3/4":   { "1/4":".0042","5/16":".0065","3/8":".0098","7/16":".0128","1/2":".0168","9/16":".0213","5/8":".0263","11/16":".0318","3/4":".038","13/16":".0447","7/8":".0519","15/16":".0596","1":".0679" },
+  "3-13/16": { "1/4":".0041","5/16":".0064","3/8":".0097","7/16":".0126","1/2":".0166","9/16":".0209","5/8":".0258","11/16":".0313","3/4":".0379","13/16":".0438","7/8":".0509","15/16":".0584","1":".0667" },
+  "3-7/8":   { "1/4":".0041","5/16":".0063","3/8":".0096","7/16":".0124","1/2":".0163","9/16":".0206","5/8":".0254","11/16":".0308","3/4":".0367","13/16":".0431","7/8":".05","15/16":".0576","1":".0656" },
+  "3-15/16": { "1/4":".0041","5/16":".0062","3/8":".0095","7/16":".0123","1/2":".0161","9/16":".0202","5/8":".025","11/16":".0302","3/4":".0361","13/16":".0424","7/8":".0492","15/16":".0566","1":".0645" },
   "4":       { "1/4":".004","5/16":".0061","3/8":".0094","7/16":".0121","1/2":".016","9/16":".0199","5/8":".0246","11/16":".0297","3/4":".0355","13/16":".0417","7/8":".0485","15/16":".0557","1":".0636" },
 };
 
@@ -2519,7 +2523,7 @@ function RefView() {
           <div style={{ background: "var(--surface)", borderBottom: "1px solid var(--border)", padding: "10px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
             <div>
               <div style={{ fontSize: 15, fontWeight: 700, color: "var(--text1)" }}>Sumitomo SMD Series</div>
-              <div style={{ fontSize: 11, color: "var(--text3)" }}>Page {smdPage + 1} of {SMD_PAGES.length} · Replaceable Tip Drills</div>
+              <div style={{ fontSize: 11, color: "var(--text3)" }}>Page {smdPage + 1} of {SMD_PAGES.length} · Spade Drills — Ranges &amp; Recommended</div>
             </div>
             <button onClick={() => setShowSmd(false)} style={{ background: "var(--surface2)", border: "none", borderRadius: 8, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: "var(--text2)", cursor: "pointer" }}>✕ Close</button>
           </div>
@@ -2546,7 +2550,7 @@ function RefView() {
           <div style={{ background: "var(--surface)", borderBottom: "1px solid var(--border)", padding: "10px 16px", display: "flex", alignItems: "center", justifyContent: "space-between", flexShrink: 0 }}>
             <div>
               <div style={{ fontSize: 15, fontWeight: 700, color: "var(--text1)" }}>Sumitomo WDX Series</div>
-              <div style={{ fontSize: 11, color: "var(--text3)" }}>Page {wdxPage + 1} of {WDX_PAGES.length}</div>
+              <div style={{ fontSize: 11, color: "var(--text3)" }}>Page {wdxPage + 1} of {WDX_PAGES.length} · Flat Bottom Drills — Ranges &amp; Recommended</div>
             </div>
             <button onClick={() => setShowWdx(false)} style={{ background: "var(--surface2)", border: "none", borderRadius: 8, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: "var(--text2)", cursor: "pointer" }}>✕ Close</button>
           </div>
