@@ -1,4 +1,55 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
+
+// Brings element into view when `trigger` changes — only if not already visible
+function useScrollRef(trigger) {
+  const ref = useRef(null);
+  const prevTrigger = useRef(undefined);
+  useEffect(() => {
+    const prev = prevTrigger.current;
+    prevTrigger.current = trigger;
+    if (!trigger || trigger === prev) return;
+    setTimeout(() => {
+      const el = ref.current;
+      if (!el) return;
+      // If this ref is an empty spacer before a result card, measure through to it
+      const measureEl = (el.offsetHeight < 4 && el.nextElementSibling) ? el.nextElementSibling : el;
+      // Find the scroll container (desktop) or use window (mobile)
+      let scroller = el.parentElement;
+      while (scroller) {
+        const oy = window.getComputedStyle(scroller).overflowY;
+        if ((oy === "auto" || oy === "scroll") && scroller.scrollHeight > scroller.clientHeight) break;
+        scroller = scroller.parentElement;
+      }
+      if (scroller) {
+        const elTop    = el.offsetTop - scroller.offsetTop;
+        const elBottom = (measureEl.offsetTop - scroller.offsetTop) + measureEl.offsetHeight;
+        const viewTop    = scroller.scrollTop;
+        const viewBottom = viewTop + scroller.clientHeight;
+        if (elBottom > viewBottom) {
+          const target = (elBottom - elTop) > scroller.clientHeight - 40
+            ? elTop - 24
+            : elBottom - scroller.clientHeight + 24;
+          scroller.scrollTo({ top: target, behavior: "smooth" });
+        } else if (elTop < viewTop) {
+          scroller.scrollTo({ top: elTop - 24, behavior: "smooth" });
+        }
+      } else {
+        const rect  = el.getBoundingClientRect();
+        const mRect = measureEl.getBoundingClientRect();
+        const vh = window.innerHeight;
+        if (mRect.bottom > vh - 16) {
+          const y = (mRect.bottom - rect.top) > vh - 100
+            ? window.scrollY + rect.top - 80
+            : window.scrollY + mRect.bottom - vh + 24;
+          window.scrollTo({ top: y, behavior: "smooth" });
+        } else if (rect.top < 70) {
+          window.scrollTo({ top: window.scrollY + rect.top - 80, behavior: "smooth" });
+        }
+      }
+    }, 80);
+  }, [trigger]);
+  return ref;
+}
 
 // ─── DATA ─────────────────────────────────────────────────────────────────────
 
@@ -180,7 +231,23 @@ const CUT_TAP_METRIC = [
   { tap: "M22 x 2.5",   pitch: "0.0984", drill: '19.5mm (.7677")',   sfm: { "Aluminum": 50.7, "CRS": 39.2, "Stainless": 29.9, "Tool Steel": 25.3 }, "Aluminum": { rpm: 224,  ipm: 22 }, "CRS": { rpm: 173,  ipm: 17 }, "Stainless": { rpm: 132,  ipm: 13 }, "Tool Steel": { rpm: 112,  ipm: 11 } },
   { tap: "M24 x 3",     pitch: "0.1181", drill: '21.0mm (.8268")',   sfm: { "Aluminum": 50.3, "CRS": 39.8, "Stainless": 29.3, "Tool Steel": 25.1 }, "Aluminum": { rpm: 203,  ipm: 24 }, "CRS": { rpm: 161,  ipm: 19 }, "Stainless": { rpm: 119,  ipm: 14 }, "Tool Steel": { rpm: 102,  ipm: 12 } },
 ];
-// ─── ARNOLD LOGO ──────────────────────────────────────────────────────────────
+const NPT_TAPS = [
+  { tap: '1/8 – 27',   tpi: 27,   pitch: "0.0370", drill: '11/32" (.3438")' },
+  { tap: '1/4 – 18',   tpi: 18,   pitch: "0.0556", drill: '7/16" (.4375")'  },
+  { tap: '3/8 – 18',   tpi: 18,   pitch: "0.0556", drill: '37/64" (.5781")' },
+  { tap: '1/2 – 14',   tpi: 14,   pitch: "0.0714", drill: '23/32" (.7188")' },
+  { tap: '3/4 – 14',   tpi: 14,   pitch: "0.0714", drill: '59/64" (.9219")' },
+  { tap: '1 – 11½',    tpi: 11.5, pitch: "0.0870", drill: '1-5/32" (1.156")'},
+  { tap: '1¼ – 11½',   tpi: 11.5, pitch: "0.0870", drill: '1-1/2" (1.500")' },
+  { tap: '1½ – 11½',   tpi: 11.5, pitch: "0.0870", drill: '1-3/4" (1.750")' },
+  { tap: '2 – 11½',    tpi: 11.5, pitch: "0.0870", drill: '2-7/32" (2.219")'},
+  { tap: '2½ – 8',     tpi: 8,    pitch: "0.1250", drill: '2-21/32" (2.656")'},
+  { tap: '3 – 8',      tpi: 8,    pitch: "0.1250", drill: '3-1/4" (3.250")' },
+  { tap: '3½ – 8',     tpi: 8,    pitch: "0.1250", drill: '3-3/4" (3.750")' },
+  { tap: '4 – 8',      tpi: 8,    pitch: "0.1250", drill: '4-1/4" (4.250")' },
+];
+
+
 
 // ─── STYLES ───────────────────────────────────────────────────────────────────
 
@@ -206,8 +273,10 @@ const css = `
     --green-border: rgba(74,222,128,0.30);
   }
 
-  body { background: var(--bg); }
-  .app { min-height: 100vh; background: var(--bg); font-family: 'DM Sans', sans-serif; max-width: 480px; margin: 0 auto; padding-bottom: 56px; }
+  html { background: var(--bg); }
+  html { background: var(--bg); }
+  body { background: var(--bg); overscroll-behavior: none; }
+  .app { min-height: 100vh; background: var(--bg); font-family: 'DM Sans', sans-serif; max-width: 480px; margin: 0 auto; padding-bottom: 50vh; }
 
   /* ── HEADER ── */
   .header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
@@ -293,8 +362,7 @@ const css = `
     .nav-tab { padding: 11px 14px; border-bottom: none; border-left: 3px solid transparent; border-radius: 10px; font-size: 13px; text-align: left; white-space: normal; }
     .nav-tab.active { border-left-color: var(--accent); border-bottom-color: transparent; background: var(--accent-bg); color: var(--accent); }
     .desktop-body { grid-column: 2; grid-row: 2 / 4; display: grid; grid-template-columns: 360px 1fr; overflow: hidden; height: 100%; }
-    .desktop-selections { overflow-y: auto; background: var(--bg); padding-bottom: 32px; border-right: 1px solid var(--border); }
-    .desktop-result { display: flex; overflow-y: auto; background: var(--bg); padding: 28px 24px; flex-direction: column; min-height: 0; }    .desktop-selections .result-card { display: none; }
+    .desktop-selections { overflow-y: auto; background: var(--bg); padding-bottom: 32px; border-right: 1px solid var(--border); }    .desktop-result { display: flex; overflow-y: auto; background: var(--bg); padding: 28px 24px; flex-direction: column; min-height: 0; }    .desktop-selections .result-card { display: none; }
     .desktop-selections .calc-result { display: none; }
     .desktop-result .result-card { display: block; margin: 0 0 16px 0; border-radius: 16px; }
     .desktop-result .result-stat-value { font-size: 42px; }
@@ -312,6 +380,10 @@ function EndmillView({ onResult }) {
   const [toolType, setToolType] = useState("");
   const [material, setMaterial] = useState("");
   const [diameter, setDiameter] = useState("");
+
+  const diaRef    = useScrollRef(toolType);
+  const matRef    = useScrollRef(diameter);
+  const resultRef = useScrollRef(material ? `${diameter}-${material}` : null);
 
   const toolData  = ENDMILL_DATA[toolType] ?? null;
   const diameters = toolData ? Object.keys(toolData.diameters) : [];
@@ -386,7 +458,7 @@ function EndmillView({ onResult }) {
         </div>
       </div>
 
-      <div className={`section${!toolType ? " locked" : ""}`}>
+      <div className={`section${!toolType ? " locked" : ""}`} ref={diaRef}>
         <div className="section-label">Diameter (inches)</div>
         <div style={ isShellMill ? { display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 7 } : undefined }
              className={ isShellMill ? undefined : "dia-grid" }>
@@ -405,14 +477,14 @@ function EndmillView({ onResult }) {
       </div>
 
       {toolData && (
-        <div className={`section${!diameter ? " locked" : ""}`}>
+        <div className={`section${!diameter ? " locked" : ""}`} ref={matRef}>
           <div className="section-label">Material</div>
           <div className="pill-grid">
             {allMaterials.map(m => {
               const isDisabled = m === "Stainless" && !isShellMill;
               return (
                 <button key={m}
-                  onClick={() => { if (!isDisabled) setMaterial(m); }}
+                  onClick={() => { if (!isDisabled) { setMaterial(m); } }}
                   className={`pill${material === m ? " sel-green" : ""}`}
                   style={isDisabled ? { opacity: 0.35, cursor: "default", pointerEvents: "none" } : {}}>
                   {m}
@@ -423,7 +495,7 @@ function EndmillView({ onResult }) {
         </div>
       )}
       {!toolData && (
-        <div className="section locked">
+        <div className="section locked" ref={matRef}>
           <div className="section-label">Material</div>
           <div className="pill-grid">
             {["Aluminum","CRS","Stainless","Tool Steel"].map(m => (
@@ -433,6 +505,7 @@ function EndmillView({ onResult }) {
         </div>
       )}
 
+      <div ref={resultRef} />
       {result && (() => {
         const dia = parseFloat(diameter);
         const sfm = Math.round((result.rpm * dia * Math.PI) / 12);
@@ -525,6 +598,10 @@ function DrillView({ onResult }) {
   const [drillType, setDrillType] = useState("");
   const [material,  setMaterial]  = useState("");
   const [diameter,  setDiameter]  = useState("");
+
+  const matRef    = useScrollRef(drillType);
+  const diaRef    = useScrollRef(drillType === "solid" ? material : null);
+  const resultRef = useScrollRef(drillType === "solid" ? (diameter ? `${material}-${diameter}` : null) : material);
 
   const solidResult = drillType === "solid" && material && diameter ? DRILL_DATA[diameter]?.[material] ?? null : null;
   const idxResult   = drillType === "indexable" && material ? INDEXABLE_DATA[material] : null;
@@ -623,7 +700,7 @@ function DrillView({ onResult }) {
       </div>
 
       {/* Material — locked until drill type selected */}
-      <div className={`section${!drillType ? " locked" : ""}`}>
+      <div className={`section${!drillType ? " locked" : ""}`} ref={matRef}>
         <div className="section-label">Material</div>
         <div className="pill-grid">
           {(drillType === "solid" ? DRILL_MATERIALS : drillType === "sandvik" ? SANDVIK_MATERIALS : drillType ? sfmMats : DRILL_MATERIALS).map(m => (
@@ -635,17 +712,18 @@ function DrillView({ onResult }) {
 
       {/* Diameter — solid carbide only, locked until material selected */}
       {(drillType === "solid" || !drillType) && (
-        <div className={`section${!material ? " locked" : ""}`}>
+        <div className={`section${!material ? " locked" : ""}`} ref={diaRef}>
           <div className="section-label">Drill Diameter (inches)</div>
           <div className="dia-grid">
             {Object.keys(DRILL_DATA).map(d => (
-              <button key={d} onClick={() => setDiameter(d)}
+              <button key={d} onClick={() => { setDiameter(d); }}
                 className={`dia-pill${diameter === d ? " sel-blue" : ""}`}>{Number(d).toFixed(4)}"</button>
             ))}
           </div>
         </div>
       )}
 
+      <div ref={resultRef} />
       {solidResult && (() => {
         const dia = parseFloat(diameter);
         const sfm  = Math.round((solidResult.rpm * dia * Math.PI) / 12);
@@ -742,10 +820,15 @@ function DrillView({ onResult }) {
 }
 
 function TapView({ onResult }) {
-  const [mode,     setMode]     = useState("");       // "form" | "cut" | "thread"
+  const [mode,     setMode]     = useState("");
   const [system,   setSystem]   = useState("");
   const [tapSize,  setTapSize]  = useState(null);
   const [material, setMaterial] = useState("");
+
+  const systemRef  = useScrollRef(mode && mode !== "thread" ? mode : null);
+  const sizeRef    = useScrollRef(system ? `${mode}-${system}` : null);
+  const matRef     = useScrollRef(tapSize && mode !== "npt" ? tapSize : null);
+  const resultRef  = useScrollRef(material ? `${tapSize}-${material}` : (mode === "npt" && tapSize ? tapSize : null));
 
   const tapData = mode === "form"
     ? (system === "inch" ? FORM_TAP_INCH : system === "metric" ? FORM_TAP_METRIC : [])
@@ -758,6 +841,8 @@ function TapView({ onResult }) {
   const isMetric  = system === "metric";
   const drillLabel = mode === "form" ? "Form Drill" : "Tap Drill";
   const typeLabel  = mode === "form" ? "Form Tap" : "Cut Tap";
+
+  const nptSelected = mode === "npt" && tapSize ? NPT_TAPS.find(r => r.tap === tapSize) : null;
 
   function switchSystem(s) { setSystem(s); setTapSize(null); setMaterial(""); }
   function switchMode(m)   { setMode(m);   setSystem(""); setTapSize(null); setMaterial(""); }
@@ -793,7 +878,7 @@ function TapView({ onResult }) {
             </div>
             <div className="result-stat">
               <div className="result-stat-label">{drillLabel}</div>
-              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: "#f9fafb", fontWeight: 500, lineHeight: 1.3, marginTop: 4 }}>{selected.drill}</div>
+              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: "var(--text1)", fontWeight: 500, lineHeight: 1.3, marginTop: 4 }}>{selected.drill}</div>
             </div>
             <div className="result-stat">
               <div className="result-stat-label">Pitch</div>
@@ -803,22 +888,101 @@ function TapView({ onResult }) {
           </div>
         </div>
       );
+     
+    } else if (mode === "npt" && nptSelected) {
+      onResult(
+        <div className="result-card">
+          <div className="result-eyebrow">NPT Tap · {nptSelected.tap}</div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 4 }}>
+            <div className="result-stat">
+              <div className="result-stat-label">Tap Drill</div>
+              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 13, color: "var(--text1)", fontWeight: 500, lineHeight: 1.4, marginTop: 4 }}>{nptSelected.drill}</div>
+            </div>
+            <div className="result-stat">
+              <div className="result-stat-label">Pitch</div>
+              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 18, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{nptSelected.pitch}"</div>
+              <div className="result-stat-unit">in / rev</div>
+            </div>
+          </div>
+          <div style={{ marginTop: 10 }}>
+            <div className="result-stat" style={{ textAlign: "center" }}>
+              <div className="result-stat-label">TPI</div>
+              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 32, color: "#60a5fa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{nptSelected.tpi}</div>
+              <div className="result-stat-unit">threads / in</div>
+            </div>
+          </div>
+          <div className="result-context">Speeds &amp; feeds coming soon</div>
+        </div>
+      );
+     
     } else if (mode !== "thread") {
       onResult(null);
     }
-  }, [selected, sf, material, isMetric, mode, typeLabel, drillLabel]);
+  }, [selected, sf, material, isMetric, mode, typeLabel, drillLabel, nptSelected]);
 
   return (
     <>
       {/* Type */}
       <div className="section">
         <div className="section-label">Type</div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
           <button className={`pill${mode === "form"   ? " sel-green" : ""}`} onClick={() => switchMode("form")}>Form Tap</button>
           <button className={`pill${mode === "cut"    ? " sel-green" : ""}`} onClick={() => switchMode("cut")}>Cut Tap</button>
+          <button className={`pill${mode === "npt"    ? " sel-green" : ""}`} onClick={() => switchMode("npt")}>NPT Tap</button>
           <button className={`pill${mode === "thread" ? " sel-green" : ""}`} onClick={() => { switchMode("thread"); onResult && onResult(null); }}>Thread Dims</button>
         </div>
       </div>
+
+      {/* ── NPT TAP ── */}
+      {mode === "npt" && (
+        <>
+          <div className="section" ref={sizeRef}>
+            <div className="section-label">Tap Size</div>
+            <div className="tool-list">
+              {NPT_TAPS.map(row => (
+                <button key={row.tap}
+                  onClick={() => { setTapSize(row.tap); }}
+                  className={`tool-btn${tapSize === row.tap ? " selected" : ""}`}
+                  style={{ flexDirection: "column", alignItems: "flex-start", gap: 3 }}>
+                  <div style={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center" }}>
+                    <span>{row.tap}</span>
+                    {tapSize === row.tap && <span className="check">✓</span>}
+                  </div>
+                  <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: tapSize === row.tap ? "rgba(45,127,249,0.7)" : "var(--text3)", fontWeight: 400 }}>
+                    Drill: {row.drill}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div ref={resultRef} />
+          {nptSelected && (
+            <div className="result-card">
+              <div className="result-eyebrow">NPT Tap · {nptSelected.tap}</div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 4 }}>
+                <div className="result-stat">
+                  <div className="result-stat-label">Tap Drill</div>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 13, color: "var(--text1)", fontWeight: 500, lineHeight: 1.4, marginTop: 4 }}>{nptSelected.drill}</div>
+                </div>
+                <div className="result-stat">
+                  <div className="result-stat-label">Pitch</div>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 18, color: "#a78bfa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{nptSelected.pitch}"</div>
+                  <div className="result-stat-unit">in / rev</div>
+                </div>
+              </div>
+              <div style={{ marginTop: 10 }}>
+                <div className="result-stat" style={{ textAlign: "center" }}>
+                  <div className="result-stat-label">TPI</div>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 32, color: "#60a5fa", fontWeight: 500, lineHeight: 1, marginTop: 4 }}>{nptSelected.tpi}</div>
+                  <div className="result-stat-unit">threads / in</div>
+                </div>
+              </div>
+              <div className="result-context">Speeds &amp; feeds coming soon</div>
+            </div>
+          )}
+        </>
+      )}
 
       {/* SFM Reference */}
       {(mode === "form" || mode === "cut") && (
@@ -845,7 +1009,7 @@ function TapView({ onResult }) {
       {/* ── FORM TAP / CUT TAP ── */}
       {(mode === "form" || mode === "cut") && (
         <>
-          <div className="section">
+          <div className="section" ref={systemRef}>
             <div className="section-label">Thread System</div>
             <div className="tool-list">
               <button className={`tool-btn${system === "inch"   ? " selected" : ""}`} onClick={() => switchSystem("inch")}>
@@ -857,7 +1021,7 @@ function TapView({ onResult }) {
             </div>
           </div>
 
-          <div className={`section${!system ? " locked" : ""}`}>
+          <div className={`section${!system ? " locked" : ""}`} ref={sizeRef}>
             <div className="section-label">Tap Size</div>
             <div className="tap-size-grid">
               {(system ? tapData : CUT_TAP_INCH).map(row => (
@@ -869,16 +1033,17 @@ function TapView({ onResult }) {
             </div>
           </div>
 
-          <div className={`section${!tapSize ? " locked" : ""}`}>
+          <div className={`section${!tapSize ? " locked" : ""}`} ref={matRef}>
             <div className="section-label">Material</div>
             <div className="pill-grid">
               {TAP_MATERIALS.map(m => (
-                <button key={m} onClick={() => setMaterial(m)}
+                <button key={m} onClick={() => { setMaterial(m); }}
                   className={`pill${material === m ? " sel-green" : ""}`}>{m}</button>
               ))}
             </div>
           </div>
 
+          <div ref={resultRef} />
           {selected && sf && (
             <div className="result-card">
               <div className="result-eyebrow">{typeLabel} · {selected.tap} · {material}</div>
@@ -1012,6 +1177,9 @@ function KeywayView({ onResult }) {
   const [shaft,  setShaft]  = useState("");
   const [keyway, setKeyway] = useState("");
 
+  const widthRef  = useScrollRef(shaft);
+  const resultRef = useScrollRef(keyway ? `${shaft}-${keyway}` : null);
+
   const availableKeyways = shaft
     ? Object.keys(KEYWAY_DATA[shaft]).sort((a, b) => KEYWAY_ORDER[a] - KEYWAY_ORDER[b])
     : [];
@@ -1051,7 +1219,7 @@ function KeywayView({ onResult }) {
         </div>
       </div>
 
-      <div className={`section${!shaft ? " locked" : ""}`}>
+      <div className={`section${!shaft ? " locked" : ""}`} ref={widthRef}>
         <div className="section-label">Keyway Width</div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 7 }}>
           {(shaft ? availableKeyways : KEYWAY_SIZES.slice(0, 8)).map(k => (
@@ -1065,6 +1233,7 @@ function KeywayView({ onResult }) {
         </div>
       </div>
 
+      <div ref={resultRef} />
       {result && (
         <div className="result-card">
           <div className="result-eyebrow">Keyway Depth</div>
@@ -1438,36 +1607,52 @@ function calcMetricThread(d, pitch, cls, internal) {
 }
 
 function ThreadDimView({ onResult }) {
-  const [system,   setSystem]   = useState("inch");
-  const [dir,      setDir]      = useState("external");
-  const [cls,      setCls]      = useState(2);
+  const [system,   setSystem]   = useState("");
+  const [dir,      setDir]      = useState("");
+  const [cls,      setCls]      = useState(null);
   const [preset,   setPreset]   = useState(null);
   const [custD,    setCustD]    = useState("");
   const [custTPI,  setCustTPI]  = useState("");
   const [custP,    setCustP]    = useState("");
-  const [mode,     setMode]     = useState("preset"); // "preset" | "custom"
+  const [mode,     setMode]     = useState("");
 
   const internal = dir === "internal";
   const presets  = system === "inch" ? INCH_PRESETS : METRIC_PRESETS;
 
+  // Reset everything below when system changes
+  function selectSystem(s) {
+    setSystem(s); setDir(""); setCls(null); setPreset(null);
+    setCustD(""); setCustTPI(""); setCustP(""); setMode("");
+  }
+
   let result = null;
-  if (mode === "preset" && preset) {
-    if (system === "inch") result = calcInchThread(preset.d, preset.tpi, cls, internal);
-    else result = calcMetricThread(preset.d, preset.p, cls, internal);
-  } else if (mode === "custom") {
-    const d = parseFloat(custD);
-    if (system === "inch") {
-      const tpi = parseFloat(custTPI);
-      if (d > 0 && tpi > 0) result = calcInchThread(d, tpi, cls, internal);
-    } else {
-      const p = parseFloat(custP);
-      if (d > 0 && p > 0) result = calcMetricThread(d, p, cls, internal);
+  if (system && dir && cls) {
+    if (mode === "preset" && preset) {
+      if (system === "inch") result = calcInchThread(preset.d, preset.tpi, cls, internal);
+      else result = calcMetricThread(preset.d, preset.p, cls, internal);
+    } else if (mode === "custom") {
+      const d = parseFloat(custD);
+      if (system === "inch") {
+        const tpi = parseFloat(custTPI);
+        if (d > 0 && tpi > 0) result = calcInchThread(d, tpi, cls, internal);
+      } else {
+        const p = parseFloat(custP);
+        if (d > 0 && p > 0) result = calcMetricThread(d, p, cls, internal);
+      }
     }
   }
 
   const unit = system === "inch" ? "in" : "mm";
   const threadLabel = mode === "preset" ? preset?.label
     : system === "inch" ? `${custD}" – ${custTPI} TPI` : `M${custD}×${custP}`;
+
+  const dirRef    = useScrollRef(system);
+  const clsRef    = useScrollRef(dir);
+  const modeRef   = useScrollRef(cls);
+  const sizeRef   = useScrollRef(mode ? `${mode}` : null);
+  const resultRef = useScrollRef(
+    result ? `${system}-${dir}-${cls}-${mode}-${preset?.label}-${custD}-${custTPI}-${custP}` : null
+  );
 
   useEffect(() => {
     if (!onResult) return;
@@ -1549,13 +1734,13 @@ function ThreadDimView({ onResult }) {
       <div className="section" style={{ marginTop:8 }}>
         <div className="section-label">Thread System</div>
         <div className="pill-grid">
-          <button className={`pill${system==="inch" ? " sel-green":""}`} onClick={() => { setSystem("inch"); setPreset(null); }}>Inch</button>
-          <button className={`pill${system==="metric" ? " sel-green":""}`} onClick={() => { setSystem("metric"); setPreset(null); }}>Metric</button>
+          <button className={`pill${system==="inch" ? " sel-green":""}`} onClick={() => selectSystem("inch")}>Inch</button>
+          <button className={`pill${system==="metric" ? " sel-green":""}`} onClick={() => selectSystem("metric")}>Metric</button>
         </div>
       </div>
 
       {/* External / Internal */}
-      <div className="section">
+      <div className={`section${!system ? " locked" : ""}`} ref={dirRef}>
         <div className="section-label">Thread Type</div>
         <div className="pill-grid">
           <button className={`pill${dir==="external" ? " sel-green":""}`} onClick={() => setDir("external")}>External</button>
@@ -1564,29 +1749,29 @@ function ThreadDimView({ onResult }) {
       </div>
 
       {/* Class */}
-      <div className="section">
+      <div className={`section${!dir ? " locked" : ""}`} ref={clsRef}>
         <div className="section-label">Thread Class</div>
         <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:8 }}>
           {[1,2,3].map(c => (
             <button key={c} className={`pill${cls===c ? " sel-green":""}`} onClick={() => setCls(c)}>
-              Class {c}{dir==="external" ? "A":"B"}
+              Class {c}{dir==="internal" ? "B":"A"}
             </button>
           ))}
         </div>
       </div>
 
       {/* Preset / Custom toggle */}
-      <div className="section">
+      <div className={`section${!cls ? " locked" : ""}`} ref={modeRef}>
         <div className="section-label">Size Selection</div>
         <div className="pill-grid">
-          <button className={`pill${mode==="preset" ? " sel-green":""}`} onClick={() => setMode("preset")}>Preset Sizes</button>
-          <button className={`pill${mode==="custom" ? " sel-green":""}`} onClick={() => setMode("custom")}>Custom</button>
+          <button className={`pill${mode==="preset" ? " sel-green":""}`} onClick={() => { setMode("preset"); setCustD(""); setCustTPI(""); setCustP(""); }}>Preset Sizes</button>
+          <button className={`pill${mode==="custom" ? " sel-green":""}`} onClick={() => { setMode("custom"); setPreset(null); }}>Custom</button>
         </div>
       </div>
 
       {/* Preset picker */}
       {mode === "preset" && (
-        <div className="section">
+        <div className="section" ref={sizeRef}>
           <div className="section-label">{system === "inch" ? "Inch Sizes" : "Metric Sizes"}</div>
           <div className="tap-size-grid">
             {presets.map(p => (
@@ -1603,7 +1788,7 @@ function ThreadDimView({ onResult }) {
 
       {/* Custom inputs */}
       {mode === "custom" && (
-        <div className="section">
+        <div className="section" ref={sizeRef}>
           <div className="section-label">Enter Dimensions</div>
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10 }}>
             <div className="calc-field">
@@ -1621,6 +1806,7 @@ function ThreadDimView({ onResult }) {
       )}
 
       {/* Result card */}
+      <div ref={resultRef} />
       {result && (
         <div className="result-card" style={{ marginTop:20 }}>
           <div className="result-eyebrow">
@@ -1838,6 +2024,10 @@ function TurningView({ onResult }) {
   const opData   = catData ? catData.operations.find(o => o.key === opKey) : null;
   const result   = opData && material ? opData.materials[material] : null;
 
+  const toolRef   = useScrollRef(category);
+  const matRef    = useScrollRef(opKey);
+  const resultRef = useScrollRef(material ? `${opKey}-${material}` : null);
+
   function selectCat(c) { setCategory(c); setOpKey(""); setMaterial(""); }
   function selectOp(k)  { setOpKey(k);   setMaterial(""); }
 
@@ -1878,6 +2068,7 @@ function TurningView({ onResult }) {
     if (!onResult) return;
     if (result && opData) {
       onResult(<ResultCard op={opData} mat={material} res={result} />);
+     
     } else {
       onResult(null);
     }
@@ -1900,7 +2091,7 @@ function TurningView({ onResult }) {
       </div>
 
       {/* Tool / Operation */}
-      <div className={`section${!category ? " locked" : ""}`}>
+      <div className={`section${!category ? " locked" : ""}`} ref={toolRef}>
         <div className="section-label">Tool</div>
         <div className="tool-list">
           {(catData ? catData.operations : []).map(op => (
@@ -1921,17 +2112,18 @@ function TurningView({ onResult }) {
       </div>
 
       {/* Material */}
-      <div className={`section${!opKey ? " locked" : ""}`}>
+      <div className={`section${!opKey ? " locked" : ""}`} ref={matRef}>
         <div className="section-label">Material</div>
         <div className="pill-grid">
           {TURNING_MATERIALS.map(m => (
-            <button key={m} onClick={() => setMaterial(m)}
+            <button key={m} onClick={() => { setMaterial(m); }}
               className={`pill${material === m ? " sel-green" : ""}`}>{m}</button>
           ))}
         </div>
       </div>
 
       {/* Inline result (mobile) */}
+      <div ref={resultRef} />
       {result && opData && <ResultCard op={opData} mat={material} res={result} />}
     </>
   );
@@ -1941,12 +2133,16 @@ function CountersinkView({ onResult }) {
   const [machine, setMachine] = useState("");
   const [system,  setSystem]  = useState("");
 
+  const systemRef = useScrollRef(machine);
+  const resultRef = useScrollRef(system);
+
   const angle = system === "metric" ? "90°" : system === "inch" ? "82°" : null;
   const label = system === "metric" ? "Metric (90°)" : system === "inch" ? "Inch (82°)" : null;
 
   useEffect(() => {
     if (!onResult) return;
     if (machine && angle) {
+     
       onResult(
         <div className="result-card">
           <div className="result-eyebrow">{machine} · {label}</div>
@@ -1980,20 +2176,21 @@ function CountersinkView({ onResult }) {
         </div>
       </div>
 
-      <div className={`section${!machine ? " locked" : ""}`}>
+      <div className={`section${!machine ? " locked" : ""}`} ref={systemRef}>
         <div className="section-label">Thread System</div>
         <div className="tool-list">
-          <button onClick={() => setSystem("inch")} className={`tool-btn${system === "inch" ? " selected" : ""}`}>
+          <button onClick={() => { setSystem("inch"); }} className={`tool-btn${system === "inch" ? " selected" : ""}`}>
             <span>Inch</span>
             <span style={{ fontSize: 11, color: system === "inch" ? "rgba(255,255,255,0.6)" : "#9ca3af", fontWeight: 400 }}>82°</span>
           </button>
-          <button onClick={() => setSystem("metric")} className={`tool-btn${system === "metric" ? " selected" : ""}`}>
+          <button onClick={() => { setSystem("metric"); }} className={`tool-btn${system === "metric" ? " selected" : ""}`}>
             <span>Metric</span>
             <span style={{ fontSize: 11, color: system === "metric" ? "rgba(255,255,255,0.6)" : "#9ca3af", fontWeight: 400 }}>90°</span>
           </button>
         </div>
       </div>
 
+      <div ref={resultRef} />
       {machine && angle && (
         <div className="result-card">
           <div className="result-eyebrow">{machine} · {label}</div>
@@ -2548,6 +2745,7 @@ export default function App() {
   const [tab, setTab] = useState("endmill");
   const [resultNode, setResultNode] = useState(null);
 
+
   return (
     <>
       <style>{css}</style>
@@ -2569,7 +2767,7 @@ export default function App() {
             {tab === "endmill"     && <EndmillView      onResult={setResultNode} />}
             {tab === "drill"       && <DrillView        onResult={setResultNode} />}
             {tab === "tap"         && <TapView          onResult={setResultNode} />}
-            {tab === "turning"     && <TurningView onResult={setResultNode} />}
+            {tab === "turning"     && <TurningView      onResult={setResultNode} />}
             {tab === "calc"        && <CalcView         onResult={setResultNode} />}
             {tab === "keyway"      && <KeywayView       onResult={setResultNode} />}
             {tab === "countersink" && <CountersinkView  onResult={setResultNode} />}
