@@ -231,6 +231,17 @@ const CUT_TAP_METRIC = [
   { tap: "M22 x 2.5",   pitch: "0.0984", drill: '19.5mm (.7677")',   sfm: { "Aluminum": 50.7, "CRS": 39.2, "Stainless": 29.9, "Tool Steel": 25.3 }, "Aluminum": { rpm: 224,  ipm: 22 }, "CRS": { rpm: 173,  ipm: 17 }, "Stainless": { rpm: 132,  ipm: 13 }, "Tool Steel": { rpm: 112,  ipm: 11 } },
   { tap: "M24 x 3",     pitch: "0.1181", drill: '21.0mm (.8268")',   sfm: { "Aluminum": 50.3, "CRS": 39.8, "Stainless": 29.3, "Tool Steel": 25.1 }, "Aluminum": { rpm: 203,  ipm: 24 }, "CRS": { rpm: 161,  ipm: 19 }, "Stainless": { rpm: 119,  ipm: 14 }, "Tool Steel": { rpm: 102,  ipm: 12 } },
 ];
+const OD_THREAD_DATA = {
+  11:  ".0551\"",
+  12:  ".0551\"",
+  13:  ".0551\"",
+  14:  ".0472\"",
+  16:  ".0394\"",
+  18:  ".0394\"",
+  20:  ".0315\"",
+  24:  ".0315\"",
+};
+
 const NPT_TAPS = [
   { tap: '1/8 – 27',   tpi: 27,   pitch: "0.0370", drill: '11/32" (.3438")' },
   { tap: '1/4 – 18',   tpi: 18,   pitch: "0.0556", drill: '7/16" (.4375")'  },
@@ -850,6 +861,8 @@ function TapView({ onResult }) {
   const typeLabel  = mode === "form" ? "Form Tap" : "Cut Tap";
 
   const nptSelected = mode === "npt" && tapSize ? NPT_TAPS.find(r => r.tap === tapSize) : null;
+  const odTpi       = mode === "od"  && tapSize ? parseInt(tapSize) : null;
+  const odPdx       = odTpi ? OD_THREAD_DATA[odTpi] : null;
 
   function switchSystem(s) { setSystem(s); setTapSize(null); setMaterial(""); }
   function switchMode(m)   { setMode(m);   setSystem(""); setTapSize(null); setMaterial(""); }
@@ -921,11 +934,28 @@ function TapView({ onResult }) {
           <div className="result-context">Speeds &amp; feeds coming soon</div>
         </div>
       );
-     
+    } else if (mode === "od" && odTpi) {
+      onResult(
+        <div className="result-card">
+          <div className="result-eyebrow">OD Threading · {odTpi} TPI</div>
+          {odPdx ? (
+            <div style={{ textAlign: "center", padding: "20px 0" }}>
+              <div className="result-stat-label" style={{ marginBottom: 12 }}>PDX Value</div>
+              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 52, fontWeight: 500, color: "#60a5fa", lineHeight: 1 }}>{odPdx}</div>
+              <div style={{ fontSize: 12, color: "var(--text3)", marginTop: 8 }}>edge of insert to center of 60° cutting edge</div>
+            </div>
+          ) : (
+            <div style={{ textAlign: "center", padding: "24px 0" }}>
+              <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 18, color: "var(--text3)" }}>{odTpi} TPI</div>
+              <div style={{ fontSize: 12, color: "var(--text3)", marginTop: 8 }}>PDX value coming soon</div>
+            </div>
+          )}
+        </div>
+      );
     } else if (mode !== "thread") {
       onResult(null);
     }
-  }, [selected, sf, material, isMetric, mode, typeLabel, drillLabel, nptSelected]);
+  }, [selected, sf, material, isMetric, mode, typeLabel, drillLabel, nptSelected, odTpi, odPdx]);
 
   return (
     <>
@@ -936,7 +966,8 @@ function TapView({ onResult }) {
           <button className={`pill${mode === "form"   ? " sel-green" : ""}`} onClick={() => switchMode("form")}>Form Tap</button>
           <button className={`pill${mode === "cut"    ? " sel-green" : ""}`} onClick={() => switchMode("cut")}>Cut Tap</button>
           <button className={`pill${mode === "npt"    ? " sel-green" : ""}`} onClick={() => switchMode("npt")}>NPT Tap</button>
-          <button className={`pill${mode === "thread" ? " sel-green" : ""}`} onClick={() => { switchMode("thread"); onResult && onResult(null); }}>Thread Dims</button>
+          <button className={`pill${mode === "od"     ? " sel-green" : ""}`} onClick={() => switchMode("od")}>OD Threading</button>
+          <button className={`pill${mode === "thread" ? " sel-green" : ""}`} onClick={() => { switchMode("thread"); onResult && onResult(null); }} style={{ gridColumn: "span 2" }}>Thread Dims</button>
         </div>
       </div>
 
@@ -1079,6 +1110,47 @@ function TapView({ onResult }) {
                   <div className="result-stat-unit">in / rev</div>
                 </div>
               </div>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* ── OD THREADING ── */}
+      {mode === "od" && (
+        <>
+          <div className="section" ref={sizeRef}>
+            <div className="section-label">TPI</div>
+            <div className="tap-size-grid">
+              {Object.keys(OD_THREAD_DATA).map(tpi => (
+                <button key={tpi}
+                  onClick={() => setTapSize(tpi)}
+                  className={`tap-size-btn${tapSize === tpi ? " active" : ""}`}
+                  style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, padding: "10px 4px" }}>
+                  <span style={{ fontSize: 13 }}>{tpi}</span>
+                  <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 9, color: tapSize === tpi ? "rgba(45,127,249,0.75)" : "var(--text3)", fontWeight: 400 }}>
+                    {OD_THREAD_DATA[parseInt(tpi)] ?? "—"}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div ref={resultRef} />
+          {odTpi && (
+            <div className="result-card">
+              <div className="result-eyebrow">OD Threading · {odTpi} TPI</div>
+              {odPdx ? (
+                <div style={{ textAlign: "center", padding: "20px 0" }}>
+                  <div className="result-stat-label" style={{ marginBottom: 12 }}>PDX Value</div>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 52, fontWeight: 500, color: "#60a5fa", lineHeight: 1 }}>{odPdx}</div>
+                  <div style={{ fontSize: 12, color: "var(--text3)", marginTop: 8 }}>edge of insert to center of 60° cutting edge</div>
+                </div>
+              ) : (
+                <div style={{ textAlign: "center", padding: "24px 0" }}>
+                  <div style={{ fontFamily: "'DM Mono', monospace", fontSize: 18, color: "var(--text3)" }}>{odTpi} TPI</div>
+                  <div style={{ fontSize: 12, color: "var(--text3)", marginTop: 8 }}>PDX value coming soon</div>
+                </div>
+              )}
             </div>
           )}
         </>
@@ -1503,8 +1575,16 @@ const INCH_PRESETS = [
   { label:"3/8-24 UNF",  d:0.3750, tpi:24  }, { label:"7/16-14 UNC", d:0.4375, tpi:14  },
   { label:"7/16-20 UNF", d:0.4375, tpi:20  }, { label:"1/2-13 UNC",  d:0.5000, tpi:13  },
   { label:"1/2-20 UNF",  d:0.5000, tpi:20  }, { label:"9/16-12 UNC", d:0.5625, tpi:12  },
-  { label:"5/8-11 UNC",  d:0.6250, tpi:11  }, { label:"3/4-10 UNC",  d:0.7500, tpi:10  },
-  { label:"7/8-9 UNC",   d:0.8750, tpi:9   }, { label:"1-8 UNC",     d:1.0000, tpi:8   },
+  { label:"5/8-11 UNC",  d:0.6250, tpi:11  }, { label:"5/8-18 UNF",  d:0.6250, tpi:18  },
+  { label:"3/4-10 UNC",  d:0.7500, tpi:10  }, { label:"3/4-16 UNF",  d:0.7500, tpi:16  },
+  { label:"7/8-9 UNC",   d:0.8750, tpi:9   }, { label:"7/8-14 UNF",  d:0.8750, tpi:14  },
+  { label:"1-8 UNC",     d:1.0000, tpi:8   }, { label:"1-12 UNF",    d:1.0000, tpi:12  },
+  { label:"1-1/8-7 UNC", d:1.1250, tpi:7   }, { label:"1-1/8-12 UNF",d:1.1250, tpi:12  },
+  { label:"1-1/4-7 UNC", d:1.2500, tpi:7   }, { label:"1-1/4-12 UNF",d:1.2500, tpi:12  },
+  { label:"1-3/8-6 UNC", d:1.3750, tpi:6   }, { label:"1-3/8-12 UNF",d:1.3750, tpi:12  },
+  { label:"1-1/2-6 UNC", d:1.5000, tpi:6   }, { label:"1-1/2-12 UNF",d:1.5000, tpi:12  },
+  { label:"1-3/4-5 UNC", d:1.7500, tpi:5   },
+  { label:"2-4.5 UNC",   d:2.0000, tpi:4.5 },
 ];
 
 const METRIC_PRESETS = [
