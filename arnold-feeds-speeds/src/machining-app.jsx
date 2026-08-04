@@ -3160,6 +3160,9 @@ export default function App() {
             <div className="header-title">Technical Data</div>
             <div className="header-sub">Shop Reference</div>
           </div>
+          <button onClick={openEdit} style={{ padding: "7px 14px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--surface2)", color: "var(--text2)", fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 600, cursor: "pointer", flexShrink: 0 }}>
+            Edit
+          </button>
         </div>
         <div className="nav-tabs">
           {TABS.map(t => (
@@ -3198,6 +3201,33 @@ export default function App() {
           </div>
         </div>
       </div>
+
+      {/* Auth Modal */}
+      {showAuth && (
+        <div style={{ position:"fixed", inset:0, zIndex:300, background:"rgba(0,0,0,0.7)", display:"flex", alignItems:"center", justifyContent:"center", padding:24 }}>
+          <div style={{ background:"var(--surface)", borderRadius:16, padding:24, width:"100%", maxWidth:360, border:"1px solid var(--border)" }}>
+            <div style={{ fontSize:16, fontWeight:700, color:"var(--text1)", marginBottom:6 }}>Enter GitHub Token</div>
+            <div style={{ fontSize:12, color:"var(--text3)", marginBottom:16, lineHeight:1.5 }}>Your Personal Access Token is stored only on this device and never sent anywhere except GitHub.</div>
+            <input
+              type="password"
+              placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+              value={tokenInput}
+              onChange={e => setTokenInput(e.target.value)}
+              onKeyDown={e => e.key === "Enter" && handleAuthSubmit()}
+              style={{ width:"100%", padding:"11px 12px", borderRadius:8, border:"1px solid var(--border)", background:"var(--surface2)", color:"var(--text1)", fontFamily:"'DM Mono',monospace", fontSize:14, outline:"none", marginBottom:12 }}
+              autoFocus
+            />
+            <div style={{ display:"flex", gap:8 }}>
+              <button onClick={handleAuthSubmit} style={{ flex:1, padding:"11px", borderRadius:8, border:"none", background:"var(--accent)", color:"#fff", fontFamily:"'DM Sans',sans-serif", fontSize:14, fontWeight:700, cursor:"pointer" }}>Unlock</button>
+              <button onClick={() => { setShowAuth(false); setTokenInput(""); }} style={{ padding:"11px 16px", borderRadius:8, border:"1px solid var(--border)", background:"var(--surface2)", color:"var(--text2)", fontFamily:"'DM Sans',sans-serif", fontSize:14, fontWeight:600, cursor:"pointer" }}>Cancel</button>
+            </div>
+            {token && <button onClick={() => { setToken(""); try { localStorage.removeItem("gh_pat"); } catch(e){} setShowAuth(false); }} style={{ marginTop:10, width:"100%", padding:"8px", borderRadius:8, border:"none", background:"transparent", color:"var(--text3)", fontFamily:"'DM Sans',sans-serif", fontSize:12, cursor:"pointer" }}>Clear saved token</button>}
+          </div>
+        </div>
+      )}
+
+      {/* Edit Panel */}
+      {showEdit && data && <EditPanel data={data} onSave={handleSave} onClose={() => setShowEdit(false)} />}
     </>
   );
 }
