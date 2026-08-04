@@ -837,5 +837,75 @@
         "i200": "M132 \u2014 Turning & Milling"
       }
     }
+  },
+  "milling_sfm": {
+    "Flat End Mill \u2014 Rough": {
+      "Aluminum": {
+        "sfm": 300
+      },
+      "CRS": {
+        "sfm": 120
+      },
+      "Tool Steel": {
+        "sfm": 60
+      }
+    },
+    "Flat End Mill \u2014 Finish": {
+      "Aluminum": {
+        "sfm": 400
+      },
+      "CRS": {
+        "sfm": 160
+      },
+      "Tool Steel": {
+        "sfm": 80
+      }
+    },
+    "Shell Mill": {
+      "Aluminum": {
+        "sfm": 2000
+      },
+      "CRS": {
+        "sfm": 600
+      },
+      "Stainless": {
+        "sfm": 400
+      },
+      "Tool Steel": {
+        "sfm": 400
+      }
+    }
+  },
+  "tap_sfm": {
+    "form": {
+      "Aluminum": 90,
+      "CRS": 60,
+      "Stainless": 40,
+      "Tool Steel": 30
+    },
+    "cut": {
+      "Aluminum": 50,
+      "CRS": 40,
+      "Stainless": 30,
+      "Tool Steel": 25
+    }
+  },
+  "drill_sfm": {
+    "Aluminum": {
+      "sfm": 300,
+      "ipr": 0.005
+    },
+    "CRS": {
+      "sfm": 120,
+      "ipr": 0.003
+    },
+    "Stainless": {
+      "sfm": 60,
+      "ipr": 0.002
+    },
+    "Tool Steel": {
+      "sfm": 60,
+      "ipr": 0.002
+    }
   }
 }

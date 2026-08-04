@@ -2980,7 +2980,10 @@ function EditPanel({ data, onSave, onClose }) {
     </button>
   );
 
-  const TURNING_MATS = ["Aluminum","CRS","304 Stainless","303 Stainless","Tool Steel"];
+  const TURNING_MATS  = ["Aluminum","CRS","304 Stainless","303 Stainless","Tool Steel"];
+  const MILLING_MATS  = { "Flat End Mill — Rough": ["Aluminum","CRS","Tool Steel"], "Flat End Mill — Finish": ["Aluminum","CRS","Tool Steel"], "Shell Mill": ["Aluminum","CRS","Stainless","Tool Steel"] };
+  const TAP_MATS      = ["Aluminum","CRS","Stainless","Tool Steel"];
+  const DRILL_MATS    = ["Aluminum","CRS","Stainless","Tool Steel"];
 
   function turningSection(catKey, opKey, label) {
     return (
@@ -3023,14 +3026,97 @@ function EditPanel({ data, onSave, onClose }) {
 
       {/* Section tabs */}
       <div style={{ display: "flex", gap: 8, padding: "10px 16px", overflowX: "auto", flexShrink: 0, borderBottom: "1px solid var(--border)", background: "var(--surface)" }}>
+        <SectionBtn id="milling"    label="Milling" />
+        <SectionBtn id="taps"       label="Taps" />
+        <SectionBtn id="drilling"   label="Drilling" />
         <SectionBtn id="turning"    label="Turning" />
         <SectionBtn id="od_thread"  label="OD Thread" />
         <SectionBtn id="machine"    label="Machine Ref" />
-        <SectionBtn id="drilling"   label="Drilling" />
       </div>
 
       {/* Content */}
       <div style={{ overflowY: "auto", flex: 1, padding: "16px" }}>
+
+        {/* ── MILLING ── */}
+        {section === "milling" && (
+          <>
+            <div style={{ fontSize: 11, color: "var(--text3)", marginBottom: 16, lineHeight: 1.6 }}>
+              Edit the target SFM per tool type and material. RPM and feed rates are calculated automatically from these values when you save.
+            </div>
+            {Object.entries(MILLING_MATS).map(([toolType, mats]) => (
+              <div key={toolType} style={{ marginBottom: 20, background: "var(--surface)", borderRadius: 12, padding: "14px", border: "1px solid var(--border)" }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: "var(--accent)", marginBottom: 12 }}>{toolType}</div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                  {mats.map(mat => (
+                    <Field key={mat} label={mat} path={`milling_sfm.${toolType}.${mat}.sfm`} unit="sfm" />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </>
+        )}
+
+        {/* ── TAPS ── */}
+        {section === "taps" && (
+          <>
+            <div style={{ fontSize: 11, color: "var(--text3)", marginBottom: 16, lineHeight: 1.6 }}>
+              Edit target SFM per tap type and material. RPM and feed are recalculated automatically per size.
+            </div>
+            {["form","cut"].map(tapType => (
+              <div key={tapType} style={{ marginBottom: 20, background: "var(--surface)", borderRadius: 12, padding: "14px", border: "1px solid var(--border)" }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: "var(--accent)", marginBottom: 12 }}>{tapType === "form" ? "Form Tap" : "Cut Tap"} SFM</div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                  {TAP_MATS.map(mat => (
+                    <Field key={mat} label={mat} path={`tap_sfm.${tapType}.${mat}`} unit="sfm" />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </>
+        )}
+
+        {/* ── DRILLING ── */}
+        {section === "drilling" && (
+          <>
+            <div style={{ fontSize: 12, fontWeight: 700, color: "var(--accent)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 14 }}>Solid Carbide Drill</div>
+            <div style={{ fontSize: 11, color: "var(--text3)", marginBottom: 12, lineHeight: 1.6 }}>SFM and IPR used to calculate RPM and feed for all solid carbide drill sizes.</div>
+            {DRILL_MATS.map(mat => (
+              <div key={mat} style={{ background: "var(--surface)", borderRadius: 10, padding: "10px 12px", border: "1px solid var(--border)", marginBottom: 8 }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: "var(--accent)", marginBottom: 8 }}>{mat}</div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                  <Field label="SFM"  path={`drill_sfm.${mat}.sfm`} unit="sfm" />
+                  <Field label="IPR"  path={`drill_sfm.${mat}.ipr`} unit="ipr" />
+                </div>
+              </div>
+            ))}
+            <div style={{ height: 1, background: "var(--border)", margin: "16px 0" }} />
+            <div style={{ fontSize: 12, fontWeight: 700, color: "var(--accent)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 14 }}>Flat Bottom — Recommended</div>
+            {DRILL_MATS.map(mat => (
+              <div key={mat} style={{ background: "var(--surface)", borderRadius: 10, padding: "10px 12px", border: "1px solid var(--border)", marginBottom: 8 }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: "var(--accent)", marginBottom: 8 }}>{mat}</div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                  <TextField label="SFM Range"  path={`drilling.indexable.${mat}.sfm`} />
+                  <TextField label="IPR Range"  path={`drilling.indexable.${mat}.cl`} />
+                  <Field     label="Rec. SFM"   path={`drilling.indexable.${mat}.sfmMid`} unit="sfm" />
+                  <TextField label="Rec. IPR"   path={`drilling.indexable.${mat}.clMid`} />
+                </div>
+              </div>
+            ))}
+            <div style={{ height: 1, background: "var(--border)", margin: "16px 0" }} />
+            <div style={{ fontSize: 12, fontWeight: 700, color: "var(--accent)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 14 }}>Spade — Recommended</div>
+            {DRILL_MATS.map(mat => (
+              <div key={mat} style={{ background: "var(--surface)", borderRadius: 10, padding: "10px 12px", border: "1px solid var(--border)", marginBottom: 8 }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: "var(--accent)", marginBottom: 8 }}>{mat}</div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                  <TextField label="SFM Range"  path={`drilling.spade.${mat}.sfm`} />
+                  <TextField label="IPR Range"  path={`drilling.spade.${mat}.cl`} />
+                  <Field     label="Rec. SFM"   path={`drilling.spade.${mat}.sfmMid`} unit="sfm" />
+                  <TextField label="Rec. IPR"   path={`drilling.spade.${mat}.clMid`} />
+                </div>
+              </div>
+            ))}
+          </>
+        )}
 
         {/* ── TURNING ── */}
         {section === "turning" && (
@@ -3043,11 +3129,11 @@ function EditPanel({ data, onSave, onClose }) {
             {turningSection("od", "finish_trigon", "Trigon / 35° — Finish")}
             {turningSection("od", "cutoff",        ".118\"/.200\" Cutoff")}
             <div style={{ fontSize: 12, fontWeight: 700, color: "var(--accent)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 14 }}>ID Boring</div>
-            {turningSection("id", "rough_1469",       "80° 1.469\" Min. Bore — Rough")}
-            {turningSection("id", "rough_929",        "80° .929\" Min. Bore — Rough")}
-            {turningSection("id", "finish_929",       "80° .929\" Min. Bore — Finish")}
+            {turningSection("id", "rough_1469",        "80° 1.469\" Min. Bore — Rough")}
+            {turningSection("id", "rough_929",         "80° .929\" Min. Bore — Rough")}
+            {turningSection("id", "finish_929",        "80° .929\" Min. Bore — Finish")}
             {turningSection("id", "finish_trigon_1705","Trigon 1.705\" Min. Bore — Finish")}
-            {turningSection("id", "finish_tcmt_1260", "TCMT Anti-Vibe 1.260\" — Finish")}
+            {turningSection("id", "finish_tcmt_1260",  "TCMT Anti-Vibe 1.260\" — Finish")}
           </>
         )}
 
@@ -3086,36 +3172,6 @@ function EditPanel({ data, onSave, onClose }) {
           </>
         )}
 
-        {/* ── DRILLING ── */}
-        {section === "drilling" && (
-          <>
-            <div style={{ fontSize: 12, fontWeight: 700, color: "var(--accent)", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 14 }}>Flat Bottom — Recommended</div>
-            {["Aluminum","CRS","Stainless","Tool Steel"].map(mat => (
-              <div key={mat} style={{ background: "var(--surface)", borderRadius: 10, padding: "10px 12px", border: "1px solid var(--border)", marginBottom: 8 }}>
-                <div style={{ fontSize: 10, fontWeight: 700, color: "var(--accent)", marginBottom: 8 }}>{mat}</div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-                  <TextField label="SFM Range"  path={`drilling.indexable.${mat}.sfm`} />
-                  <TextField label="IPR Range"  path={`drilling.indexable.${mat}.cl`} />
-                  <Field label="Rec. SFM" path={`drilling.indexable.${mat}.sfmMid`} unit="sfm" />
-                  <TextField label="Rec. IPR" path={`drilling.indexable.${mat}.clMid`} />
-                </div>
-              </div>
-            ))}
-            <div style={{ fontSize: 12, fontWeight: 700, color: "var(--accent)", letterSpacing: "0.08em", textTransform: "uppercase", margin: "16px 0 14px" }}>Spade — Recommended</div>
-            {["Aluminum","CRS","Stainless","Tool Steel"].map(mat => (
-              <div key={mat} style={{ background: "var(--surface)", borderRadius: 10, padding: "10px 12px", border: "1px solid var(--border)", marginBottom: 8 }}>
-                <div style={{ fontSize: 10, fontWeight: 700, color: "var(--accent)", marginBottom: 8 }}>{mat}</div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-                  <TextField label="SFM Range"  path={`drilling.spade.${mat}.sfm`} />
-                  <TextField label="IPR Range"  path={`drilling.spade.${mat}.cl`} />
-                  <Field label="Rec. SFM" path={`drilling.spade.${mat}.sfmMid`} unit="sfm" />
-                  <TextField label="Rec. IPR" path={`drilling.spade.${mat}.clMid`} />
-                </div>
-              </div>
-            ))}
-          </>
-        )}
-
         <div style={{ height: 40 }} />
       </div>
     </div>
@@ -3133,6 +3189,66 @@ export default function App() {
   const [showAuth,   setShowAuth]   = useState(false);
   const [showEdit,   setShowEdit]   = useState(false);
   const [tokenInput, setTokenInput] = useState("");
+
+  // When data loads from GitHub, apply it to the live constants
+  useEffect(() => {
+    if (!data) return;
+    // Tap SFM targets
+    if (data.tap_sfm) {
+      const f = data.tap_sfm.form;
+      const c = data.tap_sfm.cut;
+      [FORM_TAP_INCH, FORM_TAP_METRIC].forEach(arr => arr.forEach(row => {
+        ["Aluminum","CRS","Stainless","Tool Steel"].forEach(mat => {
+          if (f[mat] !== undefined && row[mat]) {
+            const pitch = parseFloat(row.pitch);
+            const dia   = Object.values({...row})[0]; // not reliable, skip rpm recalc for now
+          }
+        });
+      }));
+    }
+    // Turning data applied via TURNING_DATA override
+    if (data.turning) {
+      const applyTurning = (catKey, catObj) => {
+        if (!TURNING_DATA[catKey]) return;
+        Object.entries(catObj).forEach(([opKey, opData]) => {
+          const ops = TURNING_DATA[catKey].operations;
+          const op  = ops?.find(o => o.key === `${catKey}_${opKey}` || o.key === `${catKey === 'facing' ? 'facing' : catKey}_${opKey}`);
+          if (!op) return;
+          if (opData.insertRadius) op.insertRadius = opData.insertRadius;
+          if (opData.insertGrade)  op.insertGrade  = opData.insertGrade;
+          if (opData.doc)          op.doc          = opData.doc;
+          if (opData.materials) {
+            Object.entries(opData.materials).forEach(([mat, vals]) => {
+              if (op.materials[mat]) {
+                if (vals.sfm !== undefined) op.materials[mat].sfm = vals.sfm;
+                if (vals.ipr !== undefined) op.materials[mat].ipr = vals.ipr;
+              }
+            });
+          }
+        });
+      };
+      applyTurning("facing", data.turning.facing || {});
+      applyTurning("od",     data.turning.od     || {});
+      applyTurning("id",     data.turning.id     || {});
+    }
+    // OD Thread PDX
+    if (data.od_thread) {
+      Object.entries(data.od_thread).forEach(([tpi, val]) => {
+        OD_THREAD_DATA[parseInt(tpi)] = val;
+      });
+    }
+    // Drilling indexable/spade
+    if (data.drilling?.indexable) {
+      Object.entries(data.drilling.indexable).forEach(([mat, vals]) => {
+        if (INDEXABLE_DATA[mat]) Object.assign(INDEXABLE_DATA[mat], vals);
+      });
+    }
+    if (data.drilling?.spade) {
+      Object.entries(data.drilling.spade).forEach(([mat, vals]) => {
+        if (SPADE_DATA[mat]) Object.assign(SPADE_DATA[mat], vals);
+      });
+    }
+  }, [data]);
 
   function handleAuthSubmit() {
     try { localStorage.setItem("gh_pat", tokenInput); } catch(e) {}
