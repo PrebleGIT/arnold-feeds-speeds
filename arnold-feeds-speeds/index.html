@@ -385,15 +385,17 @@ var editing=false;
 
 var M={};
 /* ===== Milling ===== */
-M.mill={deps:{tool:['strat','cut','mat','dia'],strat:['cut']},
+M.mill={deps:{tool:['strat','cut','mat','dia','grade'],strat:['cut'],mat:['grade']},
 fix:function(s){
   var T=find(D.milling,'tool',s.tool);if(!T)return;
+  if(T.kind==='range'){var gs=(T.rows||[]).filter(function(r){return r.material===s.mat});if(gs.length===1)s.grade=gs[0].grade;return}
   if(T.kind==='ipt'){var cs=iptCuts(T,s.strat);if(s.strat&&cs.length===1)s.cut=cs[0];if(s.dia&&!find(T.sizes,'size',s.dia))delete s.dia;return}
   var r=find(T.rows,'dia',s.dia);if(s.mat&&!cell(r,s.mat,'rpm'))delete s.mat;
 },
 view:function(s){
   var tools=D.milling||[],T=find(tools,'tool',s.tool);
   var h=step(1,'Tool',opts('tool',tools.map(function(t){return {v:t.tool,l:esc(t.tool),s:esc(t.sub||''),on:t.tool===s.tool}}),'list'),0,!!T);
+  if(T&&T.kind==='range')return millRangeView(s,T,h);
   if(!T||T.kind==='ipt')return iptView(s,T||find(tools,'kind','ipt'),!T,h);
   var row=find(T.rows,'dia',s.dia);
   h+=step(2,'Diameter (inches)',opts('dia',(T.rows||[]).map(function(r){
@@ -411,6 +413,32 @@ view:function(s){
   }
   return {steps:h,result:res};
 }};
+/* Indexable mill chart: SFM range + feed-per-tooth range by type of cut; inserts per cutter from the sizes table */
+function millRangeView(s,T,h){
+  var rows=T.rows||[],cuts=T.cuts||[],cut=find(cuts,'cut',s.cut),mats=[];
+  rows.forEach(function(r){if(!find(mats,'material',r.material))mats.push(r)});
+  h+=step(2,'Type of cut',opts('cut',cuts.map(function(c){return {v:c.cut,l:esc(c.cut),s:esc(c.sub||''),c:1,on:c.cut===s.cut}}),'two'),0,!!cut);
+  h+=step(3,'Material',opts('mat',mats.map(function(r){return {v:r.material,l:esc(r.material),s:has(r.iso)?'ISO '+esc(r.iso):'',c:1,on:!!cut&&r.material===s.mat}}),'three'),!cut,!!(cut&&s.mat));
+  var grs=rows.filter(function(r){return r.material===s.mat}),n=4,row=null;
+  if(grs.length>1)h+=step(n++,'Insert grade',opts('grade',grs.map(function(r){return {v:r.grade,l:esc(r.grade),s:(has(r.isoRange)?esc(r.isoRange)+' · ':'')+dash(r.sfm)+' SFM',c:1,on:r.grade===s.grade}}),'three'),!(cut&&s.mat),!!s.grade);
+  if(cut&&s.mat)grs.forEach(function(r){if(!row&&r.grade===s.grade)row=r});
+  h+=step(n++,'Cutter diameter',opts('dia',(T.sizes||[]).map(function(z){return {v:z.size,l:esc(z.size)+'"',s:dia4(z.dia)+(has(z.flutes)?' · '+esc(z.flutes)+' ins.':''),c:1,on:!!row&&z.size===s.dia}}),'sm'),!row,!!(row&&s.dia));
+  var sz=find(T.sizes,'size',s.dia),res=null;
+  if(row&&sz&&has(row[cut.cut])){
+    var d=num(sz.dia),sf=rng(row.sfm),fz=rng(row[cut.cut]),zSaved=num(sz.flutes),z=zSaved||num((s.zs||{})[sz.size]);
+    var book=sf&&d?Math.round(sf.mid*12/(Math.PI*d)):0,max=num(D.settings.maxRpm)||0,rpm=max&&book>max?max:book,capped=rpm<book,act=Math.round(rpm*Math.PI*d/12);
+    var ipm=z&&fz?rpm*fz.mid*z:null;
+    res=card(esc(cut.cut)+' · '+esc(row.material)+' · '+esc(row.grade),
+      stats([stat('RPM',loc(rpm),capped?'capped at max · book '+loc(book):'rev / min','key'),stat('Feed',ipm!==null?ipm.toFixed(1):'—',ipm!==null?'in / min':'enter inserts below','key')])+
+      stats([stat('SFM',loc(act),capped?'range '+dash(row.sfm):'middle of '+dash(row.sfm),'sm'),stat('Chip load',fz?fz.mid.toFixed(4).replace(/^0\./,'.'):'—','in / tooth · '+dash(row[cut.cut]),'sm'),stat('Max axial DOC',has(cut.apMax)?d3(cut.apMax)+'"':'—','ap','sm')])+
+      (zSaved?'':'<div class="calcin"><div class="inrow"><div><label>Inserts in cutter</label><input class="field" id="rZ" inputmode="numeric" placeholder="e.g. 3" value="'+esc((s.zs||{})[sz.size]||'')+'"></div><div style="font-size:13px;color:var(--muted);padding-bottom:8px">Save the count for each diameter in Edit data → sizes so you don\'t have to type it.</div></div></div>')+
+      (capped?'<div class="note">Book speed is '+loc(book)+' RPM — capped at the '+loc(max)+' RPM max. Feed is figured at '+loc(rpm)+' RPM.</div>':'')+
+      (has(cut.note)?'<div class="note" style="background:var(--redtint);color:var(--red);font-weight:600">'+esc(cut.note)+'</div>':'')+
+      (T.note?'<div class="note">'+esc(T.note)+'</div>':''),
+      esc(sz.size)+'" ('+dia4(sz.dia)+')'+(z?' · '+z+' inserts':'')+(has(sz.partNo)?' · Part # '+esc(sz.partNo):'')+' · '+esc(T.tool));
+  }
+  return {steps:h,result:res};
+}
 /* IMCO-style chart: SFM + chip load per tooth by diameter; RPM and feed are calculated */
 function uniq(a){var o=[];a.forEach(function(x){if(has(x)&&o.indexOf(x)<0)o.push(x)});return o}
 function iptCuts(T,strat){return uniq((T.rows||[]).filter(function(r){return r.strategy===strat}).map(function(r){return r.cut}))}
@@ -805,6 +833,7 @@ $('steps').addEventListener('input',function(e){
   if(t.dataset.f){var c=t.closest('.calc'),id=c.dataset.c;(S.calc[id]=S.calc[id]||{})[t.dataset.f]=t.value;c.querySelector('.out').innerHTML=calcOut(find(CALCS,'id',id))}
 });
 $('result').addEventListener('input',function(e){
+  if(e.target.id==='rZ'){(S.mill.zs=S.mill.zs||{})[S.mill.dia]=e.target.value;var pos=e.target.selectionStart;renderResult();var i=$('rZ');if(i){i.focus();try{i.setSelectionRange(pos,pos)}catch(x){}}return}
   if(e.target.id==='rDia'){S.drill.cdia=e.target.value;var T=find(D.drilling,'type',S.drill.type);if(!T)return;
     if(T.kind==='range'){var r2=rangeRow(T,S.drill),z=find(T.sizes,'size',S.drill.size);if(r2&&z)$('rCalc').innerHTML=rangeCalc(rng(r2.sfm),rng(r2[z.size]),e.target.value,z);return}
     var r=find(T.rows,'material',S.drill.mat);if(r)$('rCalc').innerHTML=drillCalc(r,e.target.value)}
@@ -819,6 +848,16 @@ function specs(){
   L.push({id:'settings',g:'Settings',t:'App settings',obj:{rows:[D.settings]},key:'rows',fixed:1,d:'Max spindle RPM caps the calculated milling RPM (feed is lowered to keep the chip load). Edit PIN asks for a PIN before editing; leave blank for none.',
     cols:[N('maxRpm','Max spindle RPM',110),C('editPin','Edit PIN',90)]});
   (D.milling||[]).forEach(function(t,i){
+    if(t.kind==='range'){
+      L.push({id:'mill:'+i,g:'Milling',t:t.tool+' — speeds & feeds',own:{arr:D.milling,i:i,kind:'mill'},obj:t,key:'rows',
+        d:'One row per material and insert grade. SFM range like "492-787" and chip load ranges like "0.002-0.012" for each type of cut; the app starts in the middle.',
+        cols:[C('iso','ISO',44),C('material','Material',130),C('grade','Grade',80),C('isoRange','ISO range',90),C('sfm','SFM range',100)],groups:(t.cuts||[]).map(function(c){return c.cut}),cw:150});
+      L.push({id:'millsz:'+i,g:'Milling',t:t.tool+' — sizes',obj:t,key:'sizes',d:'Cutter diameters. Fill in Inserts (number of inserts in the cutter) so the app can work out feed in IPM.',
+        cols:[C('size','Size',70),N('dia','Dia (in)',80),N('flutes','Inserts',70),C('partNo','Part #',140)]});
+      L.push({id:'millcut:'+i,g:'Milling',t:t.tool+' — types of cut',obj:t,key:'cuts',d:'The Type of cut buttons. Cut must match a column name in the speeds & feeds table. Note shows in red on the result.',
+        cols:[C('cut','Cut',170),C('sub','Shown under button',190),N('apMax','Max axial DOC (in)',120),C('note','Note',420)]});
+      return;
+    }
     if(t.kind==='ipt'){
       L.push({id:'mill:'+i,g:'Milling',t:t.tool+' — speeds & feeds',own:{arr:D.milling,i:i,kind:'mill'},obj:t,key:'rows',
         d:'One row per material and type of cut, straight from the catalog chart. Strategy groups the cuts (Roughing / Finishing). SFM and chip load (inches per tooth) per diameter — the app works out RPM and feed. DOC like "1.25 x D".',

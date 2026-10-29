@@ -20,7 +20,7 @@ window.TECH_DATA = {
     "maxRpm": 12000,
     "editPin": "",
     "updated": "2026-10-29",
-    "savedAt": 1793311416371
+    "savedAt": 1793312989421
   },
 
   // MILLING — one block per tool.
@@ -83,13 +83,27 @@ window.TECH_DATA = {
       ]
     },
     {
-      "tool": "Shell Mill",
-      "materials": ["Aluminum", "CRS", "Stainless", "Tool Steel"],
+      "tool": "Haas ADKT 1706 Indexable Mill",
+      "sub": "PESR-MM / ML inserts · 3/4\" – 2\"",
+      "kind": "range",
+      "note": "Haas Tooling ADKT 1706 chart. Start in the middle of the SFM and feed ranges and adjust for your setup.",
+      "cuts": [
+        {"cut": "Face / Shoulder", "sub": "Facing · Shouldering", "apMax": 0.649, "note": "Surface and shoulder milling can be pushed up to 1150 SFM and .016 IPT depending on the setup."},
+        {"cut": "Slot / Ramp / Helical", "sub": "Slotting · Ramping · Helical", "apMax": 0.649, "note": "In deep grooving, keep axial DOC under .197\" and use coolant + air."}
+      ],
+      "sizes": [
+        {"size": "3/4", "dia": 0.75, "flutes": "", "partNo": ""},
+        {"size": "1", "dia": 1, "flutes": "", "partNo": ""},
+        {"size": "1-1/4", "dia": 1.25, "flutes": "", "partNo": ""},
+        {"size": "2", "dia": 2, "flutes": "", "partNo": ""}
+      ],
       "rows": [
-        {"dia": "1.0000", "loc": "", "partNo": "", "Aluminum": {"rpm": 7500, "ipm": 100}, "CRS": {"rpm": 3056, "ipm": 46}, "Stainless": {"rpm": 2292, "ipm": 23}, "Tool Steel": {"rpm": 2292, "ipm": 28}},
-        {"dia": "1.2500", "loc": "", "partNo": "", "Aluminum": {"rpm": 7500, "ipm": 100}},
-        {"dia": "1.5000", "loc": "", "partNo": "", "Aluminum": {"rpm": 7500, "ipm": 100}},
-        {"dia": "2.0000", "loc": "", "partNo": "", "CRS": {"rpm": 1528, "ipm": 46}, "Stainless": {"rpm": 1146, "ipm": 29}, "Tool Steel": {"rpm": 1146, "ipm": 34}}
+        {"iso": "P", "material": "Steels", "grade": "HU30", "isoRange": "P30-P40", "sfm": "492-787", "Face / Shoulder": "0.002-0.012", "Slot / Ramp / Helical": "0.002-0.012"},
+        {"iso": "P", "material": "Steels", "grade": "HP25", "isoRange": "P25-P35", "sfm": "426-688", "Face / Shoulder": "0.002-0.012", "Slot / Ramp / Helical": "0.002-0.012"},
+        {"iso": "P", "material": "Steels", "grade": "MKP30", "isoRange": "P30-P40", "sfm": "820-1148", "Face / Shoulder": "0.002-0.012", "Slot / Ramp / Helical": "0.002-0.012"},
+        {"iso": "M", "material": "Stainless Steels", "grade": "HU30", "isoRange": "M20-M30", "sfm": "295-492", "Face / Shoulder": "0.002-0.010", "Slot / Ramp / Helical": "0.002-0.006"},
+        {"iso": "K", "material": "Cast Iron", "grade": "HU30", "isoRange": "K20-K30", "sfm": "393-820", "Face / Shoulder": "0.003-0.014", "Slot / Ramp / Helical": "0.003-0.008"},
+        {"iso": "K", "material": "Cast Iron", "grade": "MKP30", "isoRange": "K20-K30", "sfm": "656-984", "Face / Shoulder": "0.003-0.014", "Slot / Ramp / Helical": "0.003-0.008"}
       ]
     }
   ],
