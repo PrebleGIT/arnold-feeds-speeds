@@ -538,17 +538,18 @@ function rangeView(s,T,h){
   if(lens.length===1)s.len=lens[0];
   else{
     var ok=!!(s.mat&&s.cond);
-    h+=step(n++,'Drill length',opts('len',lens.map(function(l){return {v:l,l:esc(l),c:1,on:ok&&l===s.len,dis:ok&&!rows.some(function(r){return r.material===s.mat&&r.condition===s.cond&&r.length===l})}}),'two'),!ok,ok&&!!s.len);
+    h+=step(n++,esc(T.variantLabel||'Drill length'),opts('len',lens.map(function(l){return {v:l,l:esc(l),c:1,on:ok&&l===s.len,dis:ok&&!rows.some(function(r){return r.material===s.mat&&r.condition===s.cond&&r.length===l})}}),'two'),!ok,ok&&!!s.len);
   }
   var row=s.mat&&s.cond&&s.len!==undefined?rangeRow(T,s):null,sz=find(T.sizes,'size',s.size);
-  h+=step(n++,'Insert size / drill diameter',opts('size',(T.sizes||[]).map(function(z){return {v:z.size,l:esc(z.size),s:d3(z.min)+' – '+d3(z.max)+'"',c:1,on:z.size===s.size,dis:!!row&&!has(row[z.size])}}),'sm'),!row,!!(row&&sz));
+  h+=step(n++,esc(T.sizeLabel||'Insert size / drill diameter'),opts('size',(T.sizes||[]).map(function(z){return {v:z.size,l:esc(z.size),s:(num(z.min)?d3(z.min)+' – ':'up to ')+d3(z.max)+'"',c:1,on:z.size===s.size,dis:!!row&&!has(row[z.size])}}),'sm'),!row,!!(row&&sz));
   var res=null;
   if(row&&sz&&has(row[s.size])){
     var sf=rng(row.sfm),fd=rng(row[s.size]);
     res=card(esc(T.heading||T.type)+' · '+esc(sz.size)+(has(row.length)?' · '+esc(row.length):''),
       stats([stat('SFM range',dash(row.sfm),'surface ft / min','xs'),stat('Feed range',dash(row[s.size]),'in / rev','xs')])+
       stats([stat('Start SFM',sf?loc(Math.round(sf.mid)):'—','middle of range','key'),stat('Start feed',fd?fd.mid.toFixed(4).replace(/^0/,''):'—','in / rev · middle of range','key')])+
-      '<div class="calcin"><div class="inrow"><div><label>Drill dia (in)</label><input class="field" id="rDia" inputmode="decimal" placeholder="'+f4(sz.min)+'" value="'+esc(s.cdia||'')+'"></div><div id="rCalc">'+rangeCalc(sf,fd,s.cdia,sz)+'</div></div></div>'+
+      '<div class="calcin"><div class="inrow"><div><label>Drill dia (in)</label><input class="field" id="rDia" inputmode="decimal" placeholder="'+f4(num(sz.min)||sz.max)+'" value="'+esc(s.cdia||'')+'"></div><div id="rCalc">'+rangeCalc(sf,fd,s.cdia,sz)+'</div></div></div>'+
+      (has(row.grades)?'<div class="note"><b>Grades:</b> '+esc(row.grades)+'</div>':'')+
       (has(row.note)?'<div class="note" style="background:var(--redtint);color:var(--red);font-weight:600">'+esc(row.note)+'</div>':'')+
       (T.note?'<div class="note">'+esc(T.note)+'</div>':''),
       esc(row.material)+' · '+esc(row.condition)+(has(row.hardness)?' ('+esc(row.hardness)+')':'')+(has(row.matNo)?' · Matl no. '+esc(row.matNo):''));
@@ -557,7 +558,7 @@ function rangeView(s,T,h){
 }
 function rangeCalc(sf,fd,dv,sz){
   var d=num(dv);
-  if(!sf||!fd||!d)return '<span style="color:var(--muted)">Enter the drill diameter ('+d3(sz.min)+' – '+d3(sz.max)+'") for RPM and feed</span>';
+  if(!sf||!fd||!d)return '<span style="color:var(--muted)">Enter the drill diameter ('+(num(sz.min)?d3(sz.min)+' – ':'up to ')+d3(sz.max)+'") for RPM and feed</span>';
   var book=Math.round(sf.mid*12/(Math.PI*d)),max=num(D.settings.maxRpm)||0,rpm=max&&book>max?max:book,warn=d<num(sz.min)||d>num(sz.max)?' <span style="color:var(--red)">· outside '+esc(sz.size)+' range</span>':'';
   return '<b>'+loc(rpm)+'</b> RPM &nbsp;·&nbsp; <b>'+(rpm*fd.mid).toFixed(2)+'</b> in/min'+(rpm<book?' <span style="color:var(--muted)">(capped)</span>':'')+warn;
 }
@@ -888,7 +889,7 @@ function specs(){
     var base={id:'drill:'+i,g:'Drilling',t:t.type,own:{arr:D.drilling,i:i,kind:'drill'},obj:t,key:'rows'};
     if(t.kind==='range'){
       L.push(Object.assign(base,{t:t.type+' — speeds & feeds',d:'One row per material condition, from the catalog chart. SFM and feed (in/rev) as ranges like "450-800" and ".003-.005"; the app starts in the middle of each range. Rows with the same material name are grouped.',
-        cols:[C('iso','ISO',44),C('material','Material',220),C('condition','Condition',170),N('matNo','Matl no.',60),C('rm','Tensile (Rm)',80),C('hardness','Hardness',80),C('length','Drill length',90),C('sfm','SFM range',90)],groups:(t.sizes||[]).map(function(z){return z.size}),cw:84,tail:[C('note','Note (shows in red)',380)]}));
+        cols:[C('iso','ISO',44),C('material','Material',220),C('condition','Condition',170),N('matNo','Matl no.',60),C('rm','Tensile (Rm)',80),C('hardness','Hardness',80),C('length',t.variantLabel||'Drill length',90),C('sfm','SFM range',90)],groups:(t.sizes||[]).map(function(z){return z.size}),cw:84,tail:[C('grades','Grades',300),C('note','Note (shows in red)',380)]}));
       L.push({id:'drillsz:'+i,g:'Drilling',t:t.type+' — sizes',obj:t,key:'sizes',d:'Insert sizes and the drill diameter range each one covers. Size is also the column name in the speeds & feeds table.',
         cols:[C('size','Size',90),N('min','Min dia (in)',90),N('max','Max dia (in)',90)]});
       return;
