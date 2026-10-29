@@ -20,7 +20,7 @@ window.TECH_DATA = {
     "maxRpm": 12000,
     "editPin": "",
     "updated": "2026-10-29",
-    "savedAt": 1793312989421
+    "savedAt": 1793313184391
   },
 
   // MILLING — one block per tool.
@@ -95,7 +95,7 @@ window.TECH_DATA = {
         {"size": "3/4", "dia": 0.75, "flutes": "", "partNo": ""},
         {"size": "1", "dia": 1, "flutes": "", "partNo": ""},
         {"size": "1-1/4", "dia": 1.25, "flutes": "", "partNo": ""},
-        {"size": "2", "dia": 2, "flutes": "", "partNo": ""}
+        {"size": "2", "dia": 2, "flutes": 5, "partNo": ""}
       ],
       "rows": [
         {"iso": "P", "material": "Steels", "grade": "HU30", "isoRange": "P30-P40", "sfm": "492-787", "Face / Shoulder": "0.002-0.012", "Slot / Ramp / Helical": "0.002-0.012"},
