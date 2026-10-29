@@ -303,7 +303,7 @@ var HEAD=[
 '     under reference > charts.',
 '   =================================================================== */',''].join('\n');
 var CMT={
- 'settings':'App settings. maxRpm: highest spindle RPM — milling RPM is capped here and feed lowered to keep chip load.\neditPin: set a PIN (e.g. "1234") to ask for it before editing. Leave "" for no PIN.',
+ 'settings':'App settings. maxRpm: highest spindle RPM — milling RPM is capped here and feed lowered to keep chip load.\nfinishFeedPct: end mill finishing chip load as a % of the catalog number (100 = catalog).\neditPin: set a PIN (e.g. "1234") to ask for it before editing. Leave "" for no PIN.',
  'milling':'MILLING — one block per tool.\nkind "ipt" (catalog chart): sizes = diameters offered; rows = one per material and type of cut with\n  SFM, depths of cut, and chip load per tooth under each size label. RPM and feed are calculated.\nkind "rpm" (shop numbers): one row per diameter, each material holds {"rpm": , "ipm": }.',
  'drilling':'DRILLING — one block per drill type.\nkind "rpm": rows by diameter with RPM / IPM per material (like milling).\nkind "range": catalog chart — sizes = insert sizes with min/max drill dia; rows = one per material condition\n  with an SFM range and a feed range (in/rev) under each size.\nkind "sfm": one row per material with SFM / IPR (ranges optional).',
  'threading':'THREADING',
@@ -473,16 +473,19 @@ function iptView(s,T,off,h){
     return {v:z.size,l:esc(z.size)+'"',s:dia4(z.dia),c:1,on:!off&&z.size===s.dia,dis:!!row&&!has(row[z.size])}}),'sm'),!row,!!(row&&s.dia));
   var res=null,sz=find(T.sizes,'size',s.dia);
   if(row&&sz&&has(row[s.dia])){
-    var d=num(sz.dia),ipt=num(row[s.dia]),z=num(row.flutes)||num(T.flutes)||4,sfm=num(row.sfm);
+    var d=num(sz.dia),bookIpt=num(row[s.dia]),z=num(row.flutes)||num(T.flutes)||4,sfm=num(row.sfm);
+    var fin=row.strategy==='Finishing'||row.cut==='Finish',pct=fin?num(D.settings.finishFeedPct):null;if(!(pct>0&&pct<100))pct=null;
+    var ipt=pct?bookIpt*pct/100:bookIpt;
     var book=Math.round(sfm*12/(Math.PI*d)),max=num(D.settings.maxRpm)||0,rpm=max&&book>max?max:book,capped=rpm<book;
     var ipm=rpm*ipt*z,act=Math.round(rpm*Math.PI*d/12),am=docMul(row.adoc),rm=docMul(row.rdoc),ad=am!==null?am*d:null,rd=rm!==null?rm*d:null;
     res=card(esc(row.strategy)+' · '+esc(row.cut)+' · '+esc(row.material),
       stats([stat('RPM',loc(rpm),capped?'capped at max · book '+loc(book):'rev / min','key'),stat('Feed',ipm.toFixed(1),'in / min','key')])+
-      stats([stat('SFM',loc(act),capped?'book '+esc(row.sfm)+' ft / min':'ft / min','sm'),stat('Chip load',ipt4(ipt),'in / tooth','sm'),stat('Flutes',z,'','sm')])+
+      stats([stat('SFM',loc(act),capped?'book '+esc(row.sfm)+' ft / min':'ft / min','sm'),stat('Chip load',ipt4(ipt),pct?pct+'% of book '+ipt4(bookIpt):'in / tooth','sm'),stat('Flutes',z,'','sm')])+
       stats([stat('Axial DOC',ad!==null?ad.toFixed(4).replace(/^0\./,'.')+'"':esc(row.adoc),esc(row.adoc||''),'sm'),stat('Radial DOC',rd!==null?rd.toFixed(4).replace(/^0\./,'.')+'"':esc(row.rdoc),esc(row.rdoc||''),'sm'),
         stat('MRR',ad!==null&&rd!==null?(ad*rd*ipm).toFixed(2):'—','in³ / min','sm')])+
       (has(sz.loc)||has(sz.partNo)?stats([stat('Length of cut',esc(sz.loc||'—'),'','sm'),stat('Part #',esc(sz.partNo||'—'),'','sm')]):'')+
-      (capped?'<div class="note">Book speed is '+loc(book)+' RPM — capped at the '+loc(max)+' RPM max. Feed is figured at '+loc(rpm)+' RPM so the chip load stays '+ipt4(ipt)+' per tooth.</div>':''),
+      (capped?'<div class="note">Book speed is '+loc(book)+' RPM — capped at the '+loc(max)+' RPM max. Feed is figured at '+loc(rpm)+' RPM so the chip load stays '+ipt4(ipt)+' per tooth.</div>':'')+
+      (pct?'<div class="note">Finishing feed set to '+pct+'% of IMCO\'s book chip load ('+ipt4(bookIpt)+' → '+ipt4(ipt)+' per tooth). Change the % in Edit data → App settings.</div>':''),
       esc(sz.size)+'" ('+dia4(sz.dia)+') · '+esc(row.material)+' · '+esc(T.tool));
   }
   return {steps:h,result:res};
@@ -860,8 +863,8 @@ function C(k,l,w){return {k:k,l:l,w:w||90}}
 function N(k,l,w){return {k:k,l:l,w:w||70,num:1}}
 function specs(){
   var L=[],T=D.threading||{};
-  L.push({id:'settings',g:'Settings',t:'App settings',obj:{rows:[D.settings]},key:'rows',fixed:1,d:'Max spindle RPM caps the calculated milling RPM (feed is lowered to keep the chip load). Edit PIN asks for a PIN before editing; leave blank for none.',
-    cols:[N('maxRpm','Max spindle RPM',110),C('editPin','Edit PIN',90)]});
+  L.push({id:'settings',g:'Settings',t:'App settings',obj:{rows:[D.settings]},key:'rows',fixed:1,d:'Max spindle RPM caps the calculated milling RPM (feed is lowered to keep the chip load). Finishing feed % scales the end mill finishing chip load (100 = book). Edit PIN asks for a PIN before editing; leave blank for none.',
+    cols:[N('maxRpm','Max spindle RPM',110),N('finishFeedPct','Finishing feed %',110),C('editPin','Edit PIN',90)]});
   (D.milling||[]).forEach(function(t,i){
     if(t.kind==='range'){
       L.push({id:'mill:'+i,g:'Milling',t:t.tool+' — speeds & feeds',own:{arr:D.milling,i:i,kind:'mill'},obj:t,key:'rows',
