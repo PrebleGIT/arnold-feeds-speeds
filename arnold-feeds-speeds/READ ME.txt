@@ -1,0 +1,20 @@
+TECHNICAL DATA — SCM, Inc.
+
+PUT ON THE SERVER
+  Copy this whole folder (index.html, data.js, charts) to the shared drive or web server.
+  Open index.html in Chrome or Edge. Make a desktop shortcut / bookmark to it on each PC.
+  Keep the three items together — the page reads data.js and the charts folder next to it.
+
+UPDATE THE NUMBERS
+  Option 1 (easiest): click "Edit data" in the app, change values, then click
+  "Save to data file" in the dark bar. The first time on each PC it asks you to pick
+  data.js in this folder. Everyone else sees the change when they refresh.
+  "Copy for Excel" / "Paste from Excel" let you edit a whole table in Excel.
+
+  Option 2: open data.js in Notepad, change the numbers, save. Instructions are at the top.
+
+  To require a PIN before editing, set "editPin" near the top of data.js (e.g. "1234").
+
+ADD A CHART
+  Drop the image or PDF into the charts folder, then in Edit data > Reference > Charts & links
+  add a row: title, description, and charts/your-file.jpg
