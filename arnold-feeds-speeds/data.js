@@ -21,8 +21,8 @@ window.TECH_DATA = {
     "maxRpm": 12000,
     "finishFeedPct": 75,
     "editPin": "",
-    "updated": "2026-10-29",
-    "savedAt": 1793315537989
+    "updated": "2026-10-30",
+    "savedAt": 1793350722572
   },
 
   // MILLING — one block per tool.
@@ -94,7 +94,7 @@ window.TECH_DATA = {
         {"cut": "Slot / Ramp / Helical", "sub": "Slotting · Ramping · Helical", "apMax": 0.649, "note": "In deep grooving, keep axial DOC under .197\" and use coolant + air."}
       ],
       "sizes": [
-        {"size": "3/4", "dia": 0.75, "flutes": "", "partNo": ""},
+        {"size": "3/4", "dia": 0.75, "flutes": 2, "partNo": ""},
         {"size": "1", "dia": 1, "flutes": "", "partNo": ""},
         {"size": "1-1/4", "dia": 1.25, "flutes": "", "partNo": ""},
         {"size": "2", "dia": 2, "flutes": 5, "partNo": ""}
