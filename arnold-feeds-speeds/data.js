@@ -22,7 +22,7 @@ window.TECH_DATA = {
     "finishFeedPct": 75,
     "editPin": "",
     "updated": "2026-10-30",
-    "savedAt": 1793351438446
+    "savedAt": 1793351640275
   },
 
   // MILLING — one block per tool.
@@ -107,7 +107,7 @@ window.TECH_DATA = {
     },
     {
       "tool": "Haas TNKT 06 Indexable Mill",
-      "sub": "TNKT / TNCT 06T308 inserts · 3/4\" & 1\"",
+      "sub": "TNKT / TNCT 06T308 inserts · 1\"",
       "kind": "range",
       "cutLabel": "Insert",
       "note": "Haas Tooling TNKT / TNCT 06T308 chart — facing, shouldering, slotting, ramping, helical and plunging. Start in the middle of the SFM and feed ranges and adjust. Surface and shoulder milling can be pushed up to 1148 SFM and .020 IPT depending on the setup.",
@@ -117,7 +117,6 @@ window.TECH_DATA = {
         {"cut": "-A · Aluminum", "sub": "TNCT06T308-A · aluminum", "apMax": 0.217, "note": "Use cutting oil or air for ramping and helical milling."}
       ],
       "sizes": [
-        {"size": "3/4", "dia": 0.75, "flutes": 2, "partNo": ""},
         {"size": "1", "dia": 1, "flutes": 3, "partNo": ""}
       ],
       "rows": [
@@ -132,7 +131,7 @@ window.TECH_DATA = {
     },
     {
       "tool": "Ingersoll Hi-Pos Trio 06",
-      "sub": "Indexable shoulder mill · 2\"",
+      "sub": "Indexable shoulder mill · 3/4\" and 2\"",
       "kind": "range",
       "gradeLabel": "Material type",
       "rangeLabel": "Examples",
@@ -141,6 +140,7 @@ window.TECH_DATA = {
         {"cut": "Shoulder / Face", "sub": "", "apMax": "", "note": "When the radial cut (ae) is less than 25% of the cutter diameter, chip thinning applies — raise the feed so the actual chip (hmax) stays in the fz range."}
       ],
       "sizes": [
+        {"size": "3/4", "dia": 0.75, "flutes": 2, "partNo": ""},
         {"size": "2", "dia": 2, "flutes": 5, "partNo": ""}
       ],
       "rows": [
