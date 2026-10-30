@@ -22,7 +22,7 @@ window.TECH_DATA = {
     "finishFeedPct": 75,
     "editPin": "",
     "updated": "2026-10-30",
-    "savedAt": 1793351640275
+    "savedAt": 1793351859739
   },
 
   // MILLING — one block per tool.
@@ -131,7 +131,7 @@ window.TECH_DATA = {
     },
     {
       "tool": "Ingersoll Hi-Pos Trio 06",
-      "sub": "Indexable shoulder mill · 3/4\" and 2\"",
+      "sub": "Indexable shoulder mill · 3/4\"",
       "kind": "range",
       "gradeLabel": "Material type",
       "rangeLabel": "Examples",
@@ -140,8 +140,7 @@ window.TECH_DATA = {
         {"cut": "Shoulder / Face", "sub": "", "apMax": "", "note": "When the radial cut (ae) is less than 25% of the cutter diameter, chip thinning applies — raise the feed so the actual chip (hmax) stays in the fz range."}
       ],
       "sizes": [
-        {"size": "3/4", "dia": 0.75, "flutes": 2, "partNo": ""},
-        {"size": "2", "dia": 2, "flutes": 5, "partNo": ""}
+        {"size": "3/4", "dia": 0.75, "flutes": 2, "partNo": ""}
       ],
       "rows": [
         {"iso": "P", "material": "Steels", "grade": "Non-alloy steel", "isoRange": "1018, A36, 1045, A572, 1070", "sfm": "400-1000", "Shoulder / Face": ".003-.006", "inserts": "1st IN4030 / IN2530 · 2nd IN2505 · 3rd IN2540", "coolant": "No"},
@@ -156,6 +155,34 @@ window.TECH_DATA = {
         {"iso": "S", "material": "High Temp & Titanium", "grade": "High-temp alloys", "isoRange": "Inconel, Hastelloy, Nimonic, Monel", "sfm": "65-200", "Shoulder / Face": ".003-.005", "inserts": "1st IN2036 · 2nd IN2505 · 3rd IN4030 / IN2530", "coolant": "Yes"},
         {"iso": "S", "material": "High Temp & Titanium", "grade": "Titanium alloys", "isoRange": "6Al-4V, 5Al-5Mo-5V-3Cr", "sfm": "85-200", "Shoulder / Face": ".003-.005", "inserts": "1st IN2036 · 2nd IN4030 / IN2530 · 3rd IN2505", "coolant": "Yes"},
         {"iso": "H", "material": "Hardened Steel", "grade": "Hardened steel >48 HRC", "isoRange": "A2, O1, D2", "sfm": "130-250", "Shoulder / Face": ".002-.004", "inserts": "1st IN2504 · 2nd IN2505", "coolant": "No"}
+      ]
+    },
+    {
+      "tool": "Ingersoll GoldMax 8 Face Mill",
+      "sub": "VJ6K series · SGM-44R001 J inserts · 2\"",
+      "kind": "range",
+      "gradeLabel": "Material type",
+      "rangeLabel": "Hardness",
+      "note": "Ingersoll GoldMax 8 (VJ6K) guidelines. Starting parameters — DOC and WOC may need to be revised to optimize the tool.",
+      "cuts": [
+        {"cut": "Face milling", "sub": "", "apMax": "", "note": ""}
+      ],
+      "sizes": [
+        {"size": "2", "dia": 2, "flutes": 5, "partNo": ""}
+      ],
+      "rows": [
+        {"iso": "N", "material": "Aluminum", "grade": "6061-T6, 7075-T6, 2024", "isoRange": "", "sfm": "1500-8000", "Face milling": ".004-.016", "inserts": "1st IN4005 · 2nd IN2505 · 3rd IN2530", "coolant": "Yes"},
+        {"iso": "K", "material": "Cast Iron", "grade": "Gray", "isoRange": "150-250 HB", "sfm": "400-750", "Face milling": ".004-.012", "inserts": "1st IN4005 · 2nd IN4030 · 3rd IN2505", "coolant": "No"},
+        {"iso": "K", "material": "Cast Iron", "grade": "Nodular", "isoRange": "150-250 HB", "sfm": "300-650", "Face milling": ".004-.012", "inserts": "1st IN4005 · 2nd IN4030 · 3rd IN2505", "coolant": "No"},
+        {"iso": "P", "material": "Steel", "grade": "Low carbon — 1018, 8620", "isoRange": "100-250 HB", "sfm": "350-650", "Face milling": ".004-.012", "inserts": "1st IN4030 · 2nd IN4005 · 3rd IN2530", "coolant": "No"},
+        {"iso": "P", "material": "Steel", "grade": "High carbon — F-6180", "isoRange": "250-400 HB", "sfm": "300-600", "Face milling": ".004-.008", "inserts": "1st IN4030 · 2nd IN4005 · 3rd IN2530", "coolant": "No"},
+        {"iso": "P", "material": "Steel", "grade": "Alloy steel — 4140, 4340", "isoRange": "150-300 HB", "sfm": "250-500", "Face milling": ".004-.008", "inserts": "1st IN4030 · 2nd IN4005 · 3rd IN2530", "coolant": "No"},
+        {"iso": "P", "material": "Steel", "grade": "Tool steel — A2, O1, D2, P20", "isoRange": "up to 300 HB", "sfm": "250-500", "Face milling": ".004-.008", "inserts": "1st IN4030 · 2nd IN4005 · 3rd IN2530", "coolant": "No"},
+        {"iso": "M", "material": "Stainless Steel", "grade": "300 series — 304, 316", "isoRange": "", "sfm": "250-450", "Face milling": ".004-.010", "inserts": "1st IN4030 · 2nd IN2530 · 3rd IN4005", "coolant": "May not be required at high speeds"},
+        {"iso": "M", "material": "Stainless Steel", "grade": "400 series, 15-5 PH", "isoRange": "up to 320 HB", "sfm": "300-600", "Face milling": ".004-.010", "inserts": "1st IN4030 · 2nd IN2530 · 3rd IN4005", "coolant": "May not be required at high speeds"},
+        {"iso": "M", "material": "Stainless Steel", "grade": "13-8 PH", "isoRange": "", "sfm": "200-400", "Face milling": ".004-.010", "inserts": "1st IN4030 · 2nd IN2530 · 3rd IN4005", "coolant": "Yes"},
+        {"iso": "S", "material": "Nickel Alloys", "grade": "Inconel, Hastelloy, Waspalloy", "isoRange": "", "sfm": "75-120", "Face milling": ".003-.006", "inserts": "1st IN4030 · 2nd IN2530 · 3rd IN4005", "coolant": "Yes"},
+        {"iso": "S", "material": "Titanium", "grade": "6-4, 10-2-3, 5-5-5-3", "isoRange": "", "sfm": "75-200", "Face milling": ".003-.006", "inserts": "1st IN4030 · 2nd IN2530 · 3rd IN4005", "coolant": "Yes"}
       ]
     }
   ],
