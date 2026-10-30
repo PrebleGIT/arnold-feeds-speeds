@@ -22,7 +22,7 @@ window.TECH_DATA = {
     "finishFeedPct": 75,
     "editPin": "",
     "updated": "2026-10-30",
-    "savedAt": 1793350722572
+    "savedAt": 1793350902571
   },
 
   // MILLING — one block per tool.
@@ -86,7 +86,7 @@ window.TECH_DATA = {
     },
     {
       "tool": "Haas ADKT 1706 Indexable Mill",
-      "sub": "PESR-MM / ML inserts · 3/4\" – 2\"",
+      "sub": "PESR-MM / ML inserts · 1\" – 2\"",
       "kind": "range",
       "note": "Haas Tooling ADKT 1706 chart. Start in the middle of the SFM and feed ranges and adjust for your setup.",
       "cuts": [
@@ -94,7 +94,6 @@ window.TECH_DATA = {
         {"cut": "Slot / Ramp / Helical", "sub": "Slotting · Ramping · Helical", "apMax": 0.649, "note": "In deep grooving, keep axial DOC under .197\" and use coolant + air."}
       ],
       "sizes": [
-        {"size": "3/4", "dia": 0.75, "flutes": 2, "partNo": ""},
         {"size": "1", "dia": 1, "flutes": "", "partNo": ""},
         {"size": "1-1/4", "dia": 1.25, "flutes": "", "partNo": ""},
         {"size": "2", "dia": 2, "flutes": 5, "partNo": ""}
@@ -106,6 +105,35 @@ window.TECH_DATA = {
         {"iso": "M", "material": "Stainless Steels", "grade": "HU30", "isoRange": "M20-M30", "sfm": "295-492", "Face / Shoulder": "0.002-0.010", "Slot / Ramp / Helical": "0.002-0.006"},
         {"iso": "K", "material": "Cast Iron", "grade": "HU30", "isoRange": "K20-K30", "sfm": "393-820", "Face / Shoulder": "0.003-0.014", "Slot / Ramp / Helical": "0.003-0.008"},
         {"iso": "K", "material": "Cast Iron", "grade": "MKP30", "isoRange": "K20-K30", "sfm": "656-984", "Face / Shoulder": "0.003-0.014", "Slot / Ramp / Helical": "0.003-0.008"}
+      ]
+    },
+    {
+      "tool": "Ingersoll Hi-Pos Trio 06",
+      "sub": "Indexable shoulder mill · .750\" & 2\"",
+      "kind": "range",
+      "gradeLabel": "Material type",
+      "rangeLabel": "Examples",
+      "note": "Ingersoll SpeedUp Hi-Pos Trio 06 guidelines (02/2026). Starting parameters — DOC and WOC may need to be revised to optimize the tool.",
+      "cuts": [
+        {"cut": "Shoulder / Face", "sub": "", "apMax": "", "note": "When the radial cut (ae) is less than 25% of the cutter diameter, chip thinning applies — raise the feed so the actual chip (hmax) stays in the fz range."}
+      ],
+      "sizes": [
+        {"size": ".750", "dia": 0.75, "flutes": 2, "partNo": ""},
+        {"size": "2", "dia": 2, "flutes": "", "partNo": ""}
+      ],
+      "rows": [
+        {"iso": "P", "material": "Steels", "grade": "Non-alloy steel", "isoRange": "1018, A36, 1045, A572, 1070", "sfm": "400-1000", "Shoulder / Face": ".003-.006", "inserts": "1st IN4030 / IN2530 · 2nd IN2505 · 3rd IN2540", "coolant": "No"},
+        {"iso": "P", "material": "Steels", "grade": "Low-alloy steel", "isoRange": "4140, 4340, P20, 8620, 300M", "sfm": "350-700", "Shoulder / Face": ".003-.006", "inserts": "1st IN4030 / IN2530 · 2nd IN2505 · 3rd IN2540", "coolant": "No"},
+        {"iso": "P", "material": "Steels", "grade": "High-alloy steel", "isoRange": "H13, A2, D2, M2, T1", "sfm": "300-600", "Shoulder / Face": ".003-.006", "inserts": "1st IN4030 / IN2530 · 2nd IN2505 · 3rd IN2540", "coolant": "No"},
+        {"iso": "M", "material": "Stainless", "grade": "Ferritic & martensitic", "isoRange": "410, 416, 440", "sfm": "350-600", "Shoulder / Face": ".003-.005", "inserts": "1st IN2036 · 2nd IN4030 / IN2530 · 3rd IN2505 · 4th IN2540", "coolant": "Yes — may not be required at high speeds"},
+        {"iso": "M", "material": "Stainless", "grade": "Austenitic", "isoRange": "303, 304, 316, 15-5, 17-4", "sfm": "300-550", "Shoulder / Face": ".003-.005", "inserts": "1st IN2036 · 2nd IN4030 / IN2530 · 3rd IN2505 · 4th IN2540", "coolant": "Yes — may not be required at high speeds"},
+        {"iso": "K", "material": "Cast Iron", "grade": "Gray cast iron", "isoRange": "Class 20, 30, 45", "sfm": "500-1000", "Shoulder / Face": ".003-.006", "inserts": "1st IN2510 · 2nd IN2504 · 3rd IN2505", "coolant": "No"},
+        {"iso": "K", "material": "Cast Iron", "grade": "Nodular cast iron", "isoRange": "60-40-18, 100-70-03", "sfm": "400-800", "Shoulder / Face": ".003-.006", "inserts": "1st IN2510 · 2nd IN2504 · 3rd IN2505", "coolant": "No"},
+        {"iso": "N", "material": "Aluminum", "grade": "Carbide insert (IN10K)", "isoRange": "7075, 6061", "sfm": "1000-3000", "Shoulder / Face": ".003-.007", "inserts": "IN10K", "coolant": "Yes"},
+        {"iso": "N", "material": "Aluminum", "grade": "DLC insert (IN3310)", "isoRange": "7075, 6061", "sfm": "1500-4500", "Shoulder / Face": ".003-.007", "inserts": "IN3310 (DLC)", "coolant": "Yes"},
+        {"iso": "S", "material": "High Temp & Titanium", "grade": "High-temp alloys", "isoRange": "Inconel, Hastelloy, Nimonic, Monel", "sfm": "65-200", "Shoulder / Face": ".003-.005", "inserts": "1st IN2036 · 2nd IN2505 · 3rd IN4030 / IN2530", "coolant": "Yes"},
+        {"iso": "S", "material": "High Temp & Titanium", "grade": "Titanium alloys", "isoRange": "6Al-4V, 5Al-5Mo-5V-3Cr", "sfm": "85-200", "Shoulder / Face": ".003-.005", "inserts": "1st IN2036 · 2nd IN4030 / IN2530 · 3rd IN2505", "coolant": "Yes"},
+        {"iso": "H", "material": "Hardened Steel", "grade": "Hardened steel >48 HRC", "isoRange": "A2, O1, D2", "sfm": "130-250", "Shoulder / Face": ".002-.004", "inserts": "1st IN2504 · 2nd IN2505", "coolant": "No"}
       ]
     }
   ],
