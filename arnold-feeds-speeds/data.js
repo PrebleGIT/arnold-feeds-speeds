@@ -22,7 +22,7 @@ window.TECH_DATA = {
     "finishFeedPct": 75,
     "editPin": "",
     "updated": "2026-10-30",
-    "savedAt": 1793350902571
+    "savedAt": 1793351138003
   },
 
   // MILLING — one block per tool.
@@ -94,7 +94,7 @@ window.TECH_DATA = {
         {"cut": "Slot / Ramp / Helical", "sub": "Slotting · Ramping · Helical", "apMax": 0.649, "note": "In deep grooving, keep axial DOC under .197\" and use coolant + air."}
       ],
       "sizes": [
-        {"size": "1", "dia": 1, "flutes": "", "partNo": ""},
+        {"size": "1", "dia": 1, "flutes": 3, "partNo": ""},
         {"size": "1-1/4", "dia": 1.25, "flutes": "", "partNo": ""},
         {"size": "2", "dia": 2, "flutes": 5, "partNo": ""}
       ],
@@ -119,7 +119,7 @@ window.TECH_DATA = {
       ],
       "sizes": [
         {"size": ".750", "dia": 0.75, "flutes": 2, "partNo": ""},
-        {"size": "2", "dia": 2, "flutes": "", "partNo": ""}
+        {"size": "2", "dia": 2, "flutes": 5, "partNo": ""}
       ],
       "rows": [
         {"iso": "P", "material": "Steels", "grade": "Non-alloy steel", "isoRange": "1018, A36, 1045, A572, 1070", "sfm": "400-1000", "Shoulder / Face": ".003-.006", "inserts": "1st IN4030 / IN2530 · 2nd IN2505 · 3rd IN2540", "coolant": "No"},
