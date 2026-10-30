@@ -22,7 +22,7 @@ window.TECH_DATA = {
     "finishFeedPct": 75,
     "editPin": "",
     "updated": "2026-10-30",
-    "savedAt": 1793351138003
+    "savedAt": 1793351353798
   },
 
   // MILLING — one block per tool.
@@ -86,7 +86,7 @@ window.TECH_DATA = {
     },
     {
       "tool": "Haas ADKT 1706 Indexable Mill",
-      "sub": "PESR-MM / ML inserts · 1\" – 2\"",
+      "sub": "PESR-MM / ML inserts · 2\"",
       "kind": "range",
       "note": "Haas Tooling ADKT 1706 chart. Start in the middle of the SFM and feed ranges and adjust for your setup.",
       "cuts": [
@@ -94,8 +94,6 @@ window.TECH_DATA = {
         {"cut": "Slot / Ramp / Helical", "sub": "Slotting · Ramping · Helical", "apMax": 0.649, "note": "In deep grooving, keep axial DOC under .197\" and use coolant + air."}
       ],
       "sizes": [
-        {"size": "1", "dia": 1, "flutes": 3, "partNo": ""},
-        {"size": "1-1/4", "dia": 1.25, "flutes": "", "partNo": ""},
         {"size": "2", "dia": 2, "flutes": 5, "partNo": ""}
       ],
       "rows": [
@@ -105,6 +103,30 @@ window.TECH_DATA = {
         {"iso": "M", "material": "Stainless Steels", "grade": "HU30", "isoRange": "M20-M30", "sfm": "295-492", "Face / Shoulder": "0.002-0.010", "Slot / Ramp / Helical": "0.002-0.006"},
         {"iso": "K", "material": "Cast Iron", "grade": "HU30", "isoRange": "K20-K30", "sfm": "393-820", "Face / Shoulder": "0.003-0.014", "Slot / Ramp / Helical": "0.003-0.008"},
         {"iso": "K", "material": "Cast Iron", "grade": "MKP30", "isoRange": "K20-K30", "sfm": "656-984", "Face / Shoulder": "0.003-0.014", "Slot / Ramp / Helical": "0.003-0.008"}
+      ]
+    },
+    {
+      "tool": "Haas TNKT 06 Indexable Mill",
+      "sub": "TNKT / TNCT 06T308 inserts · 1\"",
+      "kind": "range",
+      "cutLabel": "Insert",
+      "note": "Haas Tooling TNKT / TNCT 06T308 chart — facing, shouldering, slotting, ramping, helical and plunging. Start in the middle of the SFM and feed ranges and adjust. Surface and shoulder milling can be pushed up to 1148 SFM and .020 IPT depending on the setup.",
+      "cuts": [
+        {"cut": "-L · HS chip breaker", "sub": "TNKT06T308-L · steel, stainless, cast iron", "apMax": 0.217, "note": "Use cutting oil or air for ramping and helical milling."},
+        {"cut": "-M · MHS chip breaker", "sub": "TNKT06T308-M · steel, stainless, cast iron", "apMax": 0.217, "note": "Use cutting oil or air for ramping and helical milling."},
+        {"cut": "-A · Aluminum", "sub": "TNCT06T308-A · aluminum", "apMax": 0.217, "note": "Use cutting oil or air for ramping and helical milling."}
+      ],
+      "sizes": [
+        {"size": "1", "dia": 1, "flutes": 3, "partNo": ""}
+      ],
+      "rows": [
+        {"iso": "P", "material": "Steels", "grade": "HP25", "isoRange": "", "sfm": "524-885", "-L · HS chip breaker": "0.002-0.008", "-M · MHS chip breaker": "0.002-0.010"},
+        {"iso": "P", "material": "Steels", "grade": "HU30", "isoRange": "", "sfm": "492-787", "-L · HS chip breaker": "0.002-0.010", "-M · MHS chip breaker": "0.002-0.010"},
+        {"iso": "P", "material": "Steels", "grade": "HU40", "isoRange": "", "sfm": "426-688", "-L · HS chip breaker": "0.002-0.010", "-M · MHS chip breaker": "0.002-0.010"},
+        {"iso": "M", "material": "Stainless Steels", "grade": "HU30", "isoRange": "", "sfm": "295-492", "-L · HS chip breaker": "0.002-0.006", "-M · MHS chip breaker": "0.002-0.008"},
+        {"iso": "M", "material": "Stainless Steels", "grade": "HU40", "isoRange": "", "sfm": "229-393", "-L · HS chip breaker": "0.002-0.006", "-M · MHS chip breaker": "0.002-0.008"},
+        {"iso": "K", "material": "Cast Iron", "grade": "HU30", "isoRange": "", "sfm": "393-656", "-L · HS chip breaker": "0.003-0.010", "-M · MHS chip breaker": "0.003-0.012"},
+        {"iso": "N", "material": "Aluminum", "grade": "HN25A", "isoRange": "", "sfm": "1000-1800", "-A · Aluminum": "0.003-0.008"}
       ]
     },
     {

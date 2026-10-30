@@ -402,7 +402,11 @@ var M={};
 M.mill={deps:{tool:['strat','cut','mat','dia','grade'],strat:['cut'],mat:['grade']},
 fix:function(s){
   var T=find(D.milling,'tool',s.tool);if(!T)return;
-  if(T.kind==='range'){var gs=(T.rows||[]).filter(function(r){return r.material===s.mat});if(gs.length===1)s.grade=gs[0].grade;return}
+  if(T.kind==='range'){
+    var c1=(T.cuts||[]).length===1?T.cuts[0].cut:s.cut,ok=function(r){return !c1||has(r[c1])};
+    var gs=(T.rows||[]).filter(function(r){return r.material===s.mat&&ok(r)});
+    if(s.mat&&!gs.length){delete s.mat;delete s.grade}else if(gs.length===1)s.grade=gs[0].grade;else if(s.grade&&!find(gs,'grade',s.grade))delete s.grade;
+    return}
   if(T.kind==='ipt'){var cs=iptCuts(T,s.strat);if(s.strat&&cs.length===1)s.cut=cs[0];if(s.dia&&!find(T.sizes,'size',s.dia))delete s.dia;return}
   var r=find(T.rows,'dia',s.dia);if(s.mat&&!cell(r,s.mat,'rpm'))delete s.mat;
 },
@@ -433,9 +437,11 @@ function millRangeView(s,T,h){
   rows.forEach(function(r){if(!find(mats,'material',r.material))mats.push(r)});
   var n=2;
   if(cuts.length===1){if(s.cut!==cuts[0].cut){s.cut=cuts[0].cut}cut=cuts[0]}
-  else h+=step(n++,'Type of cut',opts('cut',cuts.map(function(c){return {v:c.cut,l:esc(c.cut),s:esc(c.sub||''),c:1,on:c.cut===s.cut}}),'two'),0,!!cut);
-  h+=step(n++,'Material',opts('mat',mats.map(function(r){return {v:r.material,l:esc(r.material),s:has(r.iso)?'ISO '+esc(r.iso):'',c:1,on:!!cut&&r.material===s.mat}}),'three'),!cut,!!(cut&&s.mat));
-  var grs=rows.filter(function(r){return r.material===s.mat}),row=null;
+  else h+=step(n++,esc(T.cutLabel||'Type of cut'),opts('cut',cuts.map(function(c){return {v:c.cut,l:esc(c.cut),s:esc(c.sub||''),c:1,on:c.cut===s.cut}}),'two'),0,!!cut);
+  var okRow=function(r){return !cut||has(r[cut.cut])};
+  h+=step(n++,'Material',opts('mat',mats.map(function(r){return {v:r.material,l:esc(r.material),s:has(r.iso)?'ISO '+esc(r.iso):'',c:1,on:!!cut&&r.material===s.mat,dis:!rows.some(function(x){return x.material===r.material&&okRow(x)})}}),'three'),!cut,!!(cut&&s.mat));
+  var grs=rows.filter(function(r){return r.material===s.mat&&okRow(r)}),row=null;
+  if(grs.length===1)s.grade=grs[0].grade;
   if(grs.length>1)h+=step(n++,esc(T.gradeLabel||'Insert grade'),opts('grade',grs.map(function(r){return {v:r.grade,l:esc(r.grade),s:(has(r.isoRange)?esc(r.isoRange)+' · ':'')+dash(r.sfm)+' SFM',c:1,on:r.grade===s.grade}}),'three'),!(cut&&s.mat),!!s.grade);
   if(cut&&s.mat)grs.forEach(function(r){if(!row&&r.grade===s.grade)row=r});
   h+=step(n++,'Cutter diameter',opts('dia',(T.sizes||[]).map(function(z){return {v:z.size,l:esc(z.size)+'"',s:dia4(z.dia)+(has(z.flutes)?' · '+esc(z.flutes)+' ins.':''),c:1,on:!!row&&z.size===s.dia}}),'sm'),!row,!!(row&&s.dia));
