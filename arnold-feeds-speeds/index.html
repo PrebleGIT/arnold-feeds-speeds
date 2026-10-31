@@ -101,8 +101,12 @@ main{flex:1;overflow:auto;padding:20px 24px}
 .kv .mm{font-size:13px;line-height:1.35}
 .calcin{padding:12px 16px;border-bottom:1px solid var(--line);background:#fafafa}
 .calcin .inrow{grid-template-columns:160px 1fr;align-items:end}
-.calcin .inrow.bin{grid-template-columns:auto repeat(auto-fit,minmax(110px,1fr));gap:12px}
-@media (max-width:900px){.calcin .inrow.bin{grid-template-columns:repeat(3,minmax(0,1fr))}.calcin .inrow.bin .binseg{grid-column:1/-1}.calcin .inrow.bin .seg button{flex:1}}
+.bgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px 18px}
+.brow{display:flex;gap:6px;align-items:stretch}
+.brow .seg{margin:0;flex:none}
+.brow .seg button{padding:7px 12px}
+.brow input{flex:1;min-width:56px;width:70px}
+@media (max-width:900px){.bgrid{grid-template-columns:minmax(0,1fr)}.brow .seg{flex:1;display:flex}.brow .seg button{flex:1}}
 #rCalc{font-size:15px;padding-bottom:8px;font-variant-numeric:tabular-nums}
 #rCalc b{font-size:20px}
 .empty{border:2px dashed #d2d2d2;padding:56px 24px;text-align:center;color:var(--muted)}
@@ -442,7 +446,7 @@ function ballView(s,T,h){
   h+=step(3,'Ball diameter',opts('dia',(T.sizes||[]).map(function(z){return {v:z.size,l:esc(z.size)+'"',s:dia4(z.dia)+(has(z.flutes)?' · '+esc(z.flutes)+' fl':''),c:1,on:z.size===s.dia,dis:!!row&&!has(row[z.size])}}),'sm'),!row,!!(row&&s.dia));
   var sz=find(T.sizes,'size',s.dia),res=null;
   if(row&&sz&&has(row[sz.size])){
-    var D=num(sz.dia),R=D/2,bk=s.bk||{},zSaved=num(sz.flutes),z=zSaved||num(bk['z'+sz.size]);
+    var D=num(sz.dia),R=D/2,bk=s.bk||{},zSaved=num(sz.flutes),zOver=num(bk['z'+sz.size]),z=zOver||zSaved;
     var pct=num(has(bk.pct)?bk.pct:T.stepDefault)||2,ap=num(has(bk.ap)?bk.ap:T.stock)||0.005;
     var deff=ap<R?2*Math.sqrt(ap*(D-ap)):D,sfm=num(row.sfm),ipt=num(row[sz.size]);
     var book=Math.round(sfm*12/(Math.PI*deff)),max=num(T.maxRpm)||num(D_.settings.maxRpm)||0,rpm=max&&book>max?max:book,capped=rpm<book,act=Math.round(rpm*Math.PI*deff/12);
@@ -450,15 +454,17 @@ function ballView(s,T,h){
     var so=D*pct/100,scal=R-Math.sqrt(Math.max(0,R*R-so*so/4));
     var seg=[1,2,3].map(function(v){return '<button type="button" data-bpct="'+v+'"'+(pct===v?' class="on"':'')+'>'+v+'%</button>'}).join('');
     res=card(esc(row.material)+' · '+esc(sz.size)+'" ball · '+pct+'% stepover',
-      '<div class="calcin"><div class="inrow bin"><div class="binseg"><label>Stepover</label><div class="seg" style="margin:0">'+seg+'</div></div>'+
-        '<div><label>Stepover % of dia</label><input class="field" id="b_pct" data-bk="pct" inputmode="decimal" value="'+esc(has(bk.pct)?bk.pct:pct)+'"></div>'+
-        '<div><label>Depth / stock (in)</label><input class="field" id="b_ap" data-bk="ap" inputmode="decimal" value="'+esc(has(bk.ap)?bk.ap:ap)+'"></div>'+
-        (zSaved?'':'<div><label>Flutes</label><input class="field" id="b_z" data-bk="z'+esc(sz.size)+'" inputmode="numeric" placeholder="e.g. 2" value="'+esc(bk['z'+sz.size]||'')+'"></div>')+'</div></div>'+
+      '<div class="calcin"><div class="bgrid">'+
+        '<div><label>Stepover % of dia</label><div class="brow"><div class="seg">'+seg+'</div><input class="field" id="b_pct" data-bk="pct" inputmode="decimal" value="'+esc(has(bk.pct)?bk.pct:pct)+'"></div></div>'+
+        '<div><label>Flutes</label><div class="brow"><div class="seg">'+[2,3,4,6].map(function(v){return '<button type="button" data-bfl="'+v+'"'+(z===v?' class="on"':'')+'>'+v+'</button>'}).join('')+'</div><input class="field" id="b_z" data-bk="z'+esc(sz.size)+'" inputmode="numeric" placeholder="'+(zSaved||'e.g. 4')+'" value="'+esc(has(bk['z'+sz.size])?bk['z'+sz.size]:(zSaved||''))+'"></div></div>'+
+        '<div><label>Depth / stock (in)</label><div class="brow"><input class="field" id="b_ap" data-bk="ap" inputmode="decimal" value="'+esc(has(bk.ap)?bk.ap:ap)+'"></div></div>'+
+      '</div></div>'+
       stats([stat('RPM',loc(rpm),capped?'capped at '+loc(max)+' · book '+loc(book):'rev / min','key'),stat('Feed',feed!==null?feed.toFixed(1):'—',feed!==null?'in / min · book chip load':'enter flutes above','key')])+
       stats([stat('Stepover',so.toFixed(4).replace(/^0\./,'.')+'"',pct+'% of '+dia4(sz.dia),'sm'),stat('Scallop height',scal.toFixed(5).replace(/^0\./,'.')+'"','theoretical','sm'),stat('Effective dia',deff.toFixed(4).replace(/^0\./,'.')+'"','at '+String(ap).replace(/^0\./,'.')+'" depth','sm')])+
       stats([stat('SFM',loc(act),'at effective dia · book '+esc(row.sfm),'sm'),stat('Chip load',ipt4(ipt),'in / tooth (book)','sm'),stat('Chip-thinned feed',feedT!==null?feedT.toFixed(1):'—',feedT!==null?ipt4(iptT)+' / tooth · ×'+thin.toFixed(1):'in / min','sm')])+
       (capped?'<div class="note">At '+String(ap).replace(/^0\./,'.')+'" depth the ball only cuts on a '+deff.toFixed(4).replace(/^0\./,'.')+'" circle, so book speed would be '+loc(book)+' RPM — capped at '+loc(max)+'. Actual SFM at the cut is '+loc(act)+'.</div>':'')+
       '<div class="note">Feed uses the book chip load. The chip-thinned feed raises it ×'+thin.toFixed(1)+' because the ball cuts on a smaller diameter at this depth — work up toward it if the finish and machine allow.</div>'+
+      (zOver&&zSaved&&zOver!==zSaved?'<div class="note">Using '+zOver+' flutes for this '+esc(sz.size)+'" ball (saved default is '+zSaved+'). This PC remembers your choice; clear the box to go back to '+zSaved+'.</div>':'')+
       (T.note?'<div class="note">'+esc(T.note)+'</div>':''),
       esc(sz.size)+'" ('+dia4(sz.dia)+') ball'+(z?' · '+z+' flutes':'')+(has(sz.partNo)?' · Part # '+esc(sz.partNo):'')+' · '+esc(T.tool));
   }
@@ -837,7 +843,11 @@ $('vBody').addEventListener('click',function(e){
   if(e.target.tagName==='IMG'){e.target.classList.toggle('full');return}
   var b=e.target.closest('[data-cam]');if(b){camSys=b.dataset.cam;$('vBody').innerHTML=camHtml()}
 });
-$('result').addEventListener('click',function(e){var b=e.target.closest('[data-bpct]');if(!b)return;(S.mill.bk=S.mill.bk||{}).pct=b.dataset.bpct;renderResult()});
+$('result').addEventListener('click',function(e){
+  var f=e.target.closest('[data-bfl]');if(f){(S.mill.bk=S.mill.bk||{})['z'+S.mill.dia]=f.dataset.bfl;saveBallZ();renderResult();return}
+  var b=e.target.closest('[data-bpct]');if(!b)return;(S.mill.bk=S.mill.bk||{}).pct=b.dataset.bpct;renderResult()});
+function saveBallZ(){var o={},bk=S.mill.bk||{};for(var k in bk)if(k.charAt(0)==='z'&&has(bk[k]))o[k]=bk[k];lsSet('td.ballz',JSON.stringify(o))}
+(function(){try{var o=JSON.parse(lsGet('td.ballz')||'{}');S.mill.bk=S.mill.bk||{};for(var k in o)S.mill.bk[k]=o[k]}catch(e){}})();
 $('vClose').addEventListener('click',function(){$('viewer').close()});
 
 /* ---------- render ---------- */
@@ -895,7 +905,7 @@ $('steps').addEventListener('input',function(e){
   if(t.dataset.f){var c=t.closest('.calc'),id=c.dataset.c;(S.calc[id]=S.calc[id]||{})[t.dataset.f]=t.value;c.querySelector('.out').innerHTML=calcOut(find(CALCS,'id',id))}
 });
 $('result').addEventListener('input',function(e){
-  if(e.target.dataset.bk){var id=e.target.id,pos=e.target.selectionStart;(S.mill.bk=S.mill.bk||{})[e.target.dataset.bk]=e.target.value;renderResult();var i=$(id);if(i){i.focus();try{i.setSelectionRange(pos,pos)}catch(x){}}return}
+  if(e.target.dataset.bk){var id=e.target.id,pos=e.target.selectionStart;(S.mill.bk=S.mill.bk||{})[e.target.dataset.bk]=e.target.value;if(e.target.dataset.bk.charAt(0)==='z')saveBallZ();renderResult();var i=$(id);if(i){i.focus();try{i.setSelectionRange(pos,pos)}catch(x){}}return}
   if(e.target.id==='rZ'){(S.mill.zs=S.mill.zs||{})[S.mill.dia]=e.target.value;var pos=e.target.selectionStart;renderResult();var i=$('rZ');if(i){i.focus();try{i.setSelectionRange(pos,pos)}catch(x){}}return}
   if(e.target.id==='rDia'){S.drill.cdia=e.target.value;var T=find(D.drilling,'type',S.drill.type);if(!T)return;
     if(T.kind==='range'){var r2=rangeRow(T,S.drill),z=find(T.sizes,'size',S.drill.size);if(r2&&z)$('rCalc').innerHTML=rangeCalc(rng(r2.sfm),rng(r2[z.size]),e.target.value,z);return}
