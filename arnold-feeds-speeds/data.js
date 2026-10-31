@@ -15,14 +15,16 @@
 window.TECH_DATA = {
   // App settings. maxRpm: highest spindle RPM — milling RPM is capped here and feed lowered to keep chip load.
   // finishFeedPct: end mill finishing chip load as a % of the catalog number (100 = catalog).
+  // hiddenTabs: tab names to hide, comma separated (e.g. "Turning"); their data stays in this file.
   // editPin: set a PIN (e.g. "1234") to ask for it before editing. Leave "" for no PIN.
   "settings": {
     "title": "Technical Data",
     "maxRpm": 12000,
     "finishFeedPct": 75,
+    "hiddenTabs": "Turning",
     "editPin": "",
     "updated": "2026-10-30",
-    "savedAt": 1793456296466
+    "savedAt": 1793456722507
   },
 
   // MILLING — one block per tool.

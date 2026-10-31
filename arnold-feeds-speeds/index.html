@@ -309,7 +309,7 @@ var HEAD=[
 '     under reference > charts.',
 '   =================================================================== */',''].join('\n');
 var CMT={
- 'settings':'App settings. maxRpm: highest spindle RPM — milling RPM is capped here and feed lowered to keep chip load.\nfinishFeedPct: end mill finishing chip load as a % of the catalog number (100 = catalog).\neditPin: set a PIN (e.g. "1234") to ask for it before editing. Leave "" for no PIN.',
+ 'settings':'App settings. maxRpm: highest spindle RPM — milling RPM is capped here and feed lowered to keep chip load.\nfinishFeedPct: end mill finishing chip load as a % of the catalog number (100 = catalog).\nhiddenTabs: tab names to hide, comma separated (e.g. "Turning"); their data stays in this file.\neditPin: set a PIN (e.g. "1234") to ask for it before editing. Leave "" for no PIN.',
  'milling':'MILLING — one block per tool.\nkind "ipt" (catalog chart): sizes = diameters offered; rows = one per material and type of cut with\n  SFM, depths of cut, and chip load per tooth under each size label. RPM and feed are calculated.\nkind "rpm" (shop numbers): one row per diameter, each material holds {"rpm": , "ipm": }.',
  'drilling':'DRILLING — one block per drill type.\nkind "rpm": rows by diameter with RPM / IPM per material (like milling).\nkind "range": catalog chart — sizes = insert sizes with min/max drill dia; rows = one per material condition\n  with an SFM range and a feed range (in/rev) under each size.\nkind "sfm": one row per material with SFM / IPR (ranges optional).',
  'threading':'THREADING',
@@ -400,7 +400,9 @@ var EMPTY='<div class="empty"><b>No result yet</b>Make your selections on the le
 /* ---------- tabs ---------- */
 var TABS=[['mill','Milling'],['drill','Drilling'],['thread','Threading'],['turn','Turning'],['calc','Calculators'],['key','Keyways'],['csk','Countersinks'],['ref','Reference']];
 var S={mill:{},drill:{},thread:{},turn:{},key:{},csk:{},calc:{},ref:{}};
-var tab=lsGet('td.tab');if(!TABS.some(function(t){return t[0]===tab}))tab='mill';
+function shownTabs(){var h=String(D.settings.hiddenTabs||'').toLowerCase().split(',').map(function(x){return x.trim()}).filter(Boolean);
+  return TABS.filter(function(t){return h.indexOf(t[1].toLowerCase())<0&&h.indexOf(t[0])<0})}
+var tab=lsGet('td.tab');if(!shownTabs().some(function(t){return t[0]===tab}))tab=(shownTabs()[0]||TABS[0])[0];
 var editing=false;
 
 var M={};
@@ -863,7 +865,8 @@ function headerInfo(){
 }
 function fmtDate(s){var d=new Date(s+'T12:00:00');return isNaN(d)?s:d.toLocaleDateString([], {month:'short',day:'numeric',year:'numeric'})}
 function renderTabs(){
-  $('tabs').innerHTML=TABS.map(function(t){return '<button data-tab="'+t[0]+'"'+(!editing&&t[0]===tab?' class="on"':'')+'>'+t[1]+'</button>'}).join('')+
+  if(!editing&&!shownTabs().some(function(t){return t[0]===tab}))tab=(shownTabs()[0]||TABS[0])[0];
+  $('tabs').innerHTML=shownTabs().map(function(t){return '<button data-tab="'+t[0]+'"'+(!editing&&t[0]===tab?' class="on"':'')+'>'+t[1]+'</button>'}).join('')+
     '<button class="lib'+(editing?' on':'')+'" data-edit="1">Edit data</button>';
 }
 function render(){
@@ -922,8 +925,8 @@ function C(k,l,w){return {k:k,l:l,w:w||90}}
 function N(k,l,w){return {k:k,l:l,w:w||70,num:1}}
 function specs(){
   var L=[],T=D.threading||{};
-  L.push({id:'settings',g:'Settings',t:'App settings',obj:{rows:[D.settings]},key:'rows',fixed:1,d:'Max spindle RPM caps the calculated milling RPM (feed is lowered to keep the chip load). Finishing feed % scales the end mill finishing chip load (100 = book). Edit PIN asks for a PIN before editing; leave blank for none.',
-    cols:[N('maxRpm','Max spindle RPM',110),N('finishFeedPct','Finishing feed %',110),C('editPin','Edit PIN',90)]});
+  L.push({id:'settings',g:'Settings',t:'App settings',obj:{rows:[D.settings]},key:'rows',fixed:1,d:'Max spindle RPM caps the calculated milling RPM (feed is lowered to keep the chip load). Finishing feed % scales the end mill finishing chip load (100 = book). Hidden tabs: tab names to hide, separated by commas (e.g. Turning) — the data is kept. Edit PIN asks for a PIN before editing; leave blank for none.',
+    cols:[N('maxRpm','Max spindle RPM',110),N('finishFeedPct','Finishing feed %',110),C('hiddenTabs','Hidden tabs',180),C('editPin','Edit PIN',90)]});
   (D.milling||[]).forEach(function(t,i){
     if(t.kind==='ball'&&t.source){
       L.push({id:'millsz:'+i,g:'Milling',t:t.tool+' — sizes',obj:t,key:'sizes',d:'Ball diameters and default flutes. SFM and chip loads come from the '+t.source+' '+(t.sourceCut||'Finish')+' rows — edit them there.',
