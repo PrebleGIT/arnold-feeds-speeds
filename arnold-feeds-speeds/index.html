@@ -116,6 +116,12 @@ main{flex:1;overflow:auto;padding:20px 24px}
 .calcs{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:16px;max-width:1500px;margin:0 auto}
 .calc{background:#fff;border:1px solid var(--line)}
 .calc h3{margin:0;display:flex;align-items:center;justify-content:space-between;background:var(--char);color:#fff;font-size:13px;letter-spacing:.8px;text-transform:uppercase;padding:6px 8px 6px 16px}
+.cvrow{display:grid;grid-template-columns:110px 1fr 22px 1fr;gap:10px;align-items:end;padding:10px 16px;border-top:1px solid var(--line)}
+.calc.conv h3+.cvrow{border-top:0}
+.cvl{font-weight:700;font-size:14px;padding-bottom:10px}
+.cvx{text-align:center;color:var(--red);font-weight:700;padding-bottom:9px}
+.cvn{padding:8px 16px 12px;color:var(--muted);font-size:12px;border-top:1px solid var(--line)}
+@media (max-width:900px){.cvrow{grid-template-columns:1fr 22px 1fr}.cvl{grid-column:1/-1;padding-bottom:0}}
 .calc h3 button{background:transparent;color:#ddd;border-color:#777;padding:3px 10px;font-size:12px;text-transform:none;letter-spacing:0}
 .calc .f{display:grid;grid-template-columns:repeat(var(--n,2),1fr);gap:10px;padding:14px 16px}
 .cr{display:flex;justify-content:space-between;align-items:baseline;padding:10px 16px;border-top:1px solid var(--line);background:var(--redtint);box-shadow:inset 4px 0 0 var(--red)}
@@ -795,8 +801,20 @@ function calcOut(C){
   var out=C.run(v);if(!out||out.some(function(o){return /NaN|Infinity/.test(o[1])}))return '';
   return out.map(function(o){return '<div class="cr"><span>'+o[0]+'</span><div><b>'+o[1]+'</b><i>'+o[2]+'</i></div></div>'}).join('');
 }
+var CONV=[['len','Length','mm','in',1/25.4,3,4],['ipt','Chip load','mm / tooth','in / tooth',1/25.4,3,4],['feed','Feed rate','mm / min','in / min',1/25.4,1,2],['spd','Surface speed','m / min','SFM',3.280839895,1,0]];
+function convFmt(v,d){var n=Number(v);if(!isFinite(n))return '';var t=n.toFixed(d);if(Math.abs(n)<1&&n!==0)t=t.replace(/^(-?)0\./,'$1.');return t}
+function convHtml(){
+  var st=S.calc.conv||{};
+  return '<div class="calc conv" data-c="conv"><h3>Metric ⇄ Inch<button data-reset="conv">Reset</button></h3>'+CONV.map(function(r){
+    var v=st[r[0]]||{};
+    return '<div class="cvrow"><div class="cvl">'+r[1]+'</div>'+
+      '<div><label>'+r[2]+'</label><input class="field" data-cv="'+r[0]+'" data-side="m" type="text" inputmode="decimal" value="'+esc(v.m||'')+'"></div>'+
+      '<div class="cvx">⇄</div>'+
+      '<div><label>'+r[3]+'</label><input class="field" data-cv="'+r[0]+'" data-side="i" type="text" inputmode="decimal" value="'+esc(v.i||'')+'"></div></div>';
+  }).join('')+'<div class="cvn">Type in either box — 1" = 25.4 mm</div></div>';
+}
 M.calc={wide:1,view:function(){
-  return '<div class="calcs">'+CALCS.map(function(C){
+  return '<div class="calcs">'+convHtml()+CALCS.map(function(C){
     var raw=S.calc[C.id]||{};
     return '<div class="calc" data-c="'+C.id+'"><h3>'+C.t+'<button data-reset="'+C.id+'">Reset</button></h3><div class="f" style="--n:'+(C.n||2)+'">'+
       C.f.map(function(f){return '<div><label>'+f[1]+'</label><input class="field" data-f="'+f[0]+'" type="text" inputmode="decimal" placeholder="'+f[2]+'" value="'+esc(raw[f[0]]||'')+'"></div>'}).join('')+
@@ -909,6 +927,10 @@ $('steps').addEventListener('click',function(e){
 $('steps').addEventListener('input',function(e){
   var t=e.target;
   if(t.dataset.in){S[tab][t.dataset.in]=t.value;renderResult();return}
+  if(t.dataset.cv){var r=find(CONV.map(function(x){return {k:x[0],x:x}}),'k',t.dataset.cv).x,side=t.dataset.side,n=parseFloat(t.value),o=side==='m'?'i':'m';
+    var out=isFinite(n)&&String(t.value).trim()!==''?(side==='m'?convFmt(n*r[4],r[6]):convFmt(n/r[4],r[5])):'';
+    var st=(S.calc.conv=S.calc.conv||{})[r[0]]={};st[side]=t.value;st[o]=out;
+    var other=t.closest('.cvrow').querySelector('input[data-side="'+o+'"]');if(other)other.value=out;return}
   if(t.dataset.f){var c=t.closest('.calc'),id=c.dataset.c;(S.calc[id]=S.calc[id]||{})[t.dataset.f]=t.value;c.querySelector('.out').innerHTML=calcOut(find(CALCS,'id',id))}
 });
 $('result').addEventListener('input',function(e){
