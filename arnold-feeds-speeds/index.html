@@ -324,6 +324,7 @@ var CMT={
  'threading.formInch':'Form taps: each material holds {"sfm": , "rpm": , "ipm": }.',
  'threading.cutInch':'Cut taps: same layout as form taps.',
  'threading.npt':'NPT pipe taps.',
+ 'threading.threadMills':'Thread mills. diams = cutter diameters that have a chip load column; rows = SFM and chip load by cutter\ndiameter for each material; passes = radial passes by tool thread size and machinability.',
  'threading.odPdx':'OD threading insert PDX (edge of insert to center of 60° cutting edge).',
  'threading.presetsInch':'Thread Dims calculator preset sizes. d = major dia, tpi / p = pitch.',
  'turning':'TURNING — one row per tool. category groups the tools (Facing / OD Turning / ID Boring).\nEach material holds {"sfm": , "ipr": }.',
@@ -634,11 +635,11 @@ function drillCalc(r,d){
 }
 
 /* ===== Threading ===== */
-var TH=['sys','size','mat','dsys','dir','cls','dmode','preset','cd','ctpi','cp'];
-M.thread={deps:{mode:TH,sys:['size','mat'],size:['mat'],dsys:['dir','cls','dmode','preset','cd','ctpi','cp'],dmode:['preset','cd','ctpi','cp']},
+var TH=['sys','size','mat','dsys','dir','cls','dmode','preset','cd','ctpi','cp','tmt','tgrp','tmat','tdir','tsize'];
+M.thread={deps:{mode:TH,tmt:['tgrp','tmat'],tgrp:['tmat'],sys:['size','mat'],size:['mat'],dsys:['dir','cls','dmode','preset','cd','ctpi','cp'],dmode:['preset','cd','ctpi','cp']},
 view:function(s){
   var T=D.threading||{},res=null;
-  var modes=[['form','Form Tap'],['cut','Cut Tap'],['npt','NPT Tap'],['od','OD Threading'],['dims','Thread Dims']];
+  var modes=[['form','Form Tap'],['cut','Cut Tap'],['npt','NPT Tap'],['tmill','Thread Mill'],['od','OD Threading'],['dims','Thread Dims']];
   var extra='';
   if(s.mode==='form'||s.mode==='cut'){
     var sr=find(T.sfmChart,'type',s.mode==='form'?'Form Tap':'Cut Tap');
@@ -672,6 +673,8 @@ view:function(s){
     var o=find(T.odPdx,'tpi',s.size);
     h+=step(2,'TPI',opts('size',(T.odPdx||[]).map(function(r){return {v:r.tpi,l:esc(r.tpi),s:esc(r.pdx||'—'),c:1,on:String(r.tpi)===String(s.size)}}),'sm'),0,!!o);
     if(o)res=card('OD threading · '+esc(o.tpi)+' TPI',has(o.pdx)?big(esc(o.pdx),'PDX — edge of insert to center of 60° cutting edge'):big(esc(o.tpi)+' TPI','PDX value coming soon'));
+  }else if(s.mode==='tmill'){
+    var r3=tmView(s);h+=r3.steps;res=r3.result;
   }else{
     var r2=dimsView(s);h+=r2.steps;res=r2.result;
   }
@@ -704,6 +707,54 @@ function calcMetricThread(d,pitch,cls,internal){
   return {major:r(d),pitch:P+' mm',pitchDist:r(P),d2basic:r(d2),d3basic:r(D1int),hs:r(hs),has:r(has_),Fcs:r(Fcs),allowance:0,
     majorMax:null,majorMin:r(d),pdMax:r(d2+td2i),pdMin:r(d2),minorMin:r(D1int),minorMax:r(D1int+td1),
     tdLabel:cls===1?'5H Internal':cls===2?'6H Internal':'7H Internal'};
+}
+/* Thread milling (single form): SFM + chip load by cutter diameter (interpolated), helical feed adjustment, radial passes */
+function tmIpt(T,row,d){
+  var ds=(T.diams||[]).map(Number),pts=[];ds.forEach(function(x){var v=num(row[String(T.diams[ds.indexOf(x)])]);if(v!==null)pts.push([x,v])});
+  if(!pts.length||!(d>0))return null;pts.sort(function(a,b){return a[0]-b[0]});
+  if(d<=pts[0][0])return pts[0][1];if(d>=pts[pts.length-1][0])return pts[pts.length-1][1];
+  for(var i=1;i<pts.length;i++)if(d<=pts[i][0]){var a=pts[i-1],b=pts[i];return a[1]+(b[1]-a[1])*(d-a[0])/(b[0]-a[0])}
+  return null;
+}
+function tmView(s){
+  var tms=(D.threading||{}).threadMills||[];if(tms.length===1&&!find(tms,'type',s.tmt))s.tmt=tms[0].type;
+  var T=find(tms,'type',s.tmt),n=2,h='',res=null;
+  h+=step(n++,'Thread mill',opts('tmt',tms.map(function(t){return {v:t.type,l:esc(t.type),s:esc(t.sub||''),on:t.type===s.tmt}}),'list'),0,!!T);
+  var rows=T?T.rows||[]:[],grps=uniq(rows.map(function(r){return r.group}));
+  h+=step(n++,'Material',opts('tgrp',grps.map(function(g){return {v:g,l:esc(g),c:1,on:g===s.tgrp}}),'three'),!T,!!s.tgrp);
+  var row=s.tmat!==undefined&&rows[+s.tmat]&&rows[+s.tmat].group===s.tgrp?rows[+s.tmat]:null,list=[];
+  rows.forEach(function(r,i){if(r.group===(s.tgrp||grps[0]))list.push({v:i,l:esc(r.material),s:[esc(r.hardness||''),has(r.sfm)?esc(r.sfm)+' SFM':''].filter(Boolean).join(' · '),on:!!s.tgrp&&String(i)===String(s.tmat)})});
+  h+=step(n++,'Type / hardness',opts('tmat',list,'list'),!s.tgrp,!!row);
+  h+=step(n++,'Thread',opts('tdir',[{v:'internal',l:'Internal',c:1,on:s.tdir==='internal'},{v:'external',l:'External',c:1,on:s.tdir==='external'}],'two'),!row,!!s.tdir);
+  var pre=(D.threading||{}).presetsInch||[],ps=find(pre,'label',s.tsize);
+  h+=step(n++,'Thread size',opts('tsize',pre.map(function(p){return {v:p.label,l:esc(p.label),c:1,on:p.label===s.tsize}}),'sm'),!(row&&s.tdir),!!ps);
+  if(T&&row&&s.tdir&&ps){
+    var tk=s.tk||{},Dmaj=num(ps.d),tpi=num(ps.tpi),P=1/tpi,inside=s.tdir==='internal';
+    var passRows=T.passes||[],autoTool=null;passRows.forEach(function(r){if(num(r.major)<=Dmaj+1e-6)autoTool=r});
+    var toolSel=tk.tool!==undefined?find(passRows,'size',tk.tool):autoTool;
+    var zDef=num(T.flutes)||4,z=num(tk.z)||zDef,d=num(tk.cd);
+    var inputs='<div class="calcin"><div class="bgrid">'+
+      '<div><label>Cutter dia (in)</label><div class="brow"><input class="field" id="t_cd" data-tk="cd" inputmode="decimal" placeholder="from the tool, e.g. .180" value="'+esc(tk.cd||'')+'"></div></div>'+
+      '<div><label>Flutes</label><div class="brow"><div class="seg">'+[2,3,4,5].map(function(v){return '<button type="button" data-tfl="'+v+'"'+(z===v?' class="on"':'')+'>'+v+'</button>'}).join('')+'</div><input class="field" id="t_z" data-tk="z" inputmode="numeric" placeholder="'+zDef+'" value="'+esc(tk.z!==undefined?tk.z:'')+'"></div></div>'+
+      '<div><label>Tool thread size (for passes)</label><div class="brow"><select class="field" id="t_tool" data-tk="tool" style="flex:1">'+passRows.map(function(r){return '<option'+(toolSel&&r.size===toolSel.size?' selected':'')+'>'+esc(r.size)+'</option>'}).join('')+'</select></div></div>'+
+      '</div></div>';
+    var minor=Dmaj-1.0825318*P,body=inputs;
+    if(!d){body+='<div class="note">Enter the cutter diameter from the tool to get RPM and feed.</div>'}
+    else{
+      var ipt=tmIpt(T,row,d),sfm=num(row.sfm),book=Math.round(sfm*12/(Math.PI*d)),max=num(D.settings.maxRpm)||0,rpm=max&&book>max?max:book,capped=rpm<book;
+      var lin=ipt!==null?rpm*ipt*z:null,adj=lin!==null?(inside?(Dmaj-d)/Dmaj:(Dmaj+d)/Dmaj)*lin:null;
+      var passes=toolSel?toolSel[String(row.machinability||'').toLowerCase()]:null;
+      body+=stats([stat('RPM',loc(rpm),capped?'capped at '+loc(max)+' · book '+loc(book):'rev / min','key'),stat('Adjusted feed',adj!==null&&adj>0?adj.toFixed(2):'—','in / min · '+(inside?'internal':'external')+' helical','key')])+
+        stats([stat('Linear feed',lin!==null?lin.toFixed(2):'—','in / min · at the cutter','sm'),stat('Chip load',ipt!==null?ipt.toFixed(5).replace(/^0\./,'.'):'—','in / tooth · for '+d3(d)+'" cutter','sm'),stat('SFM',loc(Math.round(rpm*Math.PI*d/12)),capped?'book '+esc(row.sfm):'ft / min','sm')])+
+        stats([stat('Radial passes',has(passes)?esc(passes):'—',esc(row.machinability||'')+' · full axial depth','sm'),stat('Pitch',P.toFixed(4).replace(/^0\./,'.')+'"',esc(ps.tpi)+' TPI','sm'),stat(inside?'Minor dia':'Major dia',(inside?minor:Dmaj).toFixed(4).replace(/^0\./,'.')+'"','basic','sm')])+
+        (inside&&d>=minor?'<div class="note" style="background:var(--redtint);color:var(--red);font-weight:600">The cutter ('+d3(d)+'") is too big for this thread — it must be smaller than the '+minor.toFixed(4).replace(/^0\./,'.')+'" minor diameter.</div>':'')+
+        (capped?'<div class="note">Book speed is '+loc(book)+' RPM — capped at the '+loc(max)+' RPM max. Feed is figured at '+loc(rpm)+' RPM.</div>':'')+
+        '<div class="note">Check whether your CAM / control expects the <b>linear</b> or the <b>adjusted</b> feed for the helical move.</div>';
+    }
+    body+=(T.note?'<div class="note">'+esc(T.note)+'</div>':'');
+    res=card(esc(ps.label)+' · '+(inside?'internal':'external')+' · '+esc(row.material),body,esc(row.group)+(has(row.hardness)?' · '+esc(row.hardness):'')+' · '+esc(T.type));
+  }
+  return {steps:h,result:res};
 }
 function dimsView(s){
   var T=D.threading||{},inch=s.dsys==='inch',internal=s.dir==='internal',cls=+s.cls||0;
@@ -868,6 +919,7 @@ $('vBody').addEventListener('click',function(e){
   var b=e.target.closest('[data-cam]');if(b){camSys=b.dataset.cam;$('vBody').innerHTML=camHtml()}
 });
 $('result').addEventListener('click',function(e){
+  var tf=e.target.closest('[data-tfl]');if(tf){(S.thread.tk=S.thread.tk||{}).z=tf.dataset.tfl;renderResult();return}
   var f=e.target.closest('[data-bfl]');if(f){(S.mill.bk=S.mill.bk||{})['z'+S.mill.dia]=f.dataset.bfl;saveBallZ();renderResult();return}
   var b=e.target.closest('[data-bpct]');if(!b)return;(S.mill.bk=S.mill.bk||{}).pct=b.dataset.bpct;renderResult()});
 function saveBallZ(){var o={},bk=S.mill.bk||{};for(var k in bk)if(k.charAt(0)==='z'&&has(bk[k]))o[k]=bk[k];lsSet('td.ballz',JSON.stringify(o))}
@@ -934,6 +986,7 @@ $('steps').addEventListener('input',function(e){
   if(t.dataset.f){var c=t.closest('.calc'),id=c.dataset.c;(S.calc[id]=S.calc[id]||{})[t.dataset.f]=t.value;c.querySelector('.out').innerHTML=calcOut(find(CALCS,'id',id))}
 });
 $('result').addEventListener('input',function(e){
+  if(e.target.dataset.tk){var tid=e.target.id,tpos=e.target.selectionStart;(S.thread.tk=S.thread.tk||{})[e.target.dataset.tk]=e.target.value;renderResult();var ti=$(tid);if(ti){ti.focus();try{if(ti.tagName==='INPUT')ti.setSelectionRange(tpos,tpos)}catch(x){}}return}
   if(e.target.dataset.bk){var id=e.target.id,pos=e.target.selectionStart;(S.mill.bk=S.mill.bk||{})[e.target.dataset.bk]=e.target.value;if(e.target.dataset.bk.charAt(0)==='z')saveBallZ();renderResult();var i=$(id);if(i){i.focus();try{i.setSelectionRange(pos,pos)}catch(x){}}return}
   if(e.target.id==='rZ'){(S.mill.zs=S.mill.zs||{})[S.mill.dia]=e.target.value;var pos=e.target.selectionStart;renderResult();var i=$('rZ');if(i){i.focus();try{i.setSelectionRange(pos,pos)}catch(x){}}return}
   if(e.target.id==='rDia'){S.drill.cdia=e.target.value;var T=find(D.drilling,'type',S.drill.type);if(!T)return;
@@ -1007,6 +1060,12 @@ function specs(){
   [['formInch','Form taps — inch'],['formMetric','Form taps — metric'],['cutInch','Cut taps — inch'],['cutMetric','Cut taps — metric']].forEach(function(x){
     L.push({id:'th:'+x[0],g:'Threading',t:x[1],obj:T,key:x[0],d:'One row per tap size. The second line under the size button shows the first word of the drill column.',
       cols:[C('tap','Tap',90),C('pitch','Pitch (in)',75),C('drill','Drill',140)],groups:tm,sub:[N('sfm','SFM',58),N('rpm','RPM',62),N('ipm','IPM',58)]})});
+  (T.threadMills||[]).forEach(function(t,i){
+    L.push({id:'tm:'+i,g:'Threading',t:t.type+' — speeds & feeds',obj:t,key:'rows',d:'One row per material and hardness. SFM and chip load (in/tooth) by cutter diameter — the app interpolates between columns for your cutter. Machinability (Easy / Moderate / Difficult) picks the radial passes.',
+      cols:[C('group','Group',130),C('material','Material',260),C('hardness','Hardness',90),C('machinability','Machinability',100),N('sfm','SFM',60)],groups:(t.diams||[]),cw:70});
+    L.push({id:'tmp:'+i,g:'Threading',t:t.type+' — radial passes',obj:t,key:'passes',d:'Radial passes at full axial depth by the thread size the tool is made for (not the part). Finer pitches may need 1 less pass.',
+      cols:[C('size','Tool thread size',110),N('major','Major dia',80),N('easy','Easy',60),N('moderate','Moderate',80),N('difficult','Difficult',80)]});
+  });
   L.push({id:'th:sfmChart',g:'Threading',t:'Tap target SFM',obj:T,key:'sfmChart',d:'The "Target SFM" chips shown after choosing Form Tap or Cut Tap. Keep the type names "Form Tap" and "Cut Tap".',cols:[C('type','Type',100)],groups:tm,num:1});
   L.push({id:'th:npt',g:'Threading',t:'NPT taps',obj:T,key:'npt',cols:[C('tap','Tap',100),N('tpi','TPI'),C('pitch','Pitch (in)',80),C('drill','Tap drill',160)]});
   L.push({id:'th:odPdx',g:'Threading',t:'OD threading PDX',obj:T,key:'odPdx',d:'PDX = edge of insert to center of the 60° cutting edge.',cols:[N('tpi','TPI'),C('pdx','PDX',100)]});
