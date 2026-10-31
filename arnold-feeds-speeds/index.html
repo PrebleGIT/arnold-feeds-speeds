@@ -408,7 +408,7 @@ var M={};
 M.mill={deps:{tool:['strat','cut','mat','dia','grade'],strat:['cut'],mat:['grade']},
 fix:function(s){
   var T=find(D.milling,'tool',s.tool);if(!T)return;
-  if(T.kind==='ball'){var br=find(T.rows,'material',s.mat);if(s.dia&&br&&!has(br[s.dia]))delete s.dia;return}
+  if(T.kind==='ball'){var br=find(ballRows(T),'material',s.mat);if(s.dia&&br&&!has(br[s.dia]))delete s.dia;return}
   if(T.kind==='range'){
     var c1=(T.cuts||[]).length===1?T.cuts[0].cut:s.cut,ok=function(r){return !c1||has(r[c1])};
     var gs=(T.rows||[]).filter(function(r){return r.material===s.mat&&ok(r)});
@@ -440,8 +440,12 @@ view:function(s){
   return {steps:h,result:res};
 }};
 /* Ball mill surfacing: effective diameter at shallow depth, own RPM cap, stepover + scallop */
+function ballRows(T){
+  if(T.source){var src=find(D_.milling,'tool',T.source);if(src)return (src.rows||[]).filter(function(r){return r.cut===(T.sourceCut||'Finish')})}
+  return T.rows||[];
+}
 function ballView(s,T,h){
-  var rows=T.rows||[],row=find(rows,'material',s.mat);
+  var rows=ballRows(T),row=find(rows,'material',s.mat);
   h+=step(2,'Material',opts('mat',rows.map(function(r){return {v:r.material,l:esc(r.material),s:(has(r.iso)?'ISO '+esc(r.iso)+(has(r.examples)?' · ':''):'')+esc(r.examples||''),on:r.material===s.mat}}),'two'),0,!!row);
   h+=step(3,'Ball diameter',opts('dia',(T.sizes||[]).map(function(z){return {v:z.size,l:esc(z.size)+'"',s:dia4(z.dia)+(has(z.flutes)?' · '+esc(z.flutes)+' fl':''),c:1,on:z.size===s.dia,dis:!!row&&!has(row[z.size])}}),'sm'),!row,!!(row&&s.dia));
   var sz=find(T.sizes,'size',s.dia),res=null;
@@ -921,6 +925,13 @@ function specs(){
   L.push({id:'settings',g:'Settings',t:'App settings',obj:{rows:[D.settings]},key:'rows',fixed:1,d:'Max spindle RPM caps the calculated milling RPM (feed is lowered to keep the chip load). Finishing feed % scales the end mill finishing chip load (100 = book). Edit PIN asks for a PIN before editing; leave blank for none.',
     cols:[N('maxRpm','Max spindle RPM',110),N('finishFeedPct','Finishing feed %',110),C('editPin','Edit PIN',90)]});
   (D.milling||[]).forEach(function(t,i){
+    if(t.kind==='ball'&&t.source){
+      L.push({id:'millsz:'+i,g:'Milling',t:t.tool+' — sizes',obj:t,key:'sizes',d:'Ball diameters and default flutes. SFM and chip loads come from the '+t.source+' '+(t.sourceCut||'Finish')+' rows — edit them there.',
+        cols:[C('size','Size',70),N('dia','Dia (in)',80),N('flutes','Flutes',60),C('partNo','Part #',140)]});
+      L.push({id:'millset:'+i,g:'Milling',t:t.tool+' — settings',obj:{rows:[t]},key:'rows',fixed:1,d:'RPM cap for ball mill surfacing, default depth (surface stock) and default stepover %.',
+        cols:[N('maxRpm','Max RPM',90),N('stock','Default depth / stock (in)',160),N('stepDefault','Default stepover %',130)]});
+      return;
+    }
     if(t.kind==='ball'){
       L.push({id:'mill:'+i,g:'Milling',t:t.tool+' — speeds & feeds',own:{arr:D.milling,i:i,kind:'mill'},obj:t,key:'rows',
         d:'One row per material: SFM and book chip load (inches per tooth) for each ball size. The app works out effective diameter, RPM and feed.',
