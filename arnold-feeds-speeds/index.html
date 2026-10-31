@@ -116,6 +116,8 @@ main{flex:1;overflow:auto;padding:20px 24px}
 .calcs{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:16px;max-width:1500px;margin:0 auto}
 .calc{background:#fff;border:1px solid var(--line)}
 .calc h3{margin:0;display:flex;align-items:center;justify-content:space-between;background:var(--char);color:#fff;font-size:13px;letter-spacing:.8px;text-transform:uppercase;padding:6px 8px 6px 16px}
+.tmg{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:10px 0 6px}
+.tmg:first-child{margin-top:0}
 .cvrow{display:grid;grid-template-columns:110px 1fr 22px 1fr;gap:10px;align-items:end;padding:10px 16px;border-top:1px solid var(--line)}
 .calc.conv h3+.cvrow{border-top:0}
 .cvl{font-weight:700;font-size:14px;padding-bottom:10px}
@@ -636,7 +638,7 @@ function drillCalc(r,d){
 
 /* ===== Threading ===== */
 var TH=['sys','size','mat','dsys','dir','cls','dmode','preset','cd','ctpi','cp','tmt','tgrp','tmat','tdir','tsize'];
-M.thread={deps:{mode:TH,tmt:['tgrp','tmat'],tgrp:['tmat'],sys:['size','mat'],size:['mat'],dsys:['dir','cls','dmode','preset','cd','ctpi','cp'],dmode:['preset','cd','ctpi','cp']},
+M.thread={deps:{mode:TH,tmt:['tgrp','tmat','tsize'],tgrp:['tmat'],sys:['size','mat'],size:['mat'],dsys:['dir','cls','dmode','preset','cd','ctpi','cp'],dmode:['preset','cd','ctpi','cp']},
 view:function(s){
   var T=D.threading||{},res=null;
   var modes=[['form','Form Tap'],['cut','Cut Tap'],['npt','NPT Tap'],['tmill','Thread Mill'],['od','OD Threading'],['dims','Thread Dims']];
@@ -726,33 +728,39 @@ function tmView(s){
   rows.forEach(function(r,i){if(r.group===(s.tgrp||grps[0]))list.push({v:i,l:esc(r.material),s:[esc(r.hardness||''),has(r.sfm)?esc(r.sfm)+' SFM':''].filter(Boolean).join(' · '),on:!!s.tgrp&&String(i)===String(s.tmat)})});
   h+=step(n++,'Type / hardness',opts('tmat',list,'list'),!s.tgrp,!!row);
   h+=step(n++,'Thread',opts('tdir',[{v:'internal',l:'Internal',c:1,on:s.tdir==='internal'},{v:'external',l:'External',c:1,on:s.tdir==='external'}],'two'),!row,!!s.tdir);
-  var pre=(D.threading||{}).presetsInch||[],ps=find(pre,'label',s.tsize);
-  h+=step(n++,'Thread size',opts('tsize',pre.map(function(p){return {v:p.label,l:esc(p.label),c:1,on:p.label===s.tsize}}),'sm'),!(row&&s.tdir),!!ps);
+  var multi=!!T&&T.kind==='multi',pre=multi?(T.passes||[]):((D.threading||{}).presetsInch||[]),ps=null;
+  pre.forEach(function(p){if(!ps&&(multi?p.thread:p.label)===s.tsize)ps=p});
+  var tsOff=!(row&&s.tdir),tsBody;
+  if(multi){tsBody=uniq(pre.map(function(p){return p.group})).map(function(gn){
+      return '<div class="tmg">'+esc(gn)+'</div>'+opts('tsize',pre.filter(function(p){return p.group===gn}).map(function(p){return {v:p.thread,l:esc(p.thread),c:1,on:p.thread===s.tsize}}),'sm')}).join('')}
+  else tsBody=opts('tsize',pre.map(function(p){return {v:p.label,l:esc(p.label),c:1,on:p.label===s.tsize}}),'sm');
+  h+=step(n++,'Thread size',tsBody,tsOff,!!ps);
   if(T&&row&&s.tdir&&ps){
-    var tk=s.tk||{},Dmaj=num(ps.d),tpi=num(ps.tpi),P=1/tpi,inside=s.tdir==='internal';
-    var passRows=T.passes||[],autoTool=null;passRows.forEach(function(r){if(num(r.major)<=Dmaj+1e-6)autoTool=r});
-    var toolSel=tk.tool!==undefined?find(passRows,'size',tk.tool):autoTool;
+    var tk=s.tk||{},Dmaj=num(multi?ps.major:ps.d),P=multi?(num(ps.pitchMm)?num(ps.pitchMm)/25.4:1/num(ps.tpi)):1/num(ps.tpi),tpi=1/P,inside=s.tdir==='internal';
+    var isNpt=multi&&/NPT/i.test(ps.group||'');
+    var passRows=T.passes||[],autoTool=null;if(!multi)passRows.forEach(function(r){if(num(r.major)<=Dmaj+1e-6)autoTool=r});
+    var toolSel=multi?ps:(tk.tool!==undefined?find(passRows,'size',tk.tool):autoTool);
     var zDef=num(T.flutes)||4,z=num(tk.z)||zDef,d=num(tk.cd);
     var inputs='<div class="calcin"><div class="bgrid">'+
       '<div><label>Cutter dia (in)</label><div class="brow"><input class="field" id="t_cd" data-tk="cd" inputmode="decimal" placeholder="from the tool, e.g. .180" value="'+esc(tk.cd||'')+'"></div></div>'+
       '<div><label>Flutes</label><div class="brow"><div class="seg">'+[2,3,4,5].map(function(v){return '<button type="button" data-tfl="'+v+'"'+(z===v?' class="on"':'')+'>'+v+'</button>'}).join('')+'</div><input class="field" id="t_z" data-tk="z" inputmode="numeric" placeholder="'+zDef+'" value="'+esc(tk.z!==undefined?tk.z:'')+'"></div></div>'+
-      '<div><label>Tool thread size (for passes)</label><div class="brow"><select class="field" id="t_tool" data-tk="tool" style="flex:1">'+passRows.map(function(r){return '<option'+(toolSel&&r.size===toolSel.size?' selected':'')+'>'+esc(r.size)+'</option>'}).join('')+'</select></div></div>'+
+      (multi?'':'<div><label>Tool thread size (for passes)</label><div class="brow"><select class="field" id="t_tool" data-tk="tool" style="flex:1">'+passRows.map(function(r){return '<option'+(toolSel&&r.size===toolSel.size?' selected':'')+'>'+esc(r.size)+'</option>'}).join('')+'</select></div></div>')+
       '</div></div>';
     var minor=Dmaj-1.0825318*P,body=inputs;
     if(!d){body+='<div class="note">Enter the cutter diameter from the tool to get RPM and feed.</div>'}
     else{
       var ipt=tmIpt(T,row,d),sfm=num(row.sfm),book=Math.round(sfm*12/(Math.PI*d)),max=num(D.settings.maxRpm)||0,rpm=max&&book>max?max:book,capped=rpm<book;
       var lin=ipt!==null?rpm*ipt*z:null,adj=lin!==null?(inside?(Dmaj-d)/Dmaj:(Dmaj+d)/Dmaj)*lin:null;
-      var passes=toolSel?toolSel[String(row.machinability||'').toLowerCase()]:null;
+      var passes=has(row.passes)?row.passes:(toolSel?toolSel[String(row.machinability||'').toLowerCase()]:null);
       body+=stats([stat('RPM',loc(rpm),capped?'capped at '+loc(max)+' · book '+loc(book):'rev / min','key'),stat('Adjusted feed',adj!==null&&adj>0?adj.toFixed(2):'—','in / min · '+(inside?'internal':'external')+' helical','key')])+
         stats([stat('Linear feed',lin!==null?lin.toFixed(2):'—','in / min · at the cutter','sm'),stat('Chip load',ipt!==null?ipt.toFixed(5).replace(/^0\./,'.'):'—','in / tooth · for '+d3(d)+'" cutter','sm'),stat('SFM',loc(Math.round(rpm*Math.PI*d/12)),capped?'book '+esc(row.sfm):'ft / min','sm')])+
-        stats([stat('Radial passes',has(passes)?esc(passes):'—',esc(row.machinability||'')+' · full axial depth','sm'),stat('Pitch',P.toFixed(4).replace(/^0\./,'.')+'"',esc(ps.tpi)+' TPI','sm'),stat(inside?'Minor dia':'Major dia',(inside?minor:Dmaj).toFixed(4).replace(/^0\./,'.')+'"','basic','sm')])+
-        (inside&&d>=minor?'<div class="note" style="background:var(--redtint);color:var(--red);font-weight:600">The cutter ('+d3(d)+'") is too big for this thread — it must be smaller than the '+minor.toFixed(4).replace(/^0\./,'.')+'" minor diameter.</div>':'')+
+        stats([stat('Radial passes',has(passes)?esc(passes):'—',(has(row.passes)?'hardened steel':esc(row.machinability||''))+' · full axial depth','sm'),stat('Pitch',P.toFixed(4).replace(/^0\./,'.')+'"',multi&&num(ps.pitchMm)?esc(ps.pitchMm)+' mm':(Math.round(tpi*10)/10)+' TPI','sm'),stat(inside&&!isNpt?'Minor dia':'Major dia',(inside&&!isNpt?minor:Dmaj).toFixed(4).replace(/^0\./,'.')+'"',isNpt?'pipe O.D.':'basic','sm')])+
+        (inside&&!isNpt&&d>=minor?'<div class="note" style="background:var(--redtint);color:var(--red);font-weight:600">The cutter ('+d3(d)+'") is too big for this thread — it must be smaller than the '+minor.toFixed(4).replace(/^0\./,'.')+'" minor diameter.</div>':'')+
         (capped?'<div class="note">Book speed is '+loc(book)+' RPM — capped at the '+loc(max)+' RPM max. Feed is figured at '+loc(rpm)+' RPM.</div>':'')+
         '<div class="note">Check whether your CAM / control expects the <b>linear</b> or the <b>adjusted</b> feed for the helical move.</div>';
     }
     body+=(T.note?'<div class="note">'+esc(T.note)+'</div>':'');
-    res=card(esc(ps.label)+' · '+(inside?'internal':'external')+' · '+esc(row.material),body,esc(row.group)+(has(row.hardness)?' · '+esc(row.hardness):'')+' · '+esc(T.type));
+    res=card(esc(multi?ps.thread:ps.label)+' · '+(inside?'internal':'external')+' · '+esc(row.material),body,esc(row.group)+(has(row.hardness)?' · '+esc(row.hardness):'')+' · '+esc(T.type));
   }
   return {steps:h,result:res};
 }
@@ -1062,8 +1070,10 @@ function specs(){
       cols:[C('tap','Tap',90),C('pitch','Pitch (in)',75),C('drill','Drill',140)],groups:tm,sub:[N('sfm','SFM',58),N('rpm','RPM',62),N('ipm','IPM',58)]})});
   (T.threadMills||[]).forEach(function(t,i){
     L.push({id:'tm:'+i,g:'Threading',t:t.type+' — speeds & feeds',obj:t,key:'rows',d:'One row per material and hardness. SFM and chip load (in/tooth) by cutter diameter — the app interpolates between columns for your cutter. Machinability (Easy / Moderate / Difficult) picks the radial passes.',
-      cols:[C('group','Group',130),C('material','Material',260),C('hardness','Hardness',90),C('machinability','Machinability',100),N('sfm','SFM',60)],groups:(t.diams||[]),cw:70});
-    L.push({id:'tmp:'+i,g:'Threading',t:t.type+' — radial passes',obj:t,key:'passes',d:'Radial passes at full axial depth by the thread size the tool is made for (not the part). Finer pitches may need 1 less pass.',
+      cols:[C('group','Group',130),C('material','Material',260),C('hardness','Hardness',90),C('machinability','Machinability',100),N('sfm','SFM',60)],groups:(t.diams||[]),cw:70,tail:[C('passes','Passes (override)',110)]});
+    if(t.kind==='multi')L.push({id:'tmp:'+i,g:'Threading',t:t.type+' — threads & passes',obj:t,key:'passes',d:'The thread sizes offered (group = UN / NPT / Metric), major diameter, pitch (TPI, or pitch in mm for metric) and radial passes at full axial depth by machinability.',
+      cols:[C('group','Group',90),C('thread','Thread',110),N('major','Major dia (in)',90),N('tpi','TPI',60),N('pitchMm','Pitch (mm)',80),N('easy','Easy',60),N('moderate','Moderate',80),N('difficult','Difficult',80)]});
+    else L.push({id:'tmp:'+i,g:'Threading',t:t.type+' — radial passes',obj:t,key:'passes',d:'Radial passes at full axial depth by the thread size the tool is made for (not the part). Finer pitches may need 1 less pass.',
       cols:[C('size','Tool thread size',110),N('major','Major dia',80),N('easy','Easy',60),N('moderate','Moderate',80),N('difficult','Difficult',80)]});
   });
   L.push({id:'th:sfmChart',g:'Threading',t:'Tap target SFM',obj:T,key:'sfmChart',d:'The "Target SFM" chips shown after choosing Form Tap or Cut Tap. Keep the type names "Form Tap" and "Cut Tap".',cols:[C('type','Type',100)],groups:tm,num:1});
