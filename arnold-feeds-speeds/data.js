@@ -22,7 +22,7 @@ window.TECH_DATA = {
     "finishFeedPct": 75,
     "editPin": "",
     "updated": "2026-10-30",
-    "savedAt": 1793449063300
+    "savedAt": 1793449381575
   },
 
   // MILLING — one block per tool.
@@ -93,18 +93,18 @@ window.TECH_DATA = {
       "stepDefault": 2,
       "note": "Starting SFM and chip loads are copied from the IMCO M924 finishing chart until a ball mill chart is added — adjust in Edit data → Ball Mill Surfacing.",
       "sizes": [
-        {"size": "1/8", "dia": 0.125, "flutes": "", "partNo": ""},
-        {"size": "5/32", "dia": 0.15625, "flutes": "", "partNo": ""},
-        {"size": "3/16", "dia": 0.1875, "flutes": "", "partNo": ""},
-        {"size": "7/32", "dia": 0.21875, "flutes": "", "partNo": ""},
-        {"size": "1/4", "dia": 0.25, "flutes": "", "partNo": ""},
-        {"size": "5/16", "dia": 0.3125, "flutes": "", "partNo": ""},
-        {"size": "3/8", "dia": 0.375, "flutes": "", "partNo": ""},
-        {"size": "7/16", "dia": 0.4375, "flutes": "", "partNo": ""},
-        {"size": "1/2", "dia": 0.5, "flutes": "", "partNo": ""},
-        {"size": "5/8", "dia": 0.625, "flutes": "", "partNo": ""},
-        {"size": "3/4", "dia": 0.75, "flutes": "", "partNo": ""},
-        {"size": "1", "dia": 1, "flutes": "", "partNo": ""}
+        {"size": "1/8", "dia": 0.125, "flutes": 4, "partNo": ""},
+        {"size": "5/32", "dia": 0.15625, "flutes": 4, "partNo": ""},
+        {"size": "3/16", "dia": 0.1875, "flutes": 4, "partNo": ""},
+        {"size": "7/32", "dia": 0.21875, "flutes": 4, "partNo": ""},
+        {"size": "1/4", "dia": 0.25, "flutes": 4, "partNo": ""},
+        {"size": "5/16", "dia": 0.3125, "flutes": 4, "partNo": ""},
+        {"size": "3/8", "dia": 0.375, "flutes": 4, "partNo": ""},
+        {"size": "7/16", "dia": 0.4375, "flutes": 4, "partNo": ""},
+        {"size": "1/2", "dia": 0.5, "flutes": 4, "partNo": ""},
+        {"size": "5/8", "dia": 0.625, "flutes": 4, "partNo": ""},
+        {"size": "3/4", "dia": 0.75, "flutes": 4, "partNo": ""},
+        {"size": "1", "dia": 1, "flutes": 4, "partNo": ""}
       ],
       "rows": [
         {"1": ".0066", "iso": "K", "material": "Cast Iron — Gray", "examples": "", "sfm": 475, "1/8": ".0008", "5/32": ".0010", "3/16": ".0012", "7/32": ".0014", "1/4": ".0017", "5/16": ".0021", "3/8": ".0025", "7/16": ".0029", "1/2": ".0033", "5/8": ".0041", "3/4": ".0050"},
