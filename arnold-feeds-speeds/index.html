@@ -455,9 +455,9 @@ function ballView(s,T,h){
     var seg=[1,2,3].map(function(v){return '<button type="button" data-bpct="'+v+'"'+(pct===v?' class="on"':'')+'>'+v+'%</button>'}).join('');
     res=card(esc(row.material)+' · '+esc(sz.size)+'" ball · '+pct+'% stepover',
       '<div class="calcin"><div class="bgrid">'+
-        '<div><label>Stepover % of dia</label><div class="brow"><div class="seg">'+seg+'</div><input class="field" id="b_pct" data-bk="pct" inputmode="decimal" value="'+esc(has(bk.pct)?bk.pct:pct)+'"></div></div>'+
-        '<div><label>Flutes</label><div class="brow"><div class="seg">'+[2,3,4,6].map(function(v){return '<button type="button" data-bfl="'+v+'"'+(z===v?' class="on"':'')+'>'+v+'</button>'}).join('')+'</div><input class="field" id="b_z" data-bk="z'+esc(sz.size)+'" inputmode="numeric" placeholder="'+(zSaved||'e.g. 4')+'" value="'+esc(has(bk['z'+sz.size])?bk['z'+sz.size]:(zSaved||''))+'"></div></div>'+
-        '<div><label>Depth / stock (in)</label><div class="brow"><input class="field" id="b_ap" data-bk="ap" inputmode="decimal" value="'+esc(has(bk.ap)?bk.ap:ap)+'"></div></div>'+
+        '<div><label>Stepover % of dia</label><div class="brow"><div class="seg">'+seg+'</div><input class="field" id="b_pct" data-bk="pct" inputmode="decimal" value="'+esc(bk.pct!==undefined?bk.pct:pct)+'"></div></div>'+
+        '<div><label>Flutes</label><div class="brow"><div class="seg">'+[2,3,4,6].map(function(v){return '<button type="button" data-bfl="'+v+'"'+(z===v?' class="on"':'')+'>'+v+'</button>'}).join('')+'</div><input class="field" id="b_z" data-bk="z'+esc(sz.size)+'" inputmode="numeric" placeholder="'+(zSaved||'e.g. 4')+'" value="'+esc(bk['z'+sz.size]!==undefined?bk['z'+sz.size]:(zSaved||''))+'"></div></div>'+
+        '<div><label>Depth / stock (in)</label><div class="brow"><input class="field" id="b_ap" data-bk="ap" inputmode="decimal" value="'+esc(bk.ap!==undefined?bk.ap:ap)+'"></div></div>'+
       '</div></div>'+
       stats([stat('RPM',loc(rpm),capped?'capped at '+loc(max)+' · book '+loc(book):'rev / min','key'),stat('Feed',feed!==null?feed.toFixed(1):'—',feed!==null?'in / min · book chip load':'enter flutes above','key')])+
       stats([stat('Stepover',so.toFixed(4).replace(/^0\./,'.')+'"',pct+'% of '+dia4(sz.dia),'sm'),stat('Scallop height',scal.toFixed(5).replace(/^0\./,'.')+'"','theoretical','sm'),stat('Effective dia',deff.toFixed(4).replace(/^0\./,'.')+'"','at '+String(ap).replace(/^0\./,'.')+'" depth','sm')])+
