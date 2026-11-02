@@ -996,7 +996,7 @@ M.home={wide:1,view:function(){
   var facts=[];
   if(st.updated)facts.push(['Data updated',fmtDate(st.updated)]);
   if(st.maxRpm)facts.push(['Spindle limit',loc(st.maxRpm)+' RPM']);
-  if(ball&&ball.maxRpm)facts.push(['Ball mill limit',loc(ball.maxRpm)+' RPM']);
+  if(ball&&ball.maxRpm&&+ball.maxRpm!==+st.maxRpm)facts.push(['Ball mill limit',loc(ball.maxRpm)+' RPM']);
   if(st.finishFeedPct)facts.push(['Finishing feed',st.finishFeedPct+'% of book']);
   return '<div class="home">'+
     '<section class="hero"><div class="hl"><div class="eb">SCM, Inc. · Precision Machining</div><h2>Speeds, feeds &amp; shop reference</h2><p>Pick a section to get started.</p></div>'+
