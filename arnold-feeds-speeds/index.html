@@ -137,6 +137,7 @@ main{flex:1;overflow:auto;padding:20px 24px}
 
 /* home */
 header img{cursor:pointer}
+@media (min-width:901px){main.homeMode{display:flex;flex-direction:column}main.homeMode #mainView{margin:auto 0;width:100%}main.homeMode .home{padding-bottom:24px}}
 .home{max-width:1240px;margin:0 auto}
 .hero{position:relative;overflow:hidden;display:flex;align-items:flex-end;justify-content:space-between;gap:24px;padding:40px 40px 34px;background:var(--char);color:#fff;border-bottom:5px solid var(--red)}
 .hero:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.035) 0 2px,transparent 2px 14px);pointer-events:none}
@@ -1062,9 +1063,10 @@ function renderTabs(){
 function render(){
   renderTabs();headerInfo();
   $('mainView').hidden=editing;$('editView').hidden=!editing;
-  if(editing){renderEdit();return}
+  if(editing){$('main').classList.remove('homeMode');renderEdit();return}
   var Mo=M[tab];
   $('mainView').className='layout'+(Mo.wide?' wide':'');
+  $('main').classList.toggle('homeMode',tab==='home');
   if(Mo.wide){$('steps').innerHTML=Mo.view(S[tab]);$('result').hidden=true;homeClock();return}
   var o=Mo.view(S[tab]);$('steps').innerHTML=o.steps;$('result').hidden=false;$('result').innerHTML=o.result||EMPTY;
 }
