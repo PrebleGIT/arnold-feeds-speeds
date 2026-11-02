@@ -24,7 +24,7 @@ window.TECH_DATA = {
     "hiddenTabs": "Turning, Countersinks",
     "editPin": "",
     "updated": "2026-11-02",
-    "savedAt": 1793632076772
+    "savedAt": 1793633926365
   },
 
   // MILLING — one block per tool.
@@ -883,14 +883,17 @@ window.TECH_DATA = {
     // Charts & links. link = one or more files in the charts folder (comma separated), a PDF, or a web address.
     "charts": [
       {"title": "GARR Technical Advisor", "sub": "Speeds, feeds & tool selection calculator", "link": "https://www.garrtool.com/calc/index.html"},
-      {"title": "Garr Endmills", "sub": "VRX Series — Milling Guide", "link": "charts/garr-vrx-endmills.jpg"},
       {"title": "Guhring Cut Taps", "sub": "SFM Reference Chart", "link": "charts/guhring-cut-taps.jpg"},
       {"title": "Guhring Form Taps", "sub": "SFM Reference Chart", "link": "charts/guhring-form-taps.jpg"},
+      {"title": "Haas ADKT 1706 Indexable Mill", "sub": "Haas Tooling — Speeds & Feeds", "link": "charts/haas-adkt-1706.jpg"},
+      {"title": "Haas Carbide Drills", "sub": "General Purpose Speeds & Feeds (Inch)", "link": "charts/haas-carbide-drills-1.jpg, charts/haas-carbide-drills-2.jpg, charts/haas-carbide-drills-3.jpg"},
+      {"title": "Haas TNKT 06 Indexable Mill", "sub": "Haas Tooling — Speeds & Feeds", "link": "charts/haas-tnkt-06.jpg"},
       {"title": "HSS Drill Chart", "sub": "YG-1 Straight Shank — Recommended Cutting Conditions", "link": "charts/yg1-hss-drill-1.jpg, charts/yg1-hss-drill-2.jpg"},
+      {"title": "IMCO M924 End Mills", "sub": "Application Guide — Speed & Feed (Inch)", "link": "charts/imco-m924-1.jpg"},
+      {"title": "Ingersoll GoldMax 8 Face Mill", "sub": "Series VJ6K — Operating Guidelines", "link": "charts/ingersoll-goldmax-8.jpg"},
+      {"title": "Ingersoll Hi-Pos Trio 06", "sub": "Operating Guidelines", "link": "charts/ingersoll-hipostrio-06.jpg"},
+      {"title": "Ingersoll QuadTwist Drills", "sub": "Flat Bottom & Spade — 2xD, 3xD, 4xD & 5xD Cutting Conditions", "link": "charts/ingersoll-quadtwist-2-4xd.jpg, charts/ingersoll-quadtwist-5xd.jpg"},
       {"title": "OSG HY-PRO CARB Drill Chart", "sub": "HP253 · HP255 · HP258", "link": "charts/osg-hy-pro-carb-1.jpg, charts/osg-hy-pro-carb-2.jpg"},
-      {"title": "Sumitomo Face Mills", "sub": "WEX Series", "link": "charts/sumitomo-wex.jpg"},
-      {"title": "Sumitomo Flat Bottom Drills", "sub": "WDX Series — Inserts 4D Technical Data", "link": "charts/sumitomo-wdx.jpg"},
-      {"title": "Sumitomo Spade Drills", "sub": "SMD Series — Cutting Conditions", "link": "charts/sumitomo-smd.jpg"},
       {"title": "Tap Drill Chart", "sub": "Starrett — Inch & Metric", "link": "charts/tap-drill-chart.jpg"}
     ],
 
