@@ -19,11 +19,11 @@ window.TECH_DATA = {
   // editPin: set a PIN (e.g. "1234") to ask for it before editing. Leave "" for no PIN.
   "settings": {
     "title": "Technical Data",
-    "maxRpm": 12000,
+    "maxRpm": 15000,
     "finishFeedPct": 75,
     "hiddenTabs": "Turning, Countersinks",
     "editPin": "",
-    "updated": "2026-10-30",
+    "updated": "2026-11-02",
     "savedAt": 1793632076772
   },
 
