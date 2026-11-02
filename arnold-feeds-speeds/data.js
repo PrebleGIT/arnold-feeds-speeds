@@ -21,10 +21,10 @@ window.TECH_DATA = {
     "title": "Technical Data",
     "maxRpm": 12000,
     "finishFeedPct": 75,
-    "hiddenTabs": "Turning",
+    "hiddenTabs": "Turning, Countersinks",
     "editPin": "",
     "updated": "2026-10-30",
-    "savedAt": 1793458039412
+    "savedAt": 1793623296030
   },
 
   // MILLING — one block per tool.
