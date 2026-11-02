@@ -135,6 +135,57 @@ main{flex:1;overflow:auto;padding:20px 24px}
 .cr b{font-size:28px;font-variant-numeric:tabular-nums}
 .cr i{font-style:normal;font-size:12px;color:var(--muted);margin-left:6px}
 
+/* home */
+header img{cursor:pointer}
+.home{max-width:1240px;margin:0 auto}
+.hero{position:relative;overflow:hidden;display:flex;align-items:flex-end;justify-content:space-between;gap:24px;padding:40px 40px 34px;background:var(--char);color:#fff;border-bottom:5px solid var(--red)}
+.hero:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.035) 0 2px,transparent 2px 14px);pointer-events:none}
+.hero:after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border:34px solid rgba(221,21,30,.16);border-radius:50%;pointer-events:none}
+.hero>*{position:relative;z-index:1}
+.hero .eb{font-size:12px;font-weight:700;letter-spacing:2.2px;text-transform:uppercase;color:#ff6b70}
+.hero h2{margin:8px 0 8px;font-size:42px;line-height:1.08;font-weight:700;letter-spacing:.2px}
+.hero p{margin:0;color:#cfcfcf;font-size:16px}
+.clock{text-align:right;white-space:nowrap}
+.clock .t{font-size:60px;font-weight:300;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-1px}
+.clock .t small{font-size:18px;font-weight:600;letter-spacing:1px;margin-left:6px;color:#cfcfcf}
+.clock .d{margin-top:8px;font-size:13px;text-transform:uppercase;letter-spacing:1.2px;color:#bdbdbd;font-weight:600}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:20px}
+@media (max-width:1100px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tile{display:flex;flex-direction:column;align-items:stretch;gap:12px;min-height:200px;padding:20px 20px 16px;text-align:left;background:#fff;border:1px solid var(--line);border-top:4px solid var(--char);border-radius:0;transition:border-color .15s,box-shadow .15s,transform .15s}
+.tile:hover{border-color:var(--line);border-top-color:var(--red);box-shadow:0 6px 20px rgba(0,0,0,.08);transform:translateY(-2px)}
+.tile .th{display:flex;align-items:center;gap:12px}
+.tile .ic{flex:none;display:grid;place-items:center;width:46px;height:46px;border-radius:4px;background:var(--redtint);color:var(--red)}
+.tile .ic svg{width:28px;height:28px}
+.tile b{font-size:21px;line-height:1.2}
+.tile .ds{color:var(--char2);font-size:14px;line-height:1.45}
+.tile .chips{display:flex;flex-wrap:wrap;gap:5px}
+.tile .chips span{background:#f2f2f2;border-radius:3px;padding:3px 8px;font-size:12px;font-weight:600;color:var(--char2);white-space:nowrap}
+.tile .chips .more{background:transparent;color:var(--muted);padding-left:2px}
+.tile .go{margin-top:auto;display:flex;align-items:center;gap:2px;color:var(--red);font-size:12px;font-weight:700;letter-spacing:.8px;text-transform:uppercase}
+.tile .go svg{width:16px;height:16px}
+.hfacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;margin-top:20px;background:var(--line);border:1px solid var(--line)}
+.hfacts div{background:#fff;padding:12px 18px}
+.hfacts span{display:block;font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted)}
+.hfacts b{font-size:17px;font-variant-numeric:tabular-nums}
+@media (max-width:900px){
+  .hero{flex-direction:column;align-items:flex-start;gap:18px;padding:24px 20px 22px}
+  .hero:after{width:180px;height:180px;border-width:24px;right:-50px;top:-50px}
+  .hero h2{font-size:28px}
+  .hero p{font-size:15px}
+  .clock{text-align:left;border-top:1px solid rgba(255,255,255,.15);padding-top:14px;width:100%}
+  .clock .t{font-size:40px}
+  .clock .d{font-size:12px}
+  .tiles{grid-template-columns:minmax(0,1fr);gap:10px;margin-top:12px}
+  .tile{min-height:0;padding:16px;gap:10px}
+  .tile:hover{transform:none}
+  .tile .go{display:none}
+  .tile .th{position:relative;padding-right:24px}
+  .tile .th:after{content:"";position:absolute;right:4px;top:50%;width:9px;height:9px;border-right:2.4px solid var(--red);border-top:2.4px solid var(--red);transform:translateY(-50%) rotate(45deg)}
+  .hfacts{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:12px}
+  .hfacts div{padding:10px 14px}
+  .hfacts b{font-size:15px}
+}
+
 /* reference list */
 .rlist{max-width:1100px;margin:0 auto}
 .rh{font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:700;margin:0 0 8px}
@@ -426,11 +477,11 @@ function big(v,u){return '<div class="big"><div class="v">'+v+'</div>'+(u?'<div 
 var EMPTY='<div class="empty"><b>No result yet</b>Make your selections on the left to see the numbers.</div>';
 
 /* ---------- tabs ---------- */
-var TABS=[['mill','Milling'],['drill','Drilling'],['thread','Threading'],['turn','Turning'],['calc','Calculators'],['key','Keyways'],['csk','Countersinks'],['ref','Reference']];
-var S={mill:{},drill:{},thread:{},turn:{},key:{},csk:{},calc:{},ref:{}};
+var TABS=[['home','Home'],['mill','Milling'],['drill','Drilling'],['thread','Threading'],['turn','Turning'],['calc','Calculators'],['key','Keyways'],['csk','Countersinks'],['ref','Reference']];
+var S={home:{},mill:{},drill:{},thread:{},turn:{},key:{},csk:{},calc:{},ref:{}};
 function shownTabs(){var h=String(D.settings.hiddenTabs||'').toLowerCase().split(',').map(function(x){return x.trim()}).filter(Boolean);
   return TABS.filter(function(t){return h.indexOf(t[1].toLowerCase())<0&&h.indexOf(t[0])<0})}
-var tab=lsGet('td.tab');if(!shownTabs().some(function(t){return t[0]===tab}))tab=(shownTabs()[0]||TABS[0])[0];
+var tab='home';if(!shownTabs().some(function(t){return t[0]===tab}))tab=(shownTabs()[0]||TABS[0])[0];
 var editing=false;
 
 var M={};
@@ -901,6 +952,60 @@ M.calc={wide:1,view:function(){
   }).join('')+'</div>';
 }};
 
+/* ===== Home ===== */
+var HICON={
+  home:'<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/>',
+  mill:'<path d="M9 2h6v6H9z"/><path d="M9 8h6v11l-3 3-3-3z"/><path d="M9 12l6-2.5M9 16l6-2.5"/>',
+  drill:'<path d="M10 2h4v6h-4z"/><path d="M10 8h4v9l-2 5-2-5z"/><path d="M10 11.5l4 1.8M10 15l4 1.8"/>',
+  thread:'<path d="M7 3h10l1 3H6z"/><path d="M9.5 6v15h5V6"/><path d="M9.5 9.5l5 1.5M9.5 13l5 1.5M9.5 16.5l5 1.5"/>',
+  turn:'<path d="M12 3l7 9-7 9-7-9z"/><circle cx="12" cy="12" r="2"/>',
+  calc:'<rect x="5" y="2.5" width="14" height="19" rx="2"/><path d="M8 6h8v3H8z"/><path d="M8.5 13h0M12 13h0M15.5 13h0M8.5 17h0M12 17h0M15.5 17h0" stroke-width="2.6"/>',
+  key:'<circle cx="12" cy="13" r="8"/><path d="M10 5v4h4V5"/>',
+  csk:'<path d="M4 5h16l-5 7v8H9v-8z"/>',
+  ref:'<path d="M3 5h6a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H3z"/><path d="M21 5h-6a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h7z"/>'
+};
+function hIcon(k){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+(HICON[k]||'')+'</svg>'}
+function homeInfo(k){
+  var T=D.threading||{};
+  if(k==='mill')return ['Speeds & feeds for end mills, ball mill surfacing and indexable cutters.',(D.milling||[]).map(function(t){return String(t.tool).replace(/ (End Mill|Indexable Mill|Face Mill)$/,'')})];
+  if(k==='drill')return ['HSS, solid carbide and spade drill speeds & feeds by size.',(D.drilling||[]).map(function(t){return String(t.type).split(' — ')[0]})];
+  if(k==='thread')return ['Taps, thread mills, OD threading and thread dimensions.',['Form tap','Cut tap','NPT tap'].concat((T.threadMills||[]).length?['Thread mills']:[]).concat(['OD threading','Thread dims'])];
+  if(k==='calc')return ['Metric ⇄ inch conversion and everyday shop math.',['Metric ⇄ Inch'].concat(CALCS.map(function(c){return c.t}))];
+  if(k==='ref'){var r=refItems();return ['Charts, hole sizes, GD&T and machine reference.',r.map(function(x){return x.title})]}
+  if(k==='turn')return ['Turning insert speeds & feeds.',[]];
+  if(k==='key')return ['Keyway sizes by shaft diameter.',[]];
+  if(k==='csk')return ['Countersink settings by machine.',[]];
+  return ['',[]];
+}
+function homeClock(){
+  var t=$('hClock'),d=$('hDate');if(!t)return;var n=new Date();
+  var s=n.toLocaleTimeString([], {hour:'numeric',minute:'2-digit'}),m=s.match(/^(.*?)\s*([AP]\.?M\.?)$/i);
+  t.innerHTML=m?esc(m[1])+'<small>'+esc(m[2])+'</small>':esc(s);
+  d.textContent=n.toLocaleDateString([], {weekday:'long',month:'long',day:'numeric',year:'numeric'});
+}
+setInterval(homeClock,5000);
+M.home={wide:1,view:function(){
+  var st=D.settings||{},ball=(D.milling||[]).filter(function(t){return t.kind==='ball'})[0];
+  var tiles=shownTabs().filter(function(t){return t[0]!=='home'}).map(function(t){
+    var inf=homeInfo(t[0]),ch=inf[1],max=4,more=ch.length-max;
+    return '<button class="tile" data-go="'+t[0]+'"><div class="th"><span class="ic">'+hIcon(t[0])+'</span><b>'+esc(t[1])+'</b></div>'+
+      '<div class="ds">'+esc(inf[0])+'</div>'+
+      (ch.length?'<div class="chips">'+ch.slice(0,more>0?max-1:max).map(function(c){return '<span>'+esc(c)+'</span>'}).join('')+(more>0?'<span class="more">+'+(more+1)+' more</span>':'')+'</div>':'')+
+      '<div class="go">Open '+ICON.go+'</div></button>';
+  }).join('');
+  var facts=[];
+  if(st.updated)facts.push(['Data updated',fmtDate(st.updated)]);
+  if(st.maxRpm)facts.push(['Spindle limit',loc(st.maxRpm)+' RPM']);
+  if(ball&&ball.maxRpm)facts.push(['Ball mill limit',loc(ball.maxRpm)+' RPM']);
+  if(st.finishFeedPct)facts.push(['Finishing feed',st.finishFeedPct+'% of book']);
+  return '<div class="home">'+
+    '<section class="hero"><div class="hl"><div class="eb">SCM, Inc. · Precision Machining</div><h2>Speeds, feeds &amp; shop reference</h2><p>Pick a section to get started.</p></div>'+
+    '<div class="clock"><div class="t" id="hClock"></div><div class="d" id="hDate"></div></div></section>'+
+    '<div class="tiles">'+tiles+'</div>'+
+    (facts.length?'<div class="hfacts">'+facts.map(function(f){return '<div><span>'+f[0]+'</span><b>'+esc(f[1])+'</b></div>'}).join('')+'</div>':'')+
+  '</div>';
+}};
+
 /* ===== Reference ===== */
 var BUILTIN=[{title:'CAM Hole Size Chart',sub:'Inch & Metric',bi:'cam'},{title:'GD&T Reference',sub:'Symbols & Definitions',bi:'gdt'},{title:'Integrex Reference',sub:'Mazak Integrex i200 · i300',bi:'integrex'}];
 function refItems(){
@@ -957,7 +1062,7 @@ $('vClose').addEventListener('click',function(){$('viewer').close()});
 /* ---------- render ---------- */
 function headerInfo(){
   var t=find(TABS.map(function(x){return {k:x[0],l:x[1]}}),'k',tab);
-  $('kind').textContent=editing?'Edit data':t.l;$('kind').className=editing?'ed':'';
+  $('kind').textContent=editing?'Edit data':t.l;$('kind').className=editing?'ed':'';$('kind').hidden=!editing&&tab==='home';
   var u=D.settings.updated;
   $('saved').textContent=dirty?'Unsaved changes':(u?'Data updated '+fmtDate(u):'');
 }
@@ -973,7 +1078,7 @@ function render(){
   if(editing){renderEdit();return}
   var Mo=M[tab];
   $('mainView').className='layout'+(Mo.wide?' wide':'');
-  if(Mo.wide){$('steps').innerHTML=Mo.view(S[tab]);$('result').hidden=true;return}
+  if(Mo.wide){$('steps').innerHTML=Mo.view(S[tab]);$('result').hidden=true;homeClock();return}
   var o=Mo.view(S[tab]);$('steps').innerHTML=o.steps;$('result').hidden=false;$('result').innerHTML=o.result||EMPTY;
 }
 function renderResult(){var o=M[tab].view(S[tab]);$('result').innerHTML=o.result||EMPTY}
@@ -982,9 +1087,13 @@ function narrow(){return window.matchMedia('(max-width:900px)').matches}
 $('tabs').addEventListener('click',function(e){
   var b=e.target.closest('button');if(!b)return;
   if(b.dataset.edit){if(!editing)startEdit();return}
-  editing=false;tab=b.dataset.tab;lsSet('td.tab',tab);render();$('main').scrollTop=0;window.scrollTo(0,0);
-  b.scrollIntoView({block:'nearest',inline:'nearest'});
+  goTab(b.dataset.tab);
 });
+function goTab(k){
+  editing=false;tab=k;render();$('main').scrollTop=0;window.scrollTo(0,0);
+  var b=document.querySelector('#tabs button.on');if(b)b.scrollIntoView({block:'nearest',inline:'nearest'});
+}
+document.querySelector('header img').addEventListener('click',function(){if(editing&&dirty)return;goTab('home')});
 $('steps').addEventListener('click',function(e){
   var b=e.target.closest('button.opt');
   if(b&&!b.disabled){
@@ -1001,6 +1110,7 @@ $('steps').addEventListener('click',function(e){
     });
     return;
   }
+  var gb=e.target.closest('[data-go]');if(gb){goTab(gb.dataset.go);return}
   var rb=e.target.closest('[data-reset]');if(rb){delete S.calc[rb.dataset.reset];render();return}
   var ri=e.target.closest('[data-ref]');if(ri){openRef(refItems()[+ri.dataset.ref])}
 });
