@@ -64,6 +64,10 @@ main{flex:1;overflow:auto;padding:20px 24px}
 .opts.sm{grid-template-columns:repeat(auto-fill,minmax(92px,1fr))}
 .opt{min-height:46px;padding:7px 12px;font-size:16px;font-weight:600;text-align:left;display:flex;flex-direction:column;justify-content:center;gap:1px;font-variant-numeric:tabular-nums;line-height:1.2}
 .opt.c{text-align:center;align-items:center}
+.opt span,.opt small{text-wrap:balance}
+.opts.sm .opt span,.opts.sm .opt small,.opts.dia .opt span,.opts.dia .opt small{white-space:nowrap}
+.opts.sm .opt,.opts.dia .opt{padding:7px 6px}
+.opts.sm.lng{grid-template-columns:repeat(auto-fill,minmax(132px,1fr))}
 .opt small{font-weight:400;font-size:12px;color:var(--muted)}
 .opt.on{background:var(--red);border-color:var(--red);color:#fff}
 .opt.on small{color:#ffd9db}
@@ -227,6 +231,10 @@ dialog.viewer[open]{display:flex}
   #result{position:static}
   #result .empty{display:none}
   .stat .v{font-size:36px}
+  .opts.three{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .opts.sm,.opts.dia{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .opts.sm.lng,.opts.dia.lng{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .opts.sm .opt,.opts.dia .opt{padding:6px 4px}
   .stat{padding:12px}
   .stats[style*="--n:3"] .stat.sm .v{font-size:21px}
   .big .v{font-size:56px}
@@ -395,9 +403,20 @@ var ICON={
 function step(n,label,body,off,done,extra){
   return '<section class="step'+(off?' off':'')+(done?' done':'')+'" data-step="'+n+'"><div class="sl"><span class="sn">'+n+'</span>'+label+'</div>'+body+(extra||'')+'</section>';
 }
+/* keep numbers with their units and ranges together so a label never breaks as "500 –" / "800 SFM" or "6" / "mm" */
+function glue(t){
+  return String(t==null?'':t)
+    .replace(/(\d|")\s+–\s+(?=[.\d])/g,'$1&nbsp;–&nbsp;')
+    .replace(/(\d["%]?)\s+(mm|SFM|HB|HRC|Rc|ins\.|fl|TPI|UNC|UNF|UNS|in|x)(?=[\s.,·)]|$)/g,'$1&nbsp;$2')
+    .replace(/\bx\s+(?=[.\d])/g,'x&nbsp;')
+    .replace(/\s+—\s+/g,'&nbsp;— ');
+}
+function textLen(h){return String(h).replace(/<[^>]*>/g,'').replace(/&nbsp;/g,' ').replace(/&[a-z#0-9]+;/g,'x').length}
 function opts(k,items,cls){
-  return '<div class="opts '+(cls||'')+'">'+items.map(function(it){
-    return '<button class="opt'+(it.on?' on':'')+(it.c?' c':'')+'" data-k="'+k+'" data-v="'+esc(it.v)+'"'+(it.dis?' disabled':'')+'><span>'+it.l+'</span>'+(it.s?'<small>'+it.s+'</small>':'')+'</button>';
+  cls=cls||'';
+  if(/\b(sm|dia)\b/.test(cls)){var mx=0;items.forEach(function(it){mx=Math.max(mx,textLen(it.l),textLen(it.s||'')*0.8)});if(mx>9)cls+=' lng'}
+  return '<div class="opts '+cls+'">'+items.map(function(it){
+    return '<button class="opt'+(it.on?' on':'')+(it.c?' c':'')+'" data-k="'+k+'" data-v="'+esc(it.v)+'"'+(it.dis?' disabled':'')+'><span>'+glue(it.l)+'</span>'+(it.s?'<small>'+glue(it.s)+'</small>':'')+'</button>';
   }).join('')+'</div>';
 }
 function stat(l,v,u,cls){return '<div class="stat'+(cls?' '+cls:'')+'"><div class="l">'+l+'</div><div class="v">'+v+'</div>'+(u?'<div class="u">'+u+'</div>':'')+'</div>'}
@@ -496,7 +515,7 @@ function millRangeView(s,T,h){
   h+=step(n++,'Material',opts('mat',mats.map(function(r){return {v:r.material,l:esc(r.material),s:has(r.iso)?'ISO '+esc(r.iso):'',c:1,on:!!cut&&r.material===s.mat,dis:!rows.some(function(x){return x.material===r.material&&okRow(x)})}}),'three'),!cut,!!(cut&&s.mat));
   var grs=rows.filter(function(r){return r.material===s.mat&&okRow(r)}),row=null;
   if(grs.length===1)s.grade=grs[0].grade;
-  if(grs.length>1)h+=step(n++,esc(T.gradeLabel||'Insert grade'),opts('grade',grs.map(function(r){return {v:r.grade,l:esc(r.grade),s:(has(r.isoRange)?esc(r.isoRange)+' · ':'')+dash(r.sfm)+' SFM',c:1,on:r.grade===s.grade}}),'three'),!(cut&&s.mat),!!s.grade);
+  if(grs.length>1)h+=step(n++,esc(T.gradeLabel||'Insert grade'),opts('grade',grs.map(function(r){return {v:r.grade,l:esc(r.grade),s:(has(r.isoRange)?esc(r.isoRange)+' · ':'')+dash(r.sfm)+' SFM',c:1,on:r.grade===s.grade}}),grs.some(function(r){return textLen(r.grade)+textLen(r.isoRange||'')>26})?'two':'three'),!(cut&&s.mat),!!s.grade);
   if(cut&&s.mat)grs.forEach(function(r){if(!row&&r.grade===s.grade)row=r});
   h+=step(n++,'Cutter diameter',opts('dia',(T.sizes||[]).map(function(z){return {v:z.size,l:esc(z.size)+'"',s:dia4(z.dia)+(has(z.flutes)?' · '+esc(z.flutes)+' ins.':''),c:1,on:!!row&&z.size===s.dia}}),'sm'),!row,!!(row&&s.dia));
   var sz=find(T.sizes,'size',s.dia),res=null;
