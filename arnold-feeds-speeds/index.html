@@ -678,8 +678,10 @@ function rangeView(s,T,h){
   if(row&&sz&&has(row[s.size])){
     var sfmTxt=rangeSfm(row,sz),sf=rng(sfmTxt),fd=rng(row[s.size]);
     res=card(esc(T.heading||T.type)+' · '+esc(sz.size)+(has(row.length)?' · '+esc(row.length):''),
-      stats([stat(rng(sfmTxt)&&rng(sfmTxt).lo===rng(sfmTxt).hi?'SFM':'SFM range',dash(sfmTxt),sz.small&&has(row.sfmSmall)?'surface ft / min · small drills':'surface ft / min','xs'),stat('Feed range',dash(row[s.size]),'in / rev','xs')])+
-      stats([stat('Start SFM',sf?loc(Math.round(sf.mid)):'—','middle of range','key'),stat('Start feed',fd?fd.mid.toFixed(4).replace(/^0/,''):'—','in / rev · middle of range','key')])+
+      (sf&&fd&&sf.lo===sf.hi&&fd.lo===fd.hi?
+      stats([stat('SFM',loc(Math.round(sf.mid)),sz.small&&has(row.sfmSmall)?'surface ft / min · small drills':'surface ft / min','key'),stat('Feed',fd.mid.toFixed(4).replace(/^0/,''),'in / rev','key')]):
+      stats([stat(sf&&sf.lo===sf.hi?'SFM':'SFM range',dash(sfmTxt),sz.small&&has(row.sfmSmall)?'surface ft / min · small drills':'surface ft / min','xs'),stat(fd&&fd.lo===fd.hi?'Feed':'Feed range',dash(row[s.size]),'in / rev','xs')])+
+      stats([stat('Start SFM',sf?loc(Math.round(sf.mid)):'—',sf&&sf.lo===sf.hi?'from chart':'middle of range','key'),stat('Start feed',fd?fd.mid.toFixed(4).replace(/^0/,''):'—',fd&&fd.lo===fd.hi?'in / rev · from chart':'in / rev · middle of range','key')]))+
       '<div class="calcin"><div class="inrow"><div><label>Drill dia (in)</label><input class="field" id="rDia" inputmode="decimal" placeholder="'+f4(num(sz.min)||sz.max)+'" value="'+esc(s.cdia||'')+'"></div><div id="rCalc">'+rangeCalc(sf,fd,s.cdia,sz)+'</div></div></div>'+
       (has(row.grades)?'<div class="note"><b>Grades:</b> '+esc(row.grades)+'</div>':'')+
       (has(row.note)?'<div class="note" style="background:var(--redtint);color:var(--red);font-weight:600">'+esc(row.note)+'</div>':'')+

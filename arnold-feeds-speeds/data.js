@@ -23,8 +23,8 @@ window.TECH_DATA = {
     "finishFeedPct": 75,
     "hiddenTabs": "Turning, Countersinks",
     "editPin": "",
-    "updated": "2026-11-02",
-    "savedAt": 1793633926365
+    "updated": "2026-11-03",
+    "savedAt": 1793722405498
   },
 
   // MILLING — one block per tool.
@@ -221,40 +221,41 @@ window.TECH_DATA = {
   // kind "sfm": one row per material with SFM / IPR (ranges optional).
   "drilling": [
     {
-      "type": "HSS Drills — RedLine",
-      "sub": "High speed steel · up to 1-1/2\"+",
+      "type": "HSS Drills — Morse",
+      "sub": "High speed steel · 1/8\" – 1\"",
       "kind": "range",
-      "heading": "RedLine HSS drill",
+      "heading": "Morse HSS drill",
       "variantLabel": "Drill",
       "sizeLabel": "Drill diameter",
-      "note": "RedLine Tools HSS chart. Speeds and feeds are estimates — start in the middle of the range and adjust for the job.",
+      "note": "Morse Cutting Tools HSS & cobalt drill chart. Speeds and feeds are suggested starting points — start conservatively and increase speed and feed until the drilling cycle is optimized.",
       "sizes": [
-        {"size": "≤ 1/8", "min": 0, "max": 0.187},
-        {"size": "1/4", "min": 0.188, "max": 0.312},
-        {"size": "3/8", "min": 0.313, "max": 0.437},
-        {"size": "1/2", "min": 0.438, "max": 0.625},
+        {"size": "1/8", "min": 0, "max": 0.187},
+        {"size": "1/4", "min": 0.188, "max": 0.375},
+        {"size": "1/2", "min": 0.376, "max": 0.625},
         {"size": "3/4", "min": 0.626, "max": 0.875},
-        {"size": "1", "min": 0.876, "max": 1.25},
-        {"size": "1-1/2+", "min": 1.251, "max": 3}
+        {"size": "1", "min": 0.876, "max": 1.25}
       ],
       "rows": [
-        {"1": ".0070-.0080", "iso": "P", "material": "Steels", "condition": "High Strength Tool Steel", "grades": "A2, D2, P20, H11, H13, S2, O1", "length": "HSS", "sfm": "30-65", "note": "", "≤ 1/8": ".0007-.0020", "1/4": ".0030-.0040", "3/8": ".0040-.0065", "1/2": ".0060-.0070", "3/4": ".0065-.0075", "1-1/2+": ".0075-.0085"},
-        {"1": ".0120-.0130", "iso": "P", "material": "Steels", "condition": "Low Carbon", "grades": "A36, 12L14, 12L15, 1005, 1018, 1020, 1108-1119, 1213-1215, 1513-1518, 4012, 5015, 9310", "length": "HSS", "sfm": "95", "note": "", "≤ 1/8": ".0009-.0050", "1/4": ".0060-.0070", "3/8": ".0090-.0100", "1/2": ".0100-.0110", "3/4": ".0110-.0120", "1-1/2+": ".0130-.0140"},
-        {"1": ".0120-.0140", "iso": "P", "material": "Steels", "condition": "Medium Carbon", "grades": "1040-1095, 1140-1151, 1330-1345, 1520-1572, 4023-4063, 4120-4161, 4330-4340, 4620-4640, 8620-8660, 8740-8750, 6150, 51000, 52100", "length": "HSS", "sfm": "115", "note": "", "≤ 1/8": ".0009-.0050", "1/4": ".0060-.0070", "3/8": ".0090-.0120", "1/2": ".0110-.0120", "3/4": ".0110-.0130", "1-1/2+": ".0130-.0150"},
-        {"1": ".0100-.0110", "iso": "M", "material": "Stainless Steels", "condition": "Austenitic", "grades": "301-304L, 310, 316L, 321, 347", "length": "HSS", "sfm": "26", "note": "", "≤ 1/8": ".0010-.0030", "1/4": ".0035-.0050", "3/8": ".0050-.0075", "1/2": ".0080-.0090", "3/4": ".0090-.0100", "1-1/2+": ".0110-.0120"},
-        {"1": ".0070-.0080", "iso": "M", "material": "Stainless Steels", "condition": "Martensitic", "grades": "403, 410, 416, 420, 430, 431, 440", "length": "HSS", "sfm": "50", "note": "", "≤ 1/8": ".0010-.0024", "1/4": ".0025-.0037", "3/8": ".0040-.0055", "1/2": ".0050-.0060", "3/4": ".0060-.0070", "1-1/2+": ".0080-.0090"},
-        {"1": ".0070-.0080", "iso": "M", "material": "Stainless Steels", "condition": "Precipitation Hardening", "grades": "12/8, 15/5, 17/4, AM-350/355/363, PH13-8MO, PH14-8/MO", "length": "HSS", "sfm": "20", "note": "", "≤ 1/8": ".0020-.0030", "1/4": ".0030-.0040", "3/8": ".0040-.0050", "1/2": ".0050-.0060", "3/4": ".0060-.0070", "1-1/2+": ".0080-.0090"},
-        {"1": ".0070-.0080", "iso": "K", "material": "Cast Irons", "condition": "Ductile", "grades": "A536, J434, 60-40-18", "length": "HSS", "sfm": "45", "note": "", "≤ 1/8": ".0007-.0025", "1/4": ".0025-.0035", "3/8": ".0040-.0060", "1/2": ".0060-.0070", "3/4": ".0065-.0075", "1-1/2+": ".0075-.0085"},
-        {"1": ".0090-.0130", "iso": "K", "material": "Cast Irons", "condition": "Gray", "grades": "A48, A436, A319, Class 20, G4000", "length": "HSS", "sfm": "80-100", "note": "", "≤ 1/8": ".0006-.0030", "1/4": ".0030-.0060", "3/8": ".0040-.0090", "1/2": ".0070-.0100", "3/4": ".0080-.0120", "1-1/2+": ".0100-.0140"},
-        {"1": ".0090-.0130", "iso": "K", "material": "Cast Irons", "condition": "Malleable", "grades": "A220, A602, J158", "length": "HSS", "sfm": "80-100", "note": "", "≤ 1/8": ".0006-.0030", "1/4": ".0030-.0060", "3/8": ".0040-.0090", "1/2": ".0070-.0100", "3/4": ".0080-.0120", "1-1/2+": ".0100-.0140"},
-        {"1": ".0120-.0140", "iso": "N", "material": "Non-Ferrous", "condition": "Aluminum Alloys", "grades": "2014, 2024, 6061, 7075", "length": "HSS", "sfm": "300", "note": "", "≤ 1/8": ".0007-.0050", "1/4": ".0040-.0080", "3/8": ".0060-.0110", "1/2": ".0080-.0120", "3/4": ".0090-.0130", "1-1/2+": ".0130-.0150"},
-        {"1": ".0120-.0140", "iso": "N", "material": "Non-Ferrous", "condition": "High Silicon Aluminum", "grades": "A380, A390", "length": "HSS", "sfm": "60-80", "note": "", "≤ 1/8": ".0007-.0050", "1/4": ".0040-.0080", "3/8": ".0060-.0110", "1/2": ".0080-.0120", "3/4": ".0090-.0130", "1-1/2+": ".0130-.0150"},
-        {"1": ".0090-.0110", "iso": "N", "material": "Non-Ferrous", "condition": "Brass / Bronze", "grades": "Aluminum Bronze, Low Silicon Bronze", "length": "HSS", "sfm": "90-115", "note": "", "≤ 1/8": ".0008-.0040", "1/4": ".0035-.0070", "3/8": ".0050-.0075", "1/2": ".0075-.0090", "3/4": ".0080-.0100", "1-1/2+": ".0100-.0120"},
-        {"1": ".0070-.0090", "iso": "N", "material": "Non-Ferrous", "condition": "Composites", "grades": "G-10, Fiberglass, Graphite, Graphite Epoxy, Plastics", "length": "HSS", "sfm": "100-125", "note": "", "≤ 1/8": ".0040-.0060", "1/4": ".0030-.0050", "3/8": ".0040-.0060", "1/2": ".0050-.0070", "3/4": ".0060-.0080", "1-1/2+": ".0080-.0100"},
-        {"1": ".0110-.0130", "iso": "N", "material": "Non-Ferrous", "condition": "Copper", "grades": "", "length": "HSS", "sfm": "108", "note": "", "≤ 1/8": ".0010-.0035", "1/4": ".0038-.0065", "3/8": ".0070-.0090", "1/2": ".0080-.0110", "3/4": ".0100-.0120", "1-1/2+": ".0110-.0130"},
-        {"1": ".0110-.0130", "iso": "N", "material": "Non-Ferrous", "condition": "Magnesium", "grades": "", "length": "HSS", "sfm": "90-115", "note": "", "≤ 1/8": ".0008-.0040", "1/4": ".0035-.0070", "3/8": ".0050-.0075", "1/2": ".0075-.0090", "3/4": ".0100-.0120", "1-1/2+": ".0110-.0130"},
-        {"1": ".0035-.0045", "iso": "S", "material": "High Temp Alloys", "condition": "Nickel Base", "grades": "Inconel 625/718, Inco 700, 713C, 718, Monel 400-401, 404, K401, Rene, Rene 41 & 95 Hastelloy, Waspoloy, Udimet 500 & 700", "length": "HSS", "sfm": "10-20", "note": "", "≤ 1/8": ".0004-.0013", "1/4": ".0013-.0020", "3/8": ".0020-.0030", "1/2": ".0030-.0035", "3/4": ".0030-.0040", "1-1/2+": ".0040-.0050"},
-        {"1": ".0050-.0070", "iso": "S", "material": "High Temp Alloys", "condition": "Titanium", "grades": "Commercially Pure, 6Al-4V, ASTM 1/2/3, 6Al-25N-4Zr-2Mo-Si, Ti-8Al-1Mo, Ti-8Al-4Mo", "length": "HSS", "sfm": "20-75", "note": "", "≤ 1/8": ".0006-.0025", "1/4": ".0020-.0040", "3/8": ".0030-.0055", "1/2": ".0040-.0060", "3/4": ".0045-.0065", "1-1/2+": ".0060-.0065"}
+        {"1": ".0110", "iso": "P", "material": "Carbon & Alloy Steel", "condition": "Low carbon", "hardness": "≤120 HB", "grades": "1018, 12L12, 1108, 1213", "length": "HSS", "sfm": "110", "note": "", "1/8": ".0030", "1/4": ".0040", "1/2": ".0080", "3/4": ".0100"},
+        {"1": ".0140", "iso": "P", "material": "Carbon & Alloy Steel", "condition": "Low & medium carbon", "hardness": "120–250 HB", "grades": "1018, 1551, 11L44", "length": "HSS", "sfm": "65", "note": "", "1/8": ".0040", "1/4": ".0060", "1/2": ".0110", "3/4": ".0130"},
+        {"1": ".0110", "iso": "P", "material": "Carbon & Alloy Steel", "condition": "Medium carbon & alloyed", "hardness": "≤250 HB", "grades": "1040, 1140, 4340, 8640", "length": "HSS", "sfm": "60", "note": "", "1/8": ".0030", "1/4": ".0040", "1/2": ".0080", "3/4": ".0100"},
+        {"1": ".0110", "iso": "P", "material": "Tool & Die Steel", "condition": "Up to 250 HB", "hardness": "≤250 HB", "grades": "P20, A2, D2, H12", "length": "HSS", "sfm": "50", "note": "", "1/8": ".0030", "1/4": ".0040", "1/2": ".0080", "3/4": ".0100"},
+        {"1": ".0080", "iso": "P", "material": "Tool & Die Steel", "condition": "250–350 HB", "hardness": "250–350 HB", "grades": "P20, A2, D2, H12", "length": "HSS", "sfm": "35", "note": "", "1/8": ".0020", "1/4": ".0030", "1/2": ".0060", "3/4": ".0070"},
+        {"1": ".0140", "iso": "M", "material": "Stainless Steel", "condition": "Free machining", "hardness": "≤250 HB", "grades": "303, 410, 416, 440F", "length": "HSS", "sfm": "60", "note": "", "1/8": ".0040", "1/4": ".0060", "1/2": ".0110", "3/4": ".0130"},
+        {"1": ".0080", "iso": "M", "material": "Stainless Steel", "condition": "Moderate machining", "hardness": "≤300 HB", "grades": "304, 316", "length": "HSS", "sfm": "45", "note": "", "1/8": ".0020", "1/4": ".0030", "1/2": ".0060", "3/4": ".0070"},
+        {"1": ".0080", "iso": "M", "material": "Stainless Steel", "condition": "Difficult machining", "hardness": "≤300 HB", "grades": "17-4PH, 316L, AM350", "length": "HSS", "sfm": "20", "note": "", "1/8": ".0020", "1/4": ".0030", "1/2": ".0060", "3/4": ".0070"},
+        {"1": ".0140", "iso": "K", "material": "Cast Iron", "condition": "Soft gray", "hardness": "≤160 HB", "grades": "", "length": "HSS", "sfm": "105", "note": "", "1/8": ".0040", "1/4": ".0060", "1/2": ".0110", "3/4": ".0130"},
+        {"1": ".0140", "iso": "K", "material": "Cast Iron", "condition": "Gray", "hardness": "160–260 HB", "grades": "", "length": "HSS", "sfm": "90", "note": "", "1/8": ".0040", "1/4": ".0060", "1/2": ".0110", "3/4": ".0130"},
+        {"1": ".0110", "iso": "K", "material": "Cast Iron", "condition": "Ductile", "hardness": "250 HB", "grades": "", "length": "HSS", "sfm": "80", "note": "", "1/8": ".0030", "1/4": ".0040", "1/2": ".0080", "3/4": ".0100"},
+        {"1": ".0080", "iso": "K", "material": "Cast Iron", "condition": "Malleable", "hardness": "250–330 HB", "grades": "", "length": "HSS", "sfm": "55", "note": "", "1/8": ".0020", "1/4": ".0030", "1/2": ".0060", "3/4": ".0070"},
+        {"1": ".0140", "iso": "N", "material": "Aluminum Alloys", "condition": "Aluminum alloys", "hardness": "≤150 HB", "grades": "2025, 6061, A140, 514.0", "length": "HSS", "sfm": "325", "note": "", "1/8": ".0040", "1/4": ".0060", "1/2": ".0110", "3/4": ".0130"},
+        {"1": ".0140", "iso": "N", "material": "Copper Alloys", "condition": "Brass & bronze", "hardness": "≤200 HB", "grades": "Brass, bronze", "length": "HSS", "sfm": "80", "note": "", "1/8": ".0040", "1/4": ".0060", "1/2": ".0110", "3/4": ".0130"},
+        {"1": ".0140", "iso": "N", "material": "Magnesium Alloys", "condition": "Magnesium alloys", "hardness": "50–90 HB", "grades": "AZ80A, HM12A, AM60A, ZE41A", "length": "HSS", "sfm": "325", "note": "", "1/8": ".0040", "1/4": ".0060", "1/2": ".0110", "3/4": ".0130"},
+        {"1": ".0080", "iso": "", "material": "Composites & Plastics", "condition": "Composites & plastics", "hardness": "≤128 HB", "grades": "", "length": "HSS", "sfm": "175", "note": "", "1/8": ".0020", "1/4": ".0030", "1/2": ".0060", "3/4": ".0070"},
+        {"1": ".0110", "iso": "S", "material": "Titanium Alloys", "condition": "Commercially pure 99.0", "hardness": "110–170 HB", "grades": "CP titanium", "length": "HSS", "sfm": "90", "note": "", "1/8": ".0030", "1/4": ".0040", "1/2": ".0080", "3/4": ".0100"},
+        {"1": ".0110", "iso": "S", "material": "Titanium Alloys", "condition": "Ti-6Al-4V", "hardness": "≤250 HB", "grades": "Ti-6Al-4V, ASTM B367 Grades C-3, C-4", "length": "HSS", "sfm": "50", "note": "", "1/8": ".0030", "1/4": ".0040", "1/2": ".0080", "3/4": ".0100"},
+        {"1": ".0110", "iso": "S", "material": "High Temperature Alloys", "condition": "Up to 150 HB", "hardness": "≤150 HB", "grades": "Inconel, Hastelloy, Waspaloy", "length": "HSS", "sfm": "50", "note": "", "1/8": ".0030", "1/4": ".0040", "1/2": ".0080", "3/4": ".0100"},
+        {"1": ".0070", "iso": "S", "material": "High Temperature Alloys", "condition": "150–250 HB", "hardness": "150–250 HB", "grades": "Inconel, Hastelloy, Waspaloy", "length": "HSS", "sfm": "20", "note": "", "1/8": ".0010", "1/4": ".0020", "1/2": ".0045", "3/4": ".0060"}
       ]
     },
     {
@@ -893,6 +894,7 @@ window.TECH_DATA = {
       {"title": "Ingersoll GoldMax 8 Face Mill", "sub": "Series VJ6K — Operating Guidelines", "link": "charts/ingersoll-goldmax-8.jpg"},
       {"title": "Ingersoll Hi-Pos Trio 06", "sub": "Operating Guidelines", "link": "charts/ingersoll-hipostrio-06.jpg"},
       {"title": "Ingersoll QuadTwist Drills", "sub": "Flat Bottom & Spade — 2xD, 3xD, 4xD & 5xD Cutting Conditions", "link": "charts/ingersoll-quadtwist-2-4xd.jpg, charts/ingersoll-quadtwist-5xd.jpg"},
+      {"title": "Morse HSS & Cobalt Drills", "sub": "Speed and Feed Recommendations", "link": "charts/morse-hss-drills.jpg"},
       {"title": "OSG HY-PRO CARB Drill Chart", "sub": "HP253 · HP255 · HP258", "link": "charts/osg-hy-pro-carb-1.jpg, charts/osg-hy-pro-carb-2.jpg"},
       {"title": "Tap Drill Chart", "sub": "Starrett — Inch & Metric", "link": "charts/tap-drill-chart.jpg"}
     ],
